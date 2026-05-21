@@ -30,7 +30,7 @@ useEffect(() => {
 const fetchProducts = async () => {
   try {
     const res = await axios.get(
-      "http://localhost:5000/api/products"
+      "https://sejal-backend.onrender.com/api/products"
     );
 
     setProducts(res.data.products || []);
@@ -53,7 +53,7 @@ const sendInquiry = async () => {
 
   try {
     const response = await fetch(
-      "http://localhost:5000/api/inquiries",
+      "https://sejal-backend.onrender.com/api/inquiries",
       {
         method: "POST",
         headers: {
