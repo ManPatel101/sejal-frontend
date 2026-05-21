@@ -26,7 +26,8 @@ const fetchProducts = async () => {
       "https://sejal-backend.onrender.com/api/products"
     );
 
-    console.log(res.data);
+    console.log(res.data);  
+    console.log(res.data.products);
 
     setProducts(res.data.products || []);
   } catch (error) {
@@ -34,11 +35,15 @@ const fetchProducts = async () => {
   }
 };
 
-  const filtered = products.filter(
+ const filtered = products.filter(
   (p) =>
-    (cat === "All" || p.category === cat) &&
     (
-      (p.title || "")
+      cat === "All" ||
+      (p.category || "").trim().toLowerCase() ===
+      cat.trim().toLowerCase()
+    ) &&
+    (
+      (p.title || p.name || "")
         .toLowerCase()
         .includes(search.toLowerCase()) ||
 
@@ -72,7 +77,7 @@ const fetchProducts = async () => {
         },
         body: JSON.stringify({
           ...inquiryForm,
-          product: modal?.title,
+          product: modal?.title || modal?.name,
         }),
       }
     );
@@ -155,11 +160,11 @@ const fetchProducts = async () => {
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 22 }}>
             {filtered.map((p, i) => (
-              <FadeIn key={p._id} delay={i * 0.05}>
+              <FadeIn key={p._id || i}delay={i * 0.05}>
                 <motion.div whileHover={{ y: -5 }} style={{ background: "#fff", borderRadius: 14, border: "1px solid #f1f5f9", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
                   <div style={{ background: "#fef2f2", height: 130, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 62 }}><img
-  src={p.image}
-  alt={p.title}
+  src={modal.image || "https://via.placeholder.com/600"}
+  alt={p.title || p.name}
   style={{
     width: "100%",
     height: "100%",
@@ -171,7 +176,7 @@ const fetchProducts = async () => {
                       <Badge>{p.badge}</Badge>
                       <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600 }}>{p.category}</span>
                     </div>
-                    <h3 style={{ fontWeight: 700, fontSize: 15, color: "#0f172a", margin: "0 0 8px", lineHeight: 1.4 }}>{p.title}</h3>
+                    <h3 style={{ fontWeight: 700, fontSize: 15, color: "#0f172a", margin: "0 0 8px", lineHeight: 1.4 }}>{p.title || p.name}</h3>
                     <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6, margin: "0 0 16px" }}>{(p.shortDesc || "").slice(0, 90)}…</p>
                     <div style={{ display: "flex", gap: 8 }}>
                       <button onClick={() => setModal(p)}
@@ -204,8 +209,8 @@ const fetchProducts = async () => {
               style={{ background: "#fff", borderRadius: 18, maxWidth: 580, width: "100%", maxHeight: "90vh", overflow: "auto" }}
             >
               <div style={{ background: "#fef2f2", padding: 40, textAlign: "center", borderRadius: "18px 18px 0 0", fontSize: 80 }}><img
-  src={modal.image}
-  alt={modal.title}
+  src={modal.image || "https://via.placeholder.com/400"}
+  alt={modal.title || modal.name}
   style={{
     width: "100%",
     maxHeight: 260,
@@ -232,7 +237,7 @@ const fetchProducts = async () => {
       margin: "0 0 10px",
     }}
   >
-    {modal.shortDesc}
+    {modal.shortDesc || modal.description}
   </p>
 
   <p
@@ -243,7 +248,7 @@ const fetchProducts = async () => {
       margin: 0,
     }}
   >
-    {modal.fullDesc}
+    {modal.fullDesc || modal.description}
   </p>
 </div>
                 <div style={{ background: "#f8fafc", borderRadius: 10, padding: 20, marginBottom: 24 }}>
