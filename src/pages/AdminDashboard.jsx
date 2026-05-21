@@ -34,8 +34,11 @@ export default function AdminDashboard() {
     image: "",
   });
 
-  const INQUIRY_API = "http://localhost:5000/api/inquiries";
-  const PRODUCT_API = "https://your-backend-url.com/api/products";
+  /* ─────────────────────────────────────────────
+     API URLS
+  ───────────────────────────────────────────── */
+  const INQUIRY_API = "https://sejal-backend.onrender.com/api/inquiries";;
+  const PRODUCT_API = "https://sejal-backend.onrender.com/api/products";
 
   /* FETCH INQUIRIES */
   const fetchInquiries = async () => {
