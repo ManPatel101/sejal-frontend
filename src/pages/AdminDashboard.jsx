@@ -8,11 +8,12 @@ import {
 
 import axios from "axios";
 
-export default function AdminDashboard() {import { useEffect, useState } from "react";
+export default function AdminDashboard() {
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Badge from "../components/ui/Badge.jsx";
 import { SERVICES, CATEGORIES } from "../data/index.js";
-import axios from "axios";
+import axios from "axios";}
 
 export default function AdminDashboard() {
   const [section, setSection] = useState("dashboard");
