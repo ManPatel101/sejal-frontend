@@ -8,262 +8,205 @@ import {
 
 import axios from "axios";
 
+export default function AdminDashboard() {import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Badge from "../components/ui/Badge.jsx";
+import { SERVICES, CATEGORIES } from "../data/index.js";
+import axios from "axios";
+
 export default function AdminDashboard() {
   const [section, setSection] = useState("dashboard");
   const [productSearch, setProductSearch] = useState("");
   const [inquirySearch, setInquirySearch] = useState("");
-  /* ─────────────────────────────────────────────
-     STATES
-  ───────────────────────────────────────────── */
-  const [products, setProducts] = useState([]);
 
+  const [products, setProducts] = useState([]);
   const [inquiries, setInquiries] = useState([]);
 
-  const [editProduct, setEditProduct] =
-    useState(null);
-
-  const [showAddProduct, setShowAddProduct] =
-    useState(false);
+  const [editProduct, setEditProduct] = useState(null);
+  const [showAddProduct, setShowAddProduct] = useState(false);
 
   const [newProduct, setNewProduct] = useState({
-  title: "",
-  shortDesc: "",
-  fullDesc: "",
-  category: "Extinguishers",
-  badge: "ISI Certified",
-  image: "",
-});
+    title: "",
+    shortDesc: "",
+    fullDesc: "",
+    category: "Extinguishers",
+    badge: "ISI Certified",
+    image: "",
+  });
 
-  /* ─────────────────────────────────────────────
-     API URLS
-  ───────────────────────────────────────────── */
   const INQUIRY_API = "http://localhost:5000/api/inquiries";
-  const PRODUCT_API = "http://localhost:5000/api/products";
+  const PRODUCT_API = "https://your-backend-url.com/api/products";
 
-/* FETCH INQUIRIES */
-const fetchInquiries = async () => {
-  try {
-    const res = await axios.get(INQUIRY_API);
+  /* FETCH INQUIRIES */
+  const fetchInquiries = async () => {
+    try {
+      const res = await axios.get(INQUIRY_API);
+      const data = res.data.inquiries || [];
 
-    console.log("INQUIRY API:", res.data);
+      const formatted = data.map((item) => ({
+        id: item._id,
+        name: item.name || "-",
+        email: item.email || "-",
+        phone: item.phone || "-",
+        product: item.product || "-",
+        message: item.message || "-",
+        status: item.status || "Pending",
+        date: item.createdAt
+          ? new Date(item.createdAt).toLocaleDateString()
+          : "-",
+      }));
 
-    const data = res.data.inquiries || [];
+      setInquiries(formatted);
+    } catch (error) {
+      console.error("Error fetching inquiries:", error);
+      setInquiries([]);
+    }
+  };
 
-    const formatted = data.map((item) => ({
-      id: item._id,
-      name: item.name || "-",
-      email: item.email || "-",
-      phone: item.phone || "-",
-      product: item.product || "-",
-      message: item.message || "-",
-      status: item.status || "Pending",
-      date: item.createdAt
-        ? new Date(item.createdAt).toLocaleDateString()
-        : "-",
-    }));
+  /* FETCH PRODUCTS */
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(PRODUCT_API);
+      setProducts(res.data.products || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    setInquiries(formatted);
-  } catch (error) {
-    console.error("Error fetching inquiries:", error);
-
-    setInquiries([]);
-  }
-};
-/* LOAD DATA */
-const fetchProducts = async () => {
-  try {
-    const res = await axios.get(PRODUCT_API);
-
-    setProducts(res.data.products || []);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-useEffect(() => {
-  fetchInquiries();
-
-  fetchProducts();
-
-  const interval = setInterval(() => {
+  useEffect(() => {
     fetchInquiries();
     fetchProducts();
-  }, 5000);
 
-  return () => clearInterval(interval);
-}, []);
+    const interval = setInterval(() => {
+      fetchInquiries();
+      fetchProducts(); // ✅ FIXED (was missing before)
+    }, 15000);
 
-  /* ─────────────────────────────────────────────
-     UPDATE STATUS
-  ───────────────────────────────────────────── */
+    return () => clearInterval(interval);
+  }, []);
+
+  /* UPDATE STATUS */
   const updateStatus = async (id, status) => {
     try {
-      await axios.put(
-        `${INQUIRY_API}/${id}`,
-        { status }
-      );
+      await axios.put(`${INQUIRY_API}/${id}`, { status });
 
       setInquiries((prev) =>
-        prev.map((i) =>
-          i.id === id
-            ? { ...i, status }
-            : i
-        )
+        prev.map((i) => (i.id === id ? { ...i, status } : i))
       );
     } catch (error) {
-      console.error(
-        "Error updating status:",
-        error
-      );
+      console.error("Error updating status:", error);
     }
   };
 
-  /* ─────────────────────────────────────────────
-     DELETE INQUIRY
-  ───────────────────────────────────────────── */
+  /* DELETE INQUIRY */
   const deleteInquiry = async (id) => {
     try {
-      await axios.delete(
-        `${INQUIRY_API}/${id}`
-      );
-
+      await axios.delete(`${INQUIRY_API}/${id}`);
       await fetchInquiries();
     } catch (error) {
-      console.error(
-        "Delete Error:",
-        error.response?.data ||
-          error.message
-      );
+      console.error("Delete Error:", error.response?.data || error.message);
     }
   };
 
-  /* ─────────────────────────────────────────────
-     PRODUCT FUNCTIONS
-  ───────────────────────────────────────────── */
+  /* DELETE PRODUCT */
   const deleteProduct = async (id) => {
-  try {
-    await axios.delete(
-      `${PRODUCT_API}/${id}`
-    );
+    try {
+      await axios.delete(`${PRODUCT_API}/${id}`);
+      setProducts((prev) => prev.filter((p) => p._id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-    setProducts((prev) =>
-      prev.filter((p) => p._id !== id)
-    );
-  } catch (error) {
-    console.log(error);
-  }
-};
-
+  /* ADD PRODUCT */
   const addProduct = async () => {
     if (
-    !newProduct.title ||
-    !newProduct.shortDesc ||
-    !newProduct.fullDesc ||
-    !newProduct.image
-  ) {
-    alert("Please fill all fields");
-    return;
-  }
-  try {
-    const res = await axios.post(
-      PRODUCT_API,
-      newProduct
-    );
+      !newProduct.title ||
+      !newProduct.shortDesc ||
+      !newProduct.fullDesc ||
+      !newProduct.image
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
 
-    setProducts((prev) => [
-      res.data.product,
-      ...prev,
-    ]);
+    try {
+      const res = await axios.post(PRODUCT_API, newProduct);
 
-    setNewProduct({
-      title: "",
-      shortDesc: "",
-      fullDesc: "",
-      category: "Extinguishers",
-      badge: "ISI Certified",
-      image: "",
-    });
+      setProducts((prev) => [res.data.product, ...prev]);
 
-    setShowAddProduct(false);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      setNewProduct({
+        title: "",
+        shortDesc: "",
+        fullDesc: "",
+        category: "Extinguishers",
+        badge: "ISI Certified",
+        image: "",
+      });
 
+      setShowAddProduct(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* UPDATE PRODUCT */
   const updateProduct = async () => {
-     if (
-    !editProduct.title ||
-    !editProduct.shortDesc ||
-    !editProduct.fullDesc ||
-    !editProduct.image
-  ) {
-    alert("Please fill all fields");
-    return;
-  }
-  try {
-    const res = await axios.put(
-      `${PRODUCT_API}/${editProduct._id}`,
-      editProduct
-    );
+    if (
+      !editProduct.title ||
+      !editProduct.shortDesc ||
+      !editProduct.fullDesc ||
+      !editProduct.image
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
 
-    setProducts((prev) =>
-      prev.map((p) =>
-        p._id === editProduct._id
-          ? res.data.product
-          : p
-      )
-    );
+    try {
+      const res = await axios.put(
+        `${PRODUCT_API}/${editProduct._id}`,
+        editProduct
+      );
 
-    setEditProduct(null);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      setProducts((prev) =>
+        prev.map((p) =>
+          p._id === editProduct._id ? res.data.product : p
+        )
+      );
 
-  /* ─────────────────────────────────────────────
-     SIDEBAR
-  ───────────────────────────────────────────── */
+      setEditProduct(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const sidebarItems = [
-    {
-      id: "dashboard",
-      icon: "📊",
-      label: "Dashboard",
-    },
-    {
-      id: "products",
-      icon: "📦",
-      label: "Products",
-    },
-    {
-      id: "services",
-      icon: "🔧",
-      label: "Services",
-    },
-    {
-      id: "inquiries",
-      icon: "📨",
-      label: "Inquiries",
-    },
+    { id: "dashboard", icon: "📊", label: "Dashboard" },
+    { id: "products", icon: "📦", label: "Products" },
+    { id: "services", icon: "🔧", label: "Services" },
+    { id: "inquiries", icon: "📨", label: "Inquiries" },
   ];
-  const filteredProducts = products.filter((p) =>
-  p.title.toLowerCase().includes(productSearch.toLowerCase()) ||
-  p.category.toLowerCase().includes(productSearch.toLowerCase()) ||
-  p.badge.toLowerCase().includes(productSearch.toLowerCase())
-);
 
-const filteredInquiries = inquiries.filter((inq) =>
-  inq.name.toLowerCase().includes(inquirySearch.toLowerCase()) ||
-  inq.email.toLowerCase().includes(inquirySearch.toLowerCase()) ||
-  inq.phone.toLowerCase().includes(inquirySearch.toLowerCase()) ||
-  inq.product.toLowerCase().includes(inquirySearch.toLowerCase()) ||
-  inq.status.toLowerCase().includes(inquirySearch.toLowerCase())
-);
+  const filteredProducts = products.filter((p) =>
+    (p.title || "").toLowerCase().includes(productSearch.toLowerCase()) ||
+    (p.category || "").toLowerCase().includes(productSearch.toLowerCase()) ||
+    (p.badge || "").toLowerCase().includes(productSearch.toLowerCase())
+  );
+
+  const filteredInquiries = inquiries.filter((inq) =>
+    (inq.name || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
+    (inq.email || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
+    (inq.phone || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
+    (inq.product || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
+    (inq.status || "").toLowerCase().includes(inquirySearch.toLowerCase())
+  );
 
   const statusColors = {
     Pending: "#f59e0b",
     Contacted: "#3b82f6",
     Converted: "#16a34a",
   };
+
 
   return (
     <div
