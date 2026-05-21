@@ -23,7 +23,7 @@ export default function ProductsPage() {
 const fetchProducts = async () => {
   try {
     const res = await axios.get(
-      "http://localhost:5000/api/products"
+      "https://sejal-backend.onrender.com/api/products"
     );
 
     setProducts(
@@ -35,11 +35,16 @@ const fetchProducts = async () => {
 };
 
   const filtered = products.filter(
-p =>
+  (p) =>
     (cat === "All" || p.category === cat) &&
     (
-      p.title.toLowerCase().includes(search.toLowerCase()) ||
-      p.category.toLowerCase().includes(search.toLowerCase())
+      (p.title || "")
+        .toLowerCase()
+        .includes(search.toLowerCase()) ||
+
+      (p.category || "")
+        .toLowerCase()
+        .includes(search.toLowerCase())
     )
 );
 
@@ -59,7 +64,7 @@ p =>
 
   try {
     const response = await fetch(
-      "http://localhost:5000/api/inquiries",
+      "https://sejal-backend.onrender.com/api/inquiries",
       {
         method: "POST",
         headers: {
@@ -167,7 +172,7 @@ p =>
                       <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600 }}>{p.category}</span>
                     </div>
                     <h3 style={{ fontWeight: 700, fontSize: 15, color: "#0f172a", margin: "0 0 8px", lineHeight: 1.4 }}>{p.title}</h3>
-                    <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6, margin: "0 0 16px" }}>{p.shortDesc.slice(0, 90)}…</p>
+                    <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6, margin: "0 0 16px" }}>{(p.shortDesc || "").slice(0, 90)}…</p>
                     <div style={{ display: "flex", gap: 8 }}>
                       <button onClick={() => setModal(p)}
                         style={{ flex: 1, padding: "9px", background: "#dc2626", color: "#fff", border: "none", borderRadius: 7, fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
