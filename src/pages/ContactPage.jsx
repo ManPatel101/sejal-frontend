@@ -32,22 +32,21 @@ const handleSubmit = async () => {
     setLoading(true); // 🔥 show instant loading
 
     const response = await fetch(
-      "http://localhost:5000/api/inquiries",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          product: form.subject,
-          message: form.message,
-        }),
-      }
-    );
-
+  "https://sejal-backend.onrender.com/api/inquiries",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      product: form.subject,
+      message: form.message,
+    }),
+  }
+);
     const data = await response.json();
 
     setLoading(false); // stop loading
