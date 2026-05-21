@@ -26,9 +26,9 @@ const fetchProducts = async () => {
       "https://sejal-backend.onrender.com/api/products"
     );
 
-    setProducts(
-      res.data.products || []
-    );
+    console.log(res.data);
+
+    setProducts(res.data.products || []);
   } catch (error) {
     console.log(error);
   }
