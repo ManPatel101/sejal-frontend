@@ -163,7 +163,7 @@ const fetchProducts = async () => {
               <FadeIn key={p._id || i}delay={i * 0.05}>
                 <motion.div whileHover={{ y: -5 }} style={{ background: "#fff", borderRadius: 14, border: "1px solid #f1f5f9", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
                   <div style={{ background: "#fef2f2", height: 130, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 62 }}><img
-  src={modal.image || "https://via.placeholder.com/600"}
+  src={p.image || "https://via.placeholder.com/600"}
   alt={p.title || p.name}
   style={{
     width: "100%",
@@ -222,7 +222,7 @@ const fetchProducts = async () => {
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
                   <div>
                     <Badge>{modal.badge}</Badge>
-                    <h2 style={{ fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 22, color: "#0f172a", margin: "10px 0 0" }}>{modal.title}</h2>
+                    <h2 style={{ fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 22, color: "#0f172a", margin: "10px 0 0" }}>{modal.title || modal.name}</h2>
                   </div>
                   <button onClick={() => setModal(null)}
                     style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 18 }}>✕</button>
