@@ -104,31 +104,12 @@ const inputStyle = {
     <div>
     {/* Hero */}
 <section
-  style={{
-    height: "100vh",
-    backgroundImage: `url("img/BG(1)_ChatGPT.png")`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    position: "relative",
-    overflow: "hidden",
-    paddingTop: 68,
-  }}
+  className="h-screen relative flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden pt-[68px]"
+  style={{ backgroundImage: `url("img/BG(1)_ChatGPT.png")` }}
 >
 
   {/* Dark Overlay */}
-  <div
-    style={{
-      position: "absolute",
-      inset: 0,
-      background:
-        "linear-gradient(135deg, rgba(0,0,0,0.75), rgba(0,0,0,0.55))",
-      zIndex: 1,
-    }}
-  />
+  <div className="absolute inset-0 bg-gradient-to-br from-black/75 to-black/55 z-[1]" />
 
   {/* ✨ Animated Glow Layer */}
   <motion.div
@@ -141,17 +122,10 @@ const inputStyle = {
       repeat: Infinity,
       ease: "easeInOut",
     }}
+    className="absolute w-[700px] h-[700px] top-[15%] left-1/2 -translate-x-1/2 blur-[60px] z-[1]"
     style={{
-      position: "absolute",
-      width: 700,
-      height: 700,
       background:
         "radial-gradient(circle, rgba(220,38,38,0.25), transparent 65%)",
-      top: "15%",
-      left: "50%",
-      transform: "translateX(-50%)",
-      filter: "blur(60px)",
-      zIndex: 1,
     }}
   />
 
@@ -159,17 +133,7 @@ const inputStyle = {
   <motion.div
     animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }}
     transition={{ duration: 6, repeat: Infinity }}
-    style={{
-      position: "absolute",
-      width: 10,
-      height: 10,
-      borderRadius: "50%",
-      background: "#ef4444",
-      top: "30%",
-      left: "20%",
-      filter: "blur(2px)",
-      zIndex: 1,
-    }}
+    className="absolute w-2.5 h-2.5 rounded-full bg-red-500 blur-[2px] top-[30%] left-[20%] z-[1]"
   />
 
   {/* MAIN CONTENT */}
@@ -177,51 +141,26 @@ const inputStyle = {
     initial={{ opacity: 0, scale: 0.96 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.9 }}
-    style={{
-      maxWidth: 1100,
-      width: "100%",
-      margin: "0 auto",
-      padding: "20px 24px",
-      position: "relative",
-      zIndex: 2,
-      textAlign: "center",
-    }}
+    className="relative z-[2] max-w-[1100px] w-full mx-auto px-6 text-center"
   >
 
     {/* Company Name */}
-<motion.h1
-  initial={{ opacity: 0, y: 25 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8 }}
-  style={{
-    fontSize: "clamp(48px, 8vw, 95px)",
-    fontWeight: 900,
-    margin: 0,
-    lineHeight: 1,
-    letterSpacing: 4,
-    textTransform: "uppercase",
-    textShadow:
-      "0 2px 10px rgba(0,0,0,0.4), 0 15px 50px rgba(0,0,0,0.6)",
-  }}
->
-  <span style={{ color: "#ffffff" }}>SEJAL</span>{" "}
-  <span style={{ color: "#ffffff" }}>ENGINEERING</span>
-</motion.h1>
+    <motion.h1
+      initial={{ opacity: 0, y: 25 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="m-0 font-black uppercase tracking-[4px] leading-none text-white text-[48px] sm:text-[70px] md:text-[95px] drop-shadow-[0_15px_50px_rgba(0,0,0,0.6)]"
+    >
+      <span>SEJAL</span>{" "}
+      <span>ENGINEERING</span>
+    </motion.h1>
 
     {/* Subtitle */}
     <motion.h2
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15, duration: 0.7 }}
-      style={{
-        fontSize: "clamp(16px, 2vw, 26px)",
-        color: "#f3f4f6",
-        marginTop: 18,
-        marginBottom: 14,
-        fontWeight: 700,
-        lineHeight: 1.4,
-        textShadow: "0 3px 15px rgba(0,0,0,0.5)",
-      }}
+      className="mt-[18px] mb-[14px] font-bold text-gray-100 text-[16px] sm:text-[20px] md:text-[26px] leading-snug drop-shadow-md"
     >
       Complete Fire Protection Solutions for Modern Industry
     </motion.h2>
@@ -231,15 +170,7 @@ const inputStyle = {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      style={{
-        fontSize: 11,
-        fontWeight: 600,
-        color: "#e5e7eb",
-        marginBottom: 12,
-        letterSpacing: 2,
-        textTransform: "uppercase",
-        opacity: 0.9,
-      }}
+      className="text-[11px] font-semibold text-gray-300 uppercase tracking-[2px] mb-3 opacity-90"
     >
       INDIA'S TRUSTED FIRE PROTECTION PARTNER
     </motion.div>
@@ -249,16 +180,7 @@ const inputStyle = {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.35, duration: 0.7 }}
-      style={{
-        maxWidth: 750,
-        margin: "0 auto",
-        fontSize: 14,
-        color: "#cbd5e1",
-        lineHeight: 1.8,
-        fontWeight: 400,
-        letterSpacing: 0.2,
-        textShadow: "0 2px 12px rgba(0,0,0,0.35)",
-      }}
+      className="max-w-[750px] mx-auto text-[14px] text-slate-300 leading-7 tracking-wide drop-shadow-md"
     >
       Engineering-grade fire safety systems for industrial,
       commercial, and infrastructure projects since 2010.
@@ -270,59 +192,34 @@ const inputStyle = {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.7 }}
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        gap: 18,
-        flexWrap: "wrap",
-        marginTop: 32,
-      }}
+      className="flex flex-wrap justify-center gap-4 mt-8"
     >
-      {/* Primary Button */}
-      {/* Primary Button */}
-<motion.button
-  whileHover={{
-    scale: 1.03,
-  }}
-  whileTap={{ scale: 0.96 }}
-  onClick={() => navigate("/services")}
-  style={{
-    padding: "14px 30px",
-    background: "#dc2626",
-    color: "#fff",
-    border: "none",
-    borderRadius: 10,
-    fontSize: 14,
-    fontWeight: 700,
-    cursor: "pointer",
-  }}
->
-  Explore Services →
-</motion.button>
 
-{/* Secondary Button */}
-<motion.button
-  whileHover={{
-    scale: 1.03,
-    background: "rgba(255,255,255,0.12)",
-  }}
-  whileTap={{ scale: 0.96 }}
-  onClick={() => navigate("/contact")}
-  style={{
-    padding: "14px 30px",
-    background: "rgba(255,255,255,0.08)",
-    color: "#fff",
-    border: "1px solid rgba(255,255,255,0.25)",
-    borderRadius: 10,
-    fontSize: 14,
-    fontWeight: 600,
-    cursor: "pointer",
-    backdropFilter: "blur(10px)",
-  }}
->
-  Get Expert Consultation
-</motion.button>
+      {/* Primary Button */}
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.96 }}
+        onClick={() => navigate("/services")}
+        className="px-7 py-3 bg-red-600 text-white font-bold rounded-lg text-sm"
+      >
+        Explore Services →
+      </motion.button>
+
+      {/* Secondary Button */}
+      <motion.button
+        whileHover={{
+          scale: 1.03,
+          backgroundColor: "rgba(255,255,255,0.12)",
+        }}
+        whileTap={{ scale: 0.96 }}
+        onClick={() => navigate("/contact")}
+        className="px-7 py-3 text-white font-semibold text-sm rounded-lg border border-white/25 bg-white/10 backdrop-blur-md"
+      >
+        Get Expert Consultation
+      </motion.button>
+
     </motion.div>
+
   </motion.div>
 </section>
 
