@@ -104,7 +104,7 @@ const inputStyle = {
     <div>
     {/* Hero */}
 <section
-  className="h-screen relative flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden pt-[68px]"
+  className="relative min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat overflow-hidden pt-[80px] md:pt-[68px]"
   style={{ backgroundImage: `url("img/BG(1)_ChatGPT.png")` }}
 >
 
@@ -129,7 +129,7 @@ const inputStyle = {
     }}
   />
 
-  {/* ✨ Soft Floating Light Dot */}
+  {/* ✨ Soft Floating Dot */}
   <motion.div
     animate={{ y: [0, -20, 0], opacity: [0.3, 0.6, 0.3] }}
     transition={{ duration: 6, repeat: Infinity }}
@@ -141,7 +141,7 @@ const inputStyle = {
     initial={{ opacity: 0, scale: 0.96 }}
     animate={{ opacity: 1, scale: 1 }}
     transition={{ duration: 0.9 }}
-    className="relative z-[2] max-w-[1100px] w-full mx-auto px-6 text-center"
+    className="relative z-[10] max-w-[1100px] w-full mx-auto px-4 sm:px-6 text-center"
   >
 
     {/* Company Name */}
@@ -149,7 +149,7 @@ const inputStyle = {
       initial={{ opacity: 0, y: 25 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8 }}
-      className="m-0 font-black uppercase tracking-[4px] leading-none text-white text-[48px] sm:text-[70px] md:text-[95px] drop-shadow-[0_15px_50px_rgba(0,0,0,0.6)]"
+      className="font-black uppercase tracking-[3px] sm:tracking-[4px] leading-[1.05] text-white text-[40px] sm:text-[60px] md:text-[80px] lg:text-[95px] drop-shadow-[0_15px_50px_rgba(0,0,0,0.6)] break-words"
     >
       <span>SEJAL</span>{" "}
       <span>ENGINEERING</span>
@@ -160,7 +160,7 @@ const inputStyle = {
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15, duration: 0.7 }}
-      className="mt-[18px] mb-[14px] font-bold text-gray-100 text-[16px] sm:text-[20px] md:text-[26px] leading-snug drop-shadow-md"
+      className="mt-4 sm:mt-[18px] mb-3 sm:mb-[14px] font-bold text-gray-100 text-[14px] sm:text-[18px] md:text-[26px] leading-snug"
     >
       Complete Fire Protection Solutions for Modern Industry
     </motion.h2>
@@ -170,7 +170,7 @@ const inputStyle = {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="text-[11px] font-semibold text-gray-300 uppercase tracking-[2px] mb-3 opacity-90"
+      className="text-[10px] sm:text-[11px] font-semibold text-gray-300 uppercase tracking-[2px] mb-3 opacity-90"
     >
       INDIA'S TRUSTED FIRE PROTECTION PARTNER
     </motion.div>
@@ -180,7 +180,7 @@ const inputStyle = {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.35, duration: 0.7 }}
-      className="max-w-[750px] mx-auto text-[14px] text-slate-300 leading-7 tracking-wide drop-shadow-md"
+      className="max-w-[750px] mx-auto text-[12px] sm:text-[14px] text-slate-300 leading-6 sm:leading-7 tracking-wide"
     >
       Engineering-grade fire safety systems for industrial,
       commercial, and infrastructure projects since 2010.
@@ -192,7 +192,7 @@ const inputStyle = {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.7 }}
-      className="flex flex-wrap justify-center gap-4 mt-8"
+      className="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 mt-6 sm:mt-8"
     >
 
       {/* Primary Button */}
@@ -200,7 +200,7 @@ const inputStyle = {
         whileHover={{ scale: 1.03 }}
         whileTap={{ scale: 0.96 }}
         onClick={() => navigate("/services")}
-        className="px-7 py-3 bg-red-600 text-white font-bold rounded-lg text-sm"
+        className="px-6 sm:px-7 py-3 bg-red-600 text-white font-bold rounded-lg text-sm w-full sm:w-auto"
       >
         Explore Services →
       </motion.button>
@@ -213,7 +213,7 @@ const inputStyle = {
         }}
         whileTap={{ scale: 0.96 }}
         onClick={() => navigate("/contact")}
-        className="px-7 py-3 text-white font-semibold text-sm rounded-lg border border-white/25 bg-white/10 backdrop-blur-md"
+        className="px-6 sm:px-7 py-3 text-white font-semibold text-sm rounded-lg border border-white/25 bg-white/10 backdrop-blur-md w-full sm:w-auto"
       >
         Get Expert Consultation
       </motion.button>
@@ -224,75 +224,30 @@ const inputStyle = {
 </section>
 
 {/* Company Intro */}
-<section
-  style={{
-    background: "#f8fafc",
-    padding: "110px 24px",
-    position: "relative",
-    overflow: "hidden",
-  }}
->
-  <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
-        gap: 80,
-        alignItems: "center",
-      }}
-      className="two-col"
-    >
+<section className="bg-slate-50 py-[110px] px-6 relative overflow-hidden">
+  <div className="max-w-[1280px] mx-auto">
+    
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-[80px] items-center">
 
       {/* LEFT CONTENT */}
       <FadeIn>
         <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            background: "#dc262612",
-            borderRadius: 100,
-            padding: "6px 16px",
-            marginBottom: 18,
-            backdropFilter: "blur(10px)",
-          }}
+          className="inline-flex items-center gap-2 bg-red-600/10 rounded-full px-4 py-1 mb-5 backdrop-blur-md"
         >
-          <span
-            style={{
-              color: "#dc2626",
-              fontSize: 11,
-              fontWeight: 700,
-              letterSpacing: 1.5,
-            }}
-          >
+          <span className="text-red-600 text-[11px] font-bold tracking-[1.5px]">
             WHO WE ARE
           </span>
         </div>
 
         <h2
-          style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: "clamp(34px,4vw,48px)",
-            color: "#0f172a",
-            fontWeight: 700,
-            lineHeight: 1.15,
-            margin: "0 0 24px",
-            letterSpacing: -1,
-          }}
+          className="font-serif text-[34px] md:text-[clamp(34px,4vw,48px)] text-slate-900 font-bold leading-[1.15] mb-6 tracking-[-1px]"
         >
           Engineering Safety.
           <br />
           Protecting Lives.
         </h2>
 
-        <p
-          style={{
-            color: "#475569",
-            fontSize: 16,
-            lineHeight: 1.9,
-            margin: "0 0 18px",
-          }}
-        >
+        <p className="text-slate-600 text-[15px] md:text-[16px] leading-[1.9] mb-4">
           Sejal Engineering, established in 2010 and based in Ahmedabad,
           Gujarat, is a fire safety engineering and consultancy firm offering
           reliable fire protection solutions. The company combines strong
@@ -301,14 +256,7 @@ const inputStyle = {
           commercial, and infrastructure projects.
         </p>
 
-        <p
-          style={{
-            color: "#475569",
-            fontSize: 16,
-            lineHeight: 1.9,
-            margin: "0 0 32px",
-          }}
-        >
+        <p className="text-slate-600 text-[15px] md:text-[16px] leading-[1.9] mb-8">
           From greenfield industrial projects to high-rise commercial buildings
           and healthcare facilities, we provide end-to-end fire protection
           solutions including design, supply, installation, and maintenance of
@@ -317,13 +265,7 @@ const inputStyle = {
         </p>
 
         {/* TAGS */}
-        <div
-          style={{
-            display: "flex",
-            gap: 14,
-            flexWrap: "wrap",
-          }}
-        >
+        <div className="flex flex-wrap gap-3">
           {[
             "NBC 2016 Compliant",
             "NFPA 13/72 Certified",
@@ -332,16 +274,7 @@ const inputStyle = {
           ].map((t) => (
             <span
               key={t}
-              style={{
-                background: "#ffffff",
-                border: "1px solid #e2e8f0",
-                borderRadius: 999,
-                padding: "8px 16px",
-                fontSize: 12,
-                fontWeight: 600,
-                color: "#334155",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
-              }}
+              className="bg-white border border-slate-200 rounded-full px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm"
             >
               ✓ {t}
             </span>
@@ -351,13 +284,8 @@ const inputStyle = {
 
       {/* RIGHT IMAGE CARDS */}
       <FadeIn delay={0.2}>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 18,
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
           {[
             {
               img: "/img/turnkey_project.jpg",
@@ -388,14 +316,7 @@ const inputStyle = {
               key={i}
               whileHover={{ y: -8 }}
               transition={{ duration: 0.3 }}
-              style={{
-                position: "relative",
-                height: 240,
-                borderRadius: 20,
-                overflow: "hidden",
-                cursor: "pointer",
-                boxShadow: "0 15px 40px rgba(0,0,0,0.12)",
-              }}
+              className="relative h-[220px] md:h-[240px] rounded-[20px] overflow-hidden cursor-pointer shadow-lg"
             >
 
               {/* IMAGE */}
@@ -404,260 +325,114 @@ const inputStyle = {
                 transition={{ duration: 0.5 }}
                 src={item.img}
                 alt={item.title}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
+                className="w-full h-full object-cover"
               />
 
               {/* DARK OVERLAY */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background:
-                    "linear-gradient(to top, rgba(0,0,0,0.88), rgba(0,0,0,0.2))",
-                }}
-              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/90 to-black/20" />
 
               {/* TEXT */}
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  left: 0,
-                  padding: 22,
-                  zIndex: 2,
-                }}
-              >
-                <div
-                  style={{
-                    color: "#ffffff",
-                    fontSize: 18,
-                    fontWeight: 700,
-                    marginBottom: 8,
-                    lineHeight: 1.3,
-                    textShadow: "0 2px 12px rgba(0,0,0,0.45)",
-                  }}
-                >
+              <div className="absolute bottom-0 left-0 p-5 md:p-[22px] z-10">
+                <div className="text-white text-[16px] md:text-[18px] font-bold mb-2 leading-[1.3] drop-shadow-lg">
                   {item.title}
                 </div>
 
-                <div
-                  style={{
-                    color: "rgba(255,255,255,0.82)",
-                    fontSize: 13,
-                    lineHeight: 1.6,
-                  }}
-                >
+                <div className="text-white/80 text-[12px] md:text-[13px] leading-[1.6]">
                   {item.desc}
                 </div>
               </div>
+
             </motion.div>
           ))}
         </div>
       </FadeIn>
+
     </div>
   </div>
-
-  {/* MOBILE RESPONSIVE */}
-  <style>
-    {`
-      @media(max-width: 768px){
-
-        .two-col{
-          grid-template-columns: 1fr !important;
-        }
-
-        .two-col h2{
-          font-size: 34px !important;
-        }
-
-      }
-    `}
-  </style>
 </section>
 
       {/* Services Preview */}
-      <section style={{ padding: "100px 24px", background: "#f4ecec" }}>
-  <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-    
+<section className="py-[100px] px-6 bg-[#f4ecec]">
+  <div className="max-w-[1280px] mx-auto">
+
     <FadeIn>
-      <div style={{ textAlign: "center", marginBottom: 60 }}>
-        <div
-          style={{
-            fontSize: 12,
-            fontWeight: 700,
-            letterSpacing: 2,
-            color: "#dc2626",
-            textTransform: "uppercase",
-            marginBottom: 12,
-          }}
-        >
+      <div className="text-center mb-[60px]">
+
+        <div className="text-[12px] font-bold tracking-[2px] text-red-600 uppercase mb-3">
           What We Do
         </div>
 
-        <h2
-          style={{
-            fontFamily: "'Georgia',serif",
-            fontSize: 40,
-            color: "#0f172a",
-            fontWeight: 700,
-            margin: "0 0 16px",
-          }}
-        >
+        <h2 className="font-serif text-[32px] md:text-[40px] text-slate-900 font-bold mb-4">
           Our Core Services
         </h2>
 
-        <p
-          style={{
-            color: "#64748b",
-            fontSize: 16,
-            maxWidth: 500,
-            margin: "0 auto",
-            lineHeight: 1.8,
-          }}
-        >
+        <p className="text-slate-600 text-[15px] md:text-[16px] max-w-[500px] mx-auto leading-[1.8]">
           Integrated fire protection services engineered for
           safety-critical environments.
         </p>
+
       </div>
     </FadeIn>
 
     {/* Service Cards */}
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))",
-        gap: 24,
-      }}
-    >
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+
       {SERVICES.map((s, i) => (
         <FadeIn key={s.id} delay={i * 0.07}>
+
           <motion.div
             whileHover={{
               y: -8,
               boxShadow: "0 20px 60px rgba(220,38,38,0.12)",
             }}
             transition={{ duration: 0.3 }}
-            style={{
-              background: "#ffffff",
-              border: "1px solid #eceff3",
-              borderRadius: 18,
-              padding: 30,
-              cursor: "pointer",
-              height: "100%",
-              boxSizing: "border-box",
-              position: "relative",
-              overflow: "hidden",
-            }}
+            className="relative bg-white border border-slate-200 rounded-[18px] p-7 cursor-pointer h-full overflow-hidden"
           >
-            {/* Top Accent */}
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: 4,
-                background:
-                  "linear-gradient(90deg,#dc2626,#ef4444,#f87171)",
-              }}
-            />
 
-            {/* Icon / Small Image */}
-            <div
-              style={{
-                width: 58,
-                height: 58,
-                background: "#fef2f2",
-                borderRadius: 14,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 20,
-                border: "1px solid #fee2e2",
-                boxShadow: "0 4px 12px rgba(220,38,38,0.08)",
-              }}
-            >
+            {/* Top Accent */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 via-red-500 to-red-400" />
+
+            {/* Icon */}
+            <div className="w-[58px] h-[58px] bg-red-50 border border-red-100 rounded-[14px] flex items-center justify-center mb-5 shadow-sm">
               <img
                 src={s.image}
                 alt={s.title}
-                style={{
-                  width: "70%",
-                  height: "70%",
-                  objectFit: "contain",
-                }}
+                className="w-[70%] h-[70%] object-contain"
               />
             </div>
 
             {/* Title */}
-            <h3
-              style={{
-                fontWeight: 700,
-                fontSize: 20,
-                color: "#0f172a",
-                margin: "0 0 12px",
-                lineHeight: 1.4,
-              }}
-            >
+            <h3 className="text-[18px] md:text-[20px] font-bold text-slate-900 mb-3 leading-[1.4]">
               {s.title}
             </h3>
 
             {/* Description */}
-            <p
-              style={{
-                color: "#64748b",
-                fontSize: 14,
-                lineHeight: 1.8,
-                margin: "0 0 24px",
-              }}
-            >
+            <p className="text-[14px] text-slate-600 leading-[1.8] mb-6">
               {s.desc}
             </p>
 
             {/* Learn More */}
-          <button
-  onClick={() => navigate("/services")}
-  style={{
-    color: "#dc2626",
-    fontWeight: 700,
-    fontSize: 14,
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    padding: 0,
-    display: "flex",
-    alignItems: "center",
-    gap: 6,
-  }}
->
-  Learn More
-  <span style={{ fontSize: 18 }}>→</span>
-</button>
+            <button
+              onClick={() => navigate("/services")}
+              className="text-red-600 font-bold text-[14px] flex items-center gap-1 p-0 bg-transparent border-0 cursor-pointer"
+            >
+              Learn More <span className="text-[18px]">→</span>
+            </button>
 
             {/* Glow Effect */}
-            <div
-              style={{
-                position: "absolute",
-                top: -40,
-                right: -40,
-                width: 120,
-                height: 120,
-                background:
-                  "radial-gradient(circle, rgba(220,38,38,0.08), transparent 70%)",
-                pointerEvents: "none",
-              }}
-            />
+            <div className="absolute -top-10 -right-10 w-[120px] h-[120px] bg-[radial-gradient(circle,rgba(220,38,38,0.08),transparent_70%)] pointer-events-none" />
+
           </motion.div>
+
         </FadeIn>
       ))}
+
     </div>
 
     {/* Bottom Button */}
     <FadeIn delay={0.3}>
-      <div style={{ textAlign: "center", marginTop: 52 }}>
+      <div className="text-center mt-[52px]">
+
         <motion.button
           whileHover={{
             scale: 1.04,
@@ -665,22 +440,14 @@ const inputStyle = {
           }}
           whileTap={{ scale: 0.97 }}
           onClick={() => navigate("/services")}
-          style={{
-            padding: "15px 38px",
-            background: "#dc2626",
-            color: "#fff",
-            border: "none",
-            borderRadius: 10,
-            fontWeight: 700,
-            fontSize: 15,
-            cursor: "pointer",
-            boxShadow: "0 10px 30px rgba(220,38,38,0.18)",
-          }}
+          className="px-[38px] py-[15px] bg-red-600 text-white rounded-[10px] font-bold text-[15px] shadow-lg"
         >
           View All Services
         </motion.button>
+
       </div>
     </FadeIn>
+
   </div>
 </section>
 
