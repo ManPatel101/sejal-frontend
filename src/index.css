@@ -1,21 +1,64 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* =========================
+   RESET (SAFE VERSION)
+========================= */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
+/* =========================
+   HTML + BODY FIX
+========================= */
 html,
 body,
 #root {
   width: 100%;
   min-height: 100%;
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
+/* =========================
+   BODY BASE STYLE
+========================= */
 body {
   font-family: Arial, Helvetica, sans-serif;
   background: #ffffff;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================
+   IMAGE SAFETY (IMPORTANT)
+========================= */
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* =========================
+   BUTTON SAFETY (MOBILE FIX)
+========================= */
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================
+   SCROLLBAR (OPTIONAL PREMIUM LOOK)
+========================= */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #dc2626;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
 }
