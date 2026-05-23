@@ -4,6 +4,7 @@ import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 
 import ScrollToTop from "./components/utils/ScrollToTop"; // ✅ ADD THIS
+import ProtectedRoute from "./components/utils/ProtectedRoute";
 
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
@@ -12,7 +13,6 @@ import ProductsPage from "./pages/ProductsPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ContactPage from "./pages/ContactPage";
 import AdminDashboard from "./pages/AdminDashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
 import AdminLogin from "./pages/AdminLogin";
 
 function App() {
