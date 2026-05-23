@@ -1,180 +1,257 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+
+  // Detect screen resize
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 900);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const navLinks = [
+    ["Home", "/"],
+    ["About", "/about"],
+    ["Services", "/services"],
+    ["Products", "/products"],
+    ["Projects", "/projects"],
+    ["Contact", "/contact"],
+  ];
 
   return (
-    <header
-      style={{
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        zIndex: 1000,
-
-        // 🔥 Premium glass effect
-        background: "rgba(255,255,255,0.85)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-
-        borderBottom: "1px solid rgba(226,232,240,0.6)",
-      }}
-    >
-      <div
+    <>
+      {/* NAVBAR */}
+      <header
         style={{
-          maxWidth: "1280px",
-          margin: "0 auto",
-          padding: "14px 24px",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100%",
+          zIndex: 1000,
+          background: "rgba(255,255,255,0.82)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderBottom: "1px solid rgba(226,232,240,0.6)",
         }}
       >
-        {/* LOGO */}
-        <Link
-          to="/"
+        <div
           style={{
-            textDecoration: "none",
+            maxWidth: "1280px",
+            margin: "0 auto",
+            padding: "10px 18px", // 🔥 Reduced navbar height
             display: "flex",
+            justifyContent: "space-between",
             alignItems: "center",
-            gap: 10,
-            zIndex: 1001,
           }}
         >
-          <img
-            src="/se_logo/croped.png"
-            alt="Sejal Engineering Logo"
+          {/* LOGO */}
+          <Link
+            to="/"
             style={{
-              width: 42,
-              height: 42,
-              objectFit: "contain",
-            }}
-          />
-
-          <span
-            style={{
-              fontSize: window.innerWidth < 500 ? "16px" : "22px",
-              fontWeight: "800",
-              color: "#dc2626",
-              letterSpacing: "1px",
-              whiteSpace: "nowrap",
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              zIndex: 1100,
             }}
           >
-            SEJAL ENGINEERING
-          </span>
-        </Link>
+            <img
+              src="/se_logo/croped.png"
+              alt="Sejal Engineering Logo"
+              style={{
+                width: isMobile ? "34px" : "38px",
+                height: isMobile ? "34px" : "38px",
+                objectFit: "contain",
+              }}
+            />
 
-        {/* MOBILE MENU BUTTON */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
+            <span
+              style={{
+                fontSize: isMobile ? "15px" : "20px",
+                fontWeight: "800",
+                color: "#dc2626",
+                letterSpacing: "0.5px",
+                whiteSpace: "nowrap",
+              }}
+            >
+              SEJAL ENGINEERING
+            </span>
+          </Link>
+
+          {/* DESKTOP NAV */}
+          {!isMobile && (
+            <nav
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              {navLinks.map(([label, path]) => (
+                <Link
+                  key={label}
+                  to={path}
+                  style={{
+                    textDecoration: "none",
+                    color: "#0f172a",
+                    fontWeight: "600",
+                    fontSize: "14px",
+                    padding: "8px 14px",
+                    borderRadius: "8px",
+                    transition: "0.3s",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = "#dc2626";
+                    e.target.style.color = "#fff";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = "transparent";
+                    e.target.style.color = "#0f172a";
+                  }}
+                >
+                  {label}
+                </Link>
+              ))}
+
+              {/* ADMIN BUTTON */}
+              <Link
+                to="/admin"
+                style={{
+                  marginLeft: "8px",
+                  padding: "8px 16px",
+                  borderRadius: "8px",
+                  background: "#dc2626",
+                  color: "#fff",
+                  fontWeight: "700",
+                  fontSize: "14px",
+                  textDecoration: "none",
+                }}
+              >
+                Admin
+              </Link>
+            </nav>
+          )}
+
+          {/* MOBILE MENU BUTTON */}
+          {isMobile && (
+            <button
+              onClick={() => setMenuOpen(true)}
+              style={{
+                background: "transparent",
+                border: "none",
+                fontSize: "28px",
+                cursor: "pointer",
+                color: "#dc2626",
+                zIndex: 1100,
+              }}
+            >
+              ☰
+            </button>
+          )}
+        </div>
+      </header>
+
+      {/* MOBILE OVERLAY */}
+      {menuOpen && (
+        <div
+          onClick={() => setMenuOpen(false)}
           style={{
-            display: window.innerWidth <= 900 ? "block" : "none",
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.35)",
+            zIndex: 999,
+          }}
+        />
+      )}
+
+      {/* RIGHT SIDE MOBILE MENU */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          right: menuOpen ? "0" : "-280px",
+          width: "260px",
+          height: "100vh",
+          background: "#ffffff",
+          zIndex: 1001,
+          padding: "80px 20px 20px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "12px",
+          transition: "0.35s ease",
+          boxShadow: "-5px 0 25px rgba(0,0,0,0.1)",
+        }}
+      >
+        {/* CLOSE BUTTON */}
+        <button
+          onClick={() => setMenuOpen(false)}
+          style={{
+            position: "absolute",
+            top: "18px",
+            right: "18px",
             background: "transparent",
             border: "none",
             fontSize: "28px",
             cursor: "pointer",
             color: "#dc2626",
-            zIndex: 1001,
           }}
         >
-          ☰
+          ✕
         </button>
 
-        {/* NAV LINKS */}
-        <nav
-          style={{
-            display:
-              window.innerWidth > 900
-                ? "flex"
-                : menuOpen
-                ? "flex"
-                : "none",
-
-            flexDirection: window.innerWidth <= 900 ? "column" : "row",
-
-            position: window.innerWidth <= 900 ? "absolute" : "static",
-
-            top: window.innerWidth <= 900 ? "80px" : "auto",
-            left: 0,
-
-            width: window.innerWidth <= 900 ? "100%" : "auto",
-
-            background:
-              window.innerWidth <= 900
-                ? "rgba(255,255,255,0.96)"
-                : "transparent",
-
-            padding: window.innerWidth <= 900 ? "20px 0" : "0",
-
-            gap: "10px",
-            alignItems: "center",
-
-            boxShadow:
-              window.innerWidth <= 900
-                ? "0 10px 30px rgba(0,0,0,0.08)"
-                : "none",
-          }}
-        >
-          {[
-            ["Home", "/"],
-            ["About", "/about"],
-            ["Services", "/services"],
-            ["Products", "/products"],
-            ["Projects", "/projects"],
-            ["Contact", "/contact"],
-          ].map(([label, path]) => (
-            <Link
-              key={label}
-              to={path}
-              onClick={() => setMenuOpen(false)}
-              style={{
-                textDecoration: "none",
-                color: "#0f172a",
-                fontWeight: "600",
-                fontSize: "14px",
-                padding: "10px 16px",
-                borderRadius: "8px",
-                transition: "0.3s",
-                width: window.innerWidth <= 900 ? "90%" : "auto",
-                textAlign: "center",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = "#dc2626";
-                e.target.style.color = "#fff";
-                e.target.style.transform = "translateY(-1px)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = "transparent";
-                e.target.style.color = "#0f172a";
-                e.target.style.transform = "translateY(0px)";
-              }}
-            >
-              {label}
-            </Link>
-          ))}
-
-          {/* Admin Button */}
+        {navLinks.map(([label, path]) => (
           <Link
-            to="/admin"
+            key={label}
+            to={path}
             onClick={() => setMenuOpen(false)}
             style={{
-              marginLeft: window.innerWidth <= 900 ? "0" : "10px",
-              padding: "10px 16px",
-              borderRadius: "8px",
-              background: "#dc2626",
-              color: "#fff",
-              fontWeight: "700",
-              fontSize: "14px",
               textDecoration: "none",
-              width: window.innerWidth <= 900 ? "90%" : "auto",
-              textAlign: "center",
+              color: "#0f172a",
+              fontWeight: "600",
+              fontSize: "15px",
+              padding: "12px 16px",
+              borderRadius: "10px",
+              transition: "0.3s",
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.background = "#dc2626";
+              e.target.style.color = "#fff";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.background = "transparent";
+              e.target.style.color = "#0f172a";
             }}
           >
-            Admin
+            {label}
           </Link>
-        </nav>
+        ))}
+
+        {/* ADMIN BUTTON */}
+        <Link
+          to="/admin"
+          onClick={() => setMenuOpen(false)}
+          style={{
+            marginTop: "10px",
+            padding: "12px 16px",
+            borderRadius: "10px",
+            background: "#dc2626",
+            color: "#fff",
+            fontWeight: "700",
+            fontSize: "15px",
+            textDecoration: "none",
+            textAlign: "center",
+          }}
+        >
+          Admin
+        </Link>
       </div>
-    </header>
+    </>
   );
 }
