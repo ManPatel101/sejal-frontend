@@ -12,6 +12,8 @@ import ProductsPage from "./pages/ProductsPage";
 import ProjectsPage from "./pages/ProjectsPage";
 import ContactPage from "./pages/ContactPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminLogin from "./pages/AdminLogin";
 
 function App() {
   return (
@@ -28,7 +30,16 @@ function App() {
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/projects" element={<ProjectsPage />} />
         <Route path="/contact" element={<ContactPage />} />
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/login" element={<AdminLogin />} />
+
+<Route
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
 
       <Footer />
