@@ -29,8 +29,9 @@ useEffect(() => {
 
 const fetchProducts = async () => {
   try {
+    const apiBase = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
     const res = await axios.get(
-      "https://sejal-backend.onrender.com/api/products"
+      `${apiBase}/api/products`
     );
 
     setProducts(res.data.products || []);
@@ -52,8 +53,9 @@ const sendInquiry = async () => {
   setSending(true);
 
   try {
+    const apiBase = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
     const response = await fetch(
-      "https://sejal-backend.onrender.com/api/inquiries",
+      `${apiBase}/api/inquiries`,
       {
         method: "POST",
         headers: {

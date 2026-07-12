@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
@@ -16,9 +16,12 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminLogin from "./pages/AdminLogin";
 
 function App() {
+  const location = useLocation();
+  const isAdminPage = location.pathname.startsWith("/admin") || location.pathname.startsWith("/login");
+
   return (
     <>
-      <Navbar />
+      {!isAdminPage && <Navbar />}
 
       {/* ✅ THIS FIXES YOUR HALF/MIDDLE PAGE ISSUE */}
       <ScrollToTop />
@@ -32,17 +35,17 @@ function App() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/login" element={<AdminLogin />} />
 
-<Route
-  path="/admin"
-  element={
-    <ProtectedRoute>
-      <AdminDashboard />
-    </ProtectedRoute>
-  }
-/>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
-      <Footer />
+      {!isAdminPage && <Footer />}
     </>
   );
 }

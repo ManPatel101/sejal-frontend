@@ -97,7 +97,7 @@ export const STATS = [
   { label: "Projects Completed", value: 850, suffix: "+" },
   { label: "Years of Experience", value: 18, suffix: "+" },
   { label: "Cities Covered", value: 120, suffix: "+" },
-  { label: "Client Retention", value: 96, suffix: "%" },
+  { label: "Industrial Clients", value: 500, suffix: "+" },
 ];
 
 export const CATEGORIES = ["All", "Extinguishers", "Detectors", "Panels", "Hose Reels", "Sprinklers", "Pumps"];

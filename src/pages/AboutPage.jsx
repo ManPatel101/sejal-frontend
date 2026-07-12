@@ -12,6 +12,7 @@ import {
   MonitorCog,
   RadioTower,
   BriefcaseBusiness,
+  Mail,
 } from "lucide-react";
 
 /* ─────────────────────────────── helpers ─────────────────────────────── */
@@ -34,22 +35,110 @@ function SectionLabel({ children, light }) {
 
 /* ─────────────── Certificate data ────────────────────────────────────── */
 const CERTS = [
-  { id:1, title:"ISO 9001:2015", authority:"Bureau Veritas Certification", scope:"Design, Engineering, Supply, Installation & Maintenance of Fire Protection Systems", issued:"March 2022", valid:"March 2025", ref:"BV-QMS-GJ-2022-1043", accent:"#d97706", seal:"🏅", bgFrom:"#fffbeb", bgTo:"#fef3c7", detail:"Sejal Engineering holds ISO 9001:2015 Quality Management System certification from Bureau Veritas — one of the world's most respected conformity assessment bodies. The certificate covers every operational function: design review, material procurement, installation methodology, testing protocols, and post-commissioning AMC services. Our QMS is re-audited annually with zero major non-conformances recorded since first certification in 2011." },
-  { id:2, title:"BIS / ISI Mark Licence", authority:"Bureau of Indian Standards", scope:"Manufacture of Fire Extinguishers (IS 15683) & Hose Reels (IS 884)", issued:"January 2018", valid:"Perpetual (Annual Renewal)", ref:"CM/L-7310XXX · CM/L-6812XXX", accent:"#0284c7", seal:"⭐", bgFrom:"#f0f9ff", bgTo:"#e0f2fe", detail:"Sejal Engineering holds ISI Mark licences from the Bureau of Indian Standards for two manufactured product categories. Licence CM/L-7310XXX covers our DCP fire extinguisher range (IS 15683) in 2kg–9kg capacities. Licence CM/L-6812XXX covers our swinging-type hose reel drums (IS 884) in 19mm and 25mm bore. Both licences require BIS factory audits and batch sampling tests every six months." },
-  { id:3, title:"DGFASLI Empanelment", authority:"Directorate General, Factory Advice Service & Labour Institutes", scope:"Empanelled Contractor for Fire Fighting System Installation in Factories", issued:"June 2016", valid:"Renewed Biennially", ref:"DGFASLI/GJ/FFS/2016/048", accent:"#dc2626", seal:"🔴", bgFrom:"#fff1f2", bgTo:"#ffe4e6", detail:"DGFASLI empanelment authorises Sejal Engineering to execute fire fighting system installations in factories regulated under the Factories Act 1948. This registration is mandatory for industrial clients seeking compliance under Schedule 8 of the Gujarat Factories Rules. Our empanelment is renewed every two years following inspection of completed projects and verification of technical manpower." },
-  { id:4, title:"Gujarat Fire NOC Liaison", authority:"Gujarat State Fire & Emergency Services", scope:"Recognised Agency for Fire NOC Plan Submission & Approval", issued:"2009", valid:"Active (22nd year)", ref:"GSFES/AMD/LA/2009/017", accent:"#7c3aed", seal:"🛡️", bgFrom:"#faf5ff", bgTo:"#ede9fe", detail:"Sejal Engineering has been a recognised liaison agency with the Gujarat State Fire & Emergency Services since 2009 — one of only a select number of private firms authorised to submit and represent fire safety plans for plan sanction in Ahmedabad, Surat, Vadodara, and Rajkot fire authority jurisdictions. This recognition substantially reduces plan sanction time for our clients." },
-  { id:5, title:"NFPA Member & Certified", authority:"National Fire Protection Association, USA", scope:"Engineering team certified in NFPA 13, NFPA 14, NFPA 20, NFPA 72", issued:"2014 (ongoing)", valid:"Annual renewal per standard update", ref:"NFPA-IND-GJ-SE-2014", accent:"#16a34a", seal:"🌐", bgFrom:"#f0fdf4", bgTo:"#dcfce7", detail:"Sejal Engineering's senior engineering team holds NFPA certifications across four critical standards: NFPA 13 (Sprinkler Systems), NFPA 14 (Standpipe & Hose Systems), NFPA 20 (Stationary Pumps), and NFPA 72 (Fire Alarm & Signaling). These certifications are renewed with each edition cycle ensuring our designs always reflect the latest international best practices." },
-  { id:6, title:"MSME Udyam Registration", authority:"Ministry of Micro, Small & Medium Enterprises, Govt. of India", scope:"Manufacturing & Service Enterprise Registration", issued:"August 2020", valid:"Perpetual", ref:"UDYAM-GJ-01-XXXXXXX", accent:"#ea580c", seal:"🏭", bgFrom:"#fff7ed", bgTo:"#ffedd5", detail:"Sejal Engineering is registered under the MSME Udyam scheme as a manufacturing and service enterprise, making us eligible for government procurement preferences, PSU vendor lists, and priority credit facilities. Our MSME status reflects our roots as a Gujarat-based enterprise and our commitment to building indigenous fire safety manufacturing capability within India." },
-  { id:7, title:"FM Global Compliance", authority:"Factory Mutual Global (FM Approvals)", scope:"Sprinkler & Suppression System Design — FM Data Sheet Compliance", issued:"2019", valid:"Project-wise verification", ref:"FM-DS-2-0/8-9/10-2 Compliant", accent:"#0891b2", seal:"✅", bgFrom:"#ecfeff", bgTo:"#cffafe", detail:"Several Sejal Engineering clients carry FM Global property insurance which requires fire protection systems to comply with FM Global data sheets (DS 2-0, DS 8-9, DS 10-2 etc.). Our engineering team is trained in FM Global loss prevention standards and has delivered FM-compliant sprinkler and foam suppression systems for petrochemical and warehousing clients." },
-  { id:8, title:"IS / NBC Standards Compliance", authority:"Bureau of Indian Standards & CPWD", scope:"IS 884, IS 636, IS 2175, IS 2189, IS 12469, IS 1239 — full portfolio", issued:"Since inception", valid:"Continuous", ref:"Multi-standard compliance portfolio", accent:"#be185d", seal:"📋", bgFrom:"#fdf2f8", bgTo:"#fce7f3", detail:"Every Sejal Engineering system and manufactured product complies with the full suite of relevant BIS codes. Our fabricated piping meets IS 1239, hose reels meet IS 884, hose boxes meet IS 636, smoke detectors meet IS 2175, alarm panels meet IS 2189, and our pumps meet IS 12469. Compliance is verified at every stage of production and installation." },
+  { id:1, title:"ISO 9001:2015", authority:"Bureau Veritas Certification", scope:"Design, Engineering, Supply, Installation & Maintenance of Fire Protection Systems", issued:"March 2022", valid:"March 2025", ref:"BV-QMS-GJ-2022-1043", accent:"#ef4444", seal:"🏅", bgFrom:"#fffbeb", bgTo:"#fef3c7", detail:"Sejal Engineering holds ISO 9001:2015 Quality Management System certification from Bureau Veritas — one of the world's most respected conformity assessment bodies. The certificate covers every operational function: design review, material procurement, installation methodology, testing protocols, and post-commissioning AMC services. Our QMS is re-audited annually with zero major non-conformances recorded since first certification in 2011." },
+  { id:2, title:"BIS / ISI Mark Licence", authority:"Bureau of Indian Standards", scope:"Manufacture of Fire Extinguishers (IS 15683) & Hose Reels (IS 884)", issued:"January 2018", valid:"Perpetual (Annual Renewal)", ref:"CM/L-7310XXX · CM/L-6812XXX", accent:"#ef4444", seal:"⭐", bgFrom:"#f0f9ff", bgTo:"#e0f2fe", detail:"Sejal Engineering holds ISI Mark licences from the Bureau of Indian Standards for two manufactured product categories. Licence CM/L-7310XXX covers our DCP fire extinguisher range (IS 15683) in 2kg–9kg capacities. Licence CM/L-6812XXX covers our swinging-type hose reel drums (IS 884) in 19mm and 25mm bore. Both licences require BIS factory audits and batch sampling tests every six months." },
+  { id:3, title:"DGFASLI Empanelment", authority:"Directorate General, Factory Advice Service & Labour Institutes", scope:"Empanelled Contractor for Fire Fighting System Installation in Factories", issued:"June 2016", valid:"Renewed Biennially", ref:"DGFASLI/GJ/FFS/2016/048", accent:"#ef4444", seal:"🔴", bgFrom:"#fff1f2", bgTo:"#ffe4e6", detail:"DGFASLI empanelment authorises Sejal Engineering to execute fire fighting system installations in factories regulated under the Factories Act 1948. This registration is mandatory for industrial clients seeking compliance under Schedule 8 of the Gujarat Factories Rules. Our empanelment is renewed every two years following inspection of completed projects and verification of technical manpower." },
+  { id:4, title:"Gujarat Fire NOC Liaison", authority:"Gujarat State Fire & Emergency Services", scope:"Recognised Agency for Fire NOC Plan Submission & Approval", issued:"2009", valid:"Active (22nd year)", ref:"GSFES/AMD/LA/2009/017", accent:"#ef4444", seal:"🛡️", bgFrom:"#faf5ff", bgTo:"#ede9fe", detail:"Sejal Engineering has been a recognised liaison agency with the Gujarat State Fire & Emergency Services since 2009 — one of only a select number of private firms authorised to submit and represent fire safety plans for plan sanction in Ahmedabad, Surat, Vadodara, and Rajkot fire authority jurisdictions. This recognition substantially reduces plan sanction time for our clients." },
+  { id:5, title:"NFPA Member & Certified", authority:"National Fire Protection Association, USA", scope:"Engineering team certified in NFPA 13, NFPA 14, NFPA 20, NFPA 72", issued:"2014 (ongoing)", valid:"Annual renewal per standard update", ref:"NFPA-IND-GJ-SE-2014", accent:"#ef4444", seal:"🌐", bgFrom:"#f0fdf4", bgTo:"#dcfce7", detail:"Sejal Engineering's senior engineering team holds NFPA certifications across four critical standards: NFPA 13 (Sprinkler Systems), NFPA 14 (Standpipe & Hose Systems), NFPA 20 (Stationary Pumps), and NFPA 72 (Fire Alarm & Signaling). These certifications are renewed with each edition cycle ensuring our designs always reflect the latest international best practices." },
+  { id:6, title:"MSME Udyam Registration", authority:"Ministry of Micro, Small & Medium Enterprises, Govt. of India", scope:"Manufacturing & Service Enterprise Registration", issued:"August 2020", valid:"Perpetual", ref:"UDYAM-GJ-01-XXXXXXX", accent:"#ef4444", seal:"🏭", bgFrom:"#fff7ed", bgTo:"#ffedd5", detail:"Sejal Engineering is registered under the MSME Udyam scheme as a manufacturing and service enterprise, making us eligible for government procurement preferences, PSU vendor lists, and priority credit facilities. Our MSME status reflects our roots as a Gujarat-based enterprise and our commitment to building indigenous fire safety manufacturing capability within India." },
+  { id:7, title:"FM Global Compliance", authority:"Factory Mutual Global (FM Approvals)", scope:"Sprinkler & Suppression System Design — FM Data Sheet Compliance", issued:"2019", valid:"Project-wise verification", ref:"FM-DS-2-0/8-9/10-2 Compliant", accent:"#ef4444", seal:"✅", bgFrom:"#ecfeff", bgTo:"#cffafe", detail:"Several Sejal Engineering clients carry FM Global property insurance which requires fire protection systems to comply with FM Global data sheets (DS 2-0, DS 8-9, DS 10-2 etc.). Our engineering team is trained in FM Global loss prevention standards and has delivered FM-compliant sprinkler and foam suppression systems for petrochemical and warehousing clients." },
+  { id:8, title:"IS / NBC Standards Compliance", authority:"Bureau of Indian Standards & CPWD", scope:"IS 884, IS 636, IS 2175, IS 2189, IS 12469, IS 1239 — full portfolio", issued:"Since inception", valid:"Continuous", ref:"Multi-standard compliance portfolio", accent:"#ef4444", seal:"📋", bgFrom:"#fdf2f8", bgTo:"#fce7f3", detail:"Every Sejal Engineering system and manufactured product complies with the full suite of relevant BIS codes. Our fabricated piping meets IS 1239, hose reels meet IS 884, hose boxes meet IS 636, smoke detectors meet IS 2175, alarm panels meet IS 2189, and our pumps meet IS 12469. Compliance is verified at every stage of production and installation." },
 ];
 
+/* ─────────────────── CertLogo Component (SVGs) ───────────────────────── */
+function CertLogo({ id }) {
+  switch (id) {
+    case 1: // ISO 9001
+      return (
+        <img
+          src="/certificates_logo/ISO.jpg"
+          alt="ISO 9001 Logo"
+          style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 8 }}
+        />
+      );
+    case 2: // BIS / ISI Mark
+      return (
+        <img
+          src="/certificates_logo/BIS.jpg"
+          alt="BIS Logo"
+          style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 8 }}
+        />
+      );
+    case 3: // DGFASLI
+      return (
+        <svg viewBox="0 0 100 100" style={{ width: "80%", height: "80%" }}>
+          <path d="M50 15 L80 25 V55 C80 72 50 85 50 85 C50 85 20 72 20 55 V25 Z" fill="none" stroke="#dc2626" strokeWidth="2.5" />
+          <path d="M50 15 L80 25 V55 C80 72 50 85 50 85 C50 85 20 72 20 55 V25 Z" fill="#dc2626" opacity="0.06" />
+          <line x1="32" y1="40" x2="68" y2="40" stroke="#f97316" strokeWidth="3" />
+          <line x1="32" y1="48" x2="68" y2="48" stroke="#16a34a" strokeWidth="3" />
+          <text x="50" y="65" fontSize="7" fontWeight="bold" fill="#dc2626" textAnchor="middle" style={{ fontFamily: "sans-serif" }}>GOVT OF INDIA</text>
+          <text x="50" y="33" fontSize="8" fontWeight="900" fill="#dc2626" textAnchor="middle" style={{ fontFamily: "sans-serif" }}>DGFASLI</text>
+        </svg>
+      );
+    case 4: // Gujarat Fire NOC
+      return (
+        <svg viewBox="0 0 100 100" style={{ width: "80%", height: "80%" }}>
+          <path d="M50 15 C65 15 80 25 80 50 C80 75 50 85 50 85 C50 85 20 75 20 50 C20 25 35 15 50 15 Z" fill="none" stroke="#7c3aed" strokeWidth="2.5" />
+          <path d="M50 30 C58 38 62 48 58 56 C54 64 46 64 42 56 C38 48 42 38 50 30 Z" fill="#7c3aed" />
+          <path d="M50 40 C54 45 56 50 54 54 C52 58 48 58 46 54 C44 50 46 45 50 40 Z" fill="#f59e0b" />
+          <text x="50" y="75" fontSize="7" fontWeight="900" fill="#7c3aed" textAnchor="middle" style={{ fontFamily: "sans-serif" }}>GSFES NOC</text>
+        </svg>
+      );
+    case 5: // NFPA
+      return (
+        <svg viewBox="0 0 100 100" style={{ width: "85%", height: "85%" }}>
+          <g transform="rotate(45 50 50)">
+            <rect x="25" y="25" width="50" height="50" stroke="#16a34a" strokeWidth="2" fill="none" />
+            <rect x="25" y="25" width="25" height="25" fill="#2563eb" />
+            <rect x="50" y="25" width="25" height="25" fill="#dc2626" />
+            <rect x="25" y="50" width="25" height="25" fill="#eab308" />
+            <rect x="50" y="50" width="25" height="25" fill="#ffffff" stroke="#94a3b8" strokeWidth="0.5" />
+          </g>
+          <text x="50" y="54" fontSize="9" fontWeight="900" fill="#16a34a" textAnchor="middle" stroke="#ffffff" strokeWidth="1" paintOrder="stroke" style={{ fontFamily: "sans-serif" }}>NFPA</text>
+        </svg>
+      );
+    case 6: // MSME
+      return (
+        <svg viewBox="0 0 100 100" style={{ width: "80%", height: "80%" }}>
+          <circle cx="50" cy="50" r="28" fill="none" stroke="#ea580c" strokeWidth="2.5" />
+          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => (
+            <rect key={angle} x="47" y="15" width="6" height="10" fill="#ea580c" transform={`rotate(${angle} 50 50)`} />
+          ))}
+          <circle cx="50" cy="50" r="16" fill="#fff" />
+          <text x="50" y="53" fontSize="8" fontWeight="900" fill="#ea580c" textAnchor="middle" style={{ fontFamily: "sans-serif" }}>UDYAM</text>
+        </svg>
+      );
+    case 7: // FM Global
+      return (
+        <img
+          src="/certificates_logo/FM.jfif"
+          alt="FM Global Logo"
+          style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 8 }}
+        />
+      );
+    case 8: // IS Compliance
+      return (
+        <svg viewBox="0 0 100 100" style={{ width: "75%", height: "75%" }}>
+          <rect x="25" y="20" width="50" height="60" rx="5" fill="none" stroke="#be185d" strokeWidth="2.5" />
+          <line x1="35" y1="35" x2="65" y2="35" stroke="#be185d" strokeWidth="2" strokeLinecap="round" />
+          <line x1="35" y1="48" x2="65" y2="48" stroke="#be185d" strokeWidth="2" strokeLinecap="round" />
+          <line x1="35" y1="61" x2="55" y2="61" stroke="#be185d" strokeWidth="2" strokeLinecap="round" />
+          <circle cx="70" cy="70" r="13" fill="#be185d" />
+          <path d="M65 70 l3 3 l6 -6" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+}
+
 /* ─────────────────── CertCard component ─────────────────────────────── */
-function CertCard({ cert }) {
+function CertCard({ cert /*, onClick */ }) {
   return (
     <motion.div
       whileHover={{ y: -5 }}
       transition={{ duration: 0.3 }}
+      /* onClick={() => onClick && onClick(cert)} */
       style={{
         position: "relative",
         background: "#ffffff",
@@ -58,9 +147,10 @@ function CertCard({ cert }) {
         overflow: "hidden",
         padding: "28px 26px",
         boxShadow: "0 8px 30px rgba(15,23,42,0.05)",
-        minHeight: 220,
+        height: 260,
         display: "flex",
         flexDirection: "column",
+        /* cursor: "pointer", */
       }}
     >
       {/* top accent */}
@@ -95,19 +185,15 @@ function CertCard({ cert }) {
         style={{
           width: 56,
           height: 56,
-          borderRadius: 16,
-          background: `${cert.accent}12`,
-          border: `1px solid ${cert.accent}22`,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: 26,
           marginBottom: 22,
           position: "relative",
           zIndex: 1,
         }}
       >
-        {cert.seal}
+        <CertLogo id={cert.id} />
       </div>
 
       {/* title */}
@@ -258,17 +344,13 @@ function CertModal({ cert, onClose }) {
               style={{
                 width: 72,
                 height: 72,
-                borderRadius: 18,
-                background: `${cert.accent}12`,
-                border: `1px solid ${cert.accent}25`,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: 34,
                 flexShrink: 0,
               }}
             >
-              {cert.seal}
+              <CertLogo id={cert.id} />
             </div>
           </div>
 
@@ -380,44 +462,67 @@ function CertModal({ cert, onClose }) {
     </motion.div>
   );
 }
-/* ─────────────────────────── Team card ──────────────────────────────── */
-function TeamCard({ name, role, dept, since, initials, color, bio, skills }) {
-  const [flipped, setFlipped] = useState(false);
+/* ─────────────────────────── Reusable LeadershipCard component ─────────────────────────────── */
+const LEADERSHIP_TEAM = [
+  {
+    name: "Pragnesh Patel",
+    designation: "Managing Director & Founder",
+    image: "/staff_photo/MD.jpeg"
+  },
+  {
+    name: "Nilesh K. Shah",
+    designation: "Head — Quality Control",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200"
+  },
+  {
+    name: "Manish D. Desai",
+    designation: "Head — Projects & Production",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200"
+  },
+  {
+    name: "Pooja V. Mehta",
+    designation: "Head — Marketing & Business Dev.",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200"
+  }
+];
+
+function LeadershipCard({ name, designation, image }) {
   return (
-    <div style={{ perspective:900, height:400 }} onMouseEnter={()=>setFlipped(true)} onMouseLeave={()=>setFlipped(false)}>
-      <motion.div animate={{ rotateY: flipped ? 180 : 0 }} transition={{ duration:0.55, ease:[0.4,0,0.2,1] }}
-        style={{ width:"100%", height:"100%", transformStyle:"preserve-3d", position:"relative" }}>
-        {/* Front */}
-        <div style={{ position:"absolute", inset:0, backfaceVisibility:"hidden", borderRadius:20, overflow:"hidden", background:"#fff", border:"1.5px solid #f0f0f0", boxShadow:"0 4px 24px rgba(0,0,0,0.06)" }}>
-          <div style={{ height:220, background:`linear-gradient(135deg, ${color}22 0%, ${color}44 50%, ${color}18 100%)`, display:"flex", alignItems:"center", justifyContent:"center", position:"relative" }}>
-            <div style={{ position:"absolute", width:180, height:180, borderRadius:"50%", border:`2px solid ${color}20` }} />
-            <div style={{ position:"absolute", width:140, height:140, borderRadius:"50%", border:`2px solid ${color}30` }} />
-            <div style={{ width:100, height:100, borderRadius:"50%", background:`linear-gradient(135deg, ${color}, ${color}bb)`, display:"flex", alignItems:"center", justifyContent:"center", fontSize:36, fontWeight:800, color:"#fff", fontFamily:"'Georgia',serif", boxShadow:`0 8px 32px ${color}55, 0 0 0 6px ${color}18`, zIndex:1 }}>{initials}</div>
-            <div style={{ position:"absolute", bottom:16, right:16, background:color, color:"#fff", fontSize:10, fontWeight:700, letterSpacing:1.5, textTransform:"uppercase", padding:"4px 10px", borderRadius:100 }}>{dept}</div>
-          </div>
-          <div style={{ padding:"20px 24px 24px" }}>
-            <div style={{ fontFamily:"'Georgia',serif", fontWeight:700, fontSize:20, color:"#0f172a", marginBottom:4 }}>{name}</div>
-            <div style={{ fontSize:13, color:color, fontWeight:700, marginBottom:8, textTransform:"uppercase", letterSpacing:0.5 }}>{role}</div>
-            <div style={{ fontSize:12, color:"#94a3b8", fontWeight:600 }}>With Sejal since {since}</div>
-            <div style={{ marginTop:14, fontSize:12, color:"#64748b", fontStyle:"italic" }}>Hover to know more →</div>
-          </div>
-        </div>
-        {/* Back */}
-        <div style={{ position:"absolute", inset:0, backfaceVisibility:"hidden", borderRadius:20, overflow:"hidden", background:"linear-gradient(135deg,#0f172a 0%,#1e293b 100%)", border:`1.5px solid ${color}40`, rotateY:"180deg", padding:"28px 26px", display:"flex", flexDirection:"column", justifyContent:"space-between" }}>
-          <div>
-            <div style={{ fontFamily:"'Georgia',serif", fontWeight:700, fontSize:18, color:"#fff", marginBottom:4 }}>{name}</div>
-            <div style={{ fontSize:12, color:color, fontWeight:700, textTransform:"uppercase", letterSpacing:1, marginBottom:18 }}>{role}</div>
-            <p style={{ fontSize:13.5, color:"#94a3b8", lineHeight:1.75, margin:0 }}>{bio}</p>
-          </div>
-          <div>
-            <div style={{ fontSize:11, fontWeight:700, color:"#64748b", letterSpacing:1.5, textTransform:"uppercase", marginBottom:10 }}>Expertise</div>
-            <div style={{ display:"flex", flexWrap:"wrap", gap:7 }}>
-              {skills.map(s=>(<span key={s} style={{ background:`${color}22`, border:`1px solid ${color}44`, color:color, fontSize:11, fontWeight:600, padding:"3px 9px", borderRadius:100 }}>{s}</span>))}
-            </div>
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+      whileHover={{ y: -8 }}
+      className="bg-[#FFFFFF] rounded-2xl border border-[#E5E7EB] p-8 flex flex-col items-center text-center shadow-sm hover:shadow-xl transition-all duration-300 h-full justify-between group"
+    >
+      {/* Centered Circular Photo Container */}
+      <div className="relative mb-6 flex-shrink-0">
+        {/* Outer Ring & Soft Shadow */}
+        <div className="w-[148px] h-[148px] rounded-full border border-[#E5E7EB] flex items-center justify-center p-[3px] bg-white shadow-sm overflow-hidden">
+          {/* Inner Photo with 4px White Border */}
+          <div className="w-full h-full rounded-full overflow-hidden border-[4px] border-white">
+            <motion.img
+              src={image}
+              alt={name}
+              whileHover={{ scale: 1.05 }}
+              transition={{ duration: 0.3 }}
+              className="w-full h-full object-cover rounded-full"
+            />
           </div>
         </div>
-      </motion.div>
-    </div>
+      </div>
+
+      {/* Info Area */}
+      <div className="flex-grow flex flex-col justify-center items-center w-full">
+        <h3 className="text-xl font-bold text-[#0B1F3A] mb-2 font-serif">
+          {name}
+        </h3>
+        <p className="text-xs font-semibold uppercase tracking-wider text-[#0056D2]">
+          {designation}
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
@@ -468,8 +573,8 @@ export default function AboutPage() {
 
       {/* ══ HERO ══ */}
       <section ref={heroRef} style={{ position:"relative", height:"62vh", minHeight:460, overflow:"hidden", display:"flex", alignItems:"center" }}>
-        <motion.div style={{ position:"absolute", inset:0, y:yBg, backgroundImage:'url("https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1920&q=80")', backgroundSize:"cover", backgroundPosition:"center", filter:"brightness(0.30)" }} />
-        <div style={{ position:"absolute", inset:0, background:"linear-gradient(90deg,rgba(15,23,42,0.85) 0%,rgba(15,23,42,0.45) 60%,transparent 100%)" }} />
+        <motion.div style={{ position:"absolute", inset:0, y:yBg, backgroundImage:'url("https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1920&q=80")', backgroundSize:"cover", backgroundPosition:"center", filter:"brightness(0.55)" }} />
+        <div style={{ position:"absolute", inset:0, background:"linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
         <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize:"28px 28px" }} />
         <div style={{ maxWidth:1280, margin:"0 auto", padding:"0 24px", position:"relative", zIndex:1, width:"100%" }}>
           <motion.div initial={{ opacity:0, y:40 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.9 }}>
@@ -511,12 +616,12 @@ export default function AboutPage() {
                 {[
                   {label:"Founded",value:"2002",sub:"Ahmedabad, Gujarat"},
                   {label:"Registered Office",value:"Ahmedabad",sub:"Gujarat, India — PIN 380015"},
-                  {label:"CIN",value:"U74900GJ2002PTC049XXX",sub:"Company Identification Number"},
+                  /*{label:"CIN",value:"U74900GJ2002PTC049XXX",sub:"Company Identification Number"}*/,
                   {label:"GSTIN",value:"24AAXXX1234X1Z5",sub:"Gujarat State GST Registration"},
-                  {label:"Manufacturing Unit",value:"Naroda GIDC",sub:"Fire extinguisher & hose reel plant"},
-                  {label:"ISI Licences",value:"2 Active Licences",sub:"IS 15683 (Extinguisher) · IS 884 (Hose Reel)"},
+                  {label:"Warehouse",value:"Sukhram Estate, Virat Nagar",sub:"Fire Safety Operations Center"},
+                  /*{label:"ISI Licences",value:"2 Active Licences",sub:"IS 15683 (Extinguisher) · IS 884 (Hose Reel)"}*/,
                   {label:"Team Strength",value:"120+ Professionals",sub:"Engineers · Technicians · QC · Sales"},
-                  {label:"Turnover Range",value:"₹50 Cr+",sub:"Annual consolidated revenue"},
+                 /* {label:"Turnover Range",value:"₹50 Cr+",sub:"Annual consolidated revenue"}*/,
                 ].map(c=>(
                   <div key={c.label} style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"13px 16px", background:"#f8fafc", borderRadius:10, borderLeft:"3px solid #dc2626" }}>
                     <div style={{ fontSize:11, color:"#94a3b8", fontWeight:600, textTransform:"uppercase", letterSpacing:0.5 }}>{c.label}</div>
@@ -800,7 +905,7 @@ export default function AboutPage() {
 </section>
 
       {/* ══ TIMELINE ══ */}
-      <section style={{ padding:"100px 24px", background:"#f8fafc" }}>
+      {/* <section style={{ padding:"100px 24px", background:"#f8fafc" }}>
         <div style={{ maxWidth:900, margin:"0 auto" }}>
           <FadeIn>
             <div style={{ textAlign:"center", marginBottom:72 }}>
@@ -820,7 +925,7 @@ export default function AboutPage() {
             {year:"2024",title:"850+ Projects & Counting",desc:"Today, Sejal Engineering operates across 120+ cities with 120+ team members and a live AMC portfolio of 200+ sites. Revenues exceed ₹50 Cr. The mission remains unchanged.",side:"left",last:true},
           ].map((item,i)=><TimelineItem key={i} {...item} last={!!item.last} />)}
         </div>
-      </section>
+      </section> */}
 
       {/* ══ OUR DIFFERENTIATORS — manufacturing-focused, unique content ══ */}
 <section style={{ padding: "90px 22px", background: "#fff" }}>
@@ -872,7 +977,7 @@ export default function AboutPage() {
           title: "Integrated Manufacturing",
           body:
             "In-house manufacturing of ISI-certified extinguishers and hose reels with turnkey execution support.",
-          color: "#dc2626",
+          color: "#ef4444",
         },
 
         {
@@ -881,7 +986,7 @@ export default function AboutPage() {
           title: "Advanced Testing Facility",
           body:
             "Dedicated testing systems for pressure checks, discharge verification, and quality inspection.",
-          color: "#2563eb",
+          color: "#ef4444",
         },
 
         {
@@ -890,7 +995,7 @@ export default function AboutPage() {
           title: "BIS Licensed Products",
           body:
             "Products certified under IS standards with strict BIS compliance and audited production processes.",
-          color: "#16a34a",
+          color: "#ef4444",
         },
 
         {
@@ -899,7 +1004,7 @@ export default function AboutPage() {
           title: "Factory-Direct Supply",
           body:
             "Direct manufacturing capability delivering better pricing with controlled engineering quality.",
-          color: "#d97706",
+          color: "#ef4444",
         },
 
         {
@@ -908,7 +1013,7 @@ export default function AboutPage() {
           title: "Material Traceability",
           body:
             "Complete traceability of production batches with certified raw material documentation.",
-          color: "#7c3aed",
+          color: "#ef4444",
         },
 
         {
@@ -917,14 +1022,14 @@ export default function AboutPage() {
           title: "Certified Refilling Systems",
           body:
             "Factory-standard DCP and CO₂ refilling support for reliable AMC maintenance services.",
-          color: "#0891b2",
+          color: "#ef4444",
         },
       ].map((item, i) => (
         <FadeIn key={item.no} delay={i * 0.05}>
           <motion.div
             whileHover={{
               y: -6,
-              borderColor: `${item.color}55`,
+              borderColor: "rgba(239, 68, 68, 0.35)",
               boxShadow: "0 18px 50px rgba(15,23,42,0.10)",
             }}
             transition={{ duration: 0.3 }}
@@ -1081,15 +1186,16 @@ export default function AboutPage() {
             </div>
           </FadeIn>
           <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(270px,1fr))", gap:20 }}>
-            {CERTS.map((cert,i)=>(<FadeIn key={cert.id} delay={i*0.07}><CertCard cert={cert} onClick={setActiveCert} /></FadeIn>))}
+            {/* {CERTS.map((cert,i)=>(<FadeIn key={cert.id} delay={i*0.07}><CertCard cert={cert} onClick={setActiveCert} /></FadeIn>))} */}
+            {CERTS.map((cert,i)=>(<FadeIn key={cert.id} delay={i*0.07}><CertCard cert={cert} /></FadeIn>))}
           </div>
         </div>
       </section>
 
       {/* Certificate modal — rendered at root level */}
-      <AnimatePresence>
+      {/* <AnimatePresence>
         {activeCert && <CertModal cert={activeCert} onClose={()=>setActiveCert(null)} />}
-      </AnimatePresence>
+      </AnimatePresence> */}
 {/* ══ INFRASTRUCTURE ══ */}
 <section style={{ padding:"100px 24px", background:"#0f172a" }}>
   <div style={{ maxWidth:1280, margin:"0 auto" }}>
@@ -1126,43 +1232,39 @@ export default function AboutPage() {
             {
               icon: <Building2 size={18} strokeWidth={1.8} />,
               label:"Head Office",
-              val:"Ahmedabad, Gujarat (2,400 sq ft engineering + admin)"
+              val:"Ahmedabad, Gujarat "
             },
             {
               icon:<Factory size={18} />,
-              label:"Manufacturing Plant",
-              val:"Naroda GIDC, Ahmedabad — 8,000 sq ft fire equipment plant"
+              label:"Warehouse",
+              val:"26-Sukhram Estate, NH-8, Ahmedabad, Gujarat"
             },
             {
               icon:<ShieldCheck size={18} strokeWidth={1.8} />,
               label:"QC Testing Lab",
-              val:"In-house product testing lab (6 dedicated test stations)"
+              val:"In-house product testing lab"
             },
             {
               icon:<BriefcaseBusiness size={18} strokeWidth={1.8} />,
               label:"Branch Offices",
-              val:"Surat · Vadodara · Rajkot · Mumbai liaison"
+              val:"Surat"
             },
-            {
-              icon:<Boxes size={18} strokeWidth={1.8} />,
-              label:"Spare Parts Warehouse",
-              val:"1,800 sq ft spares inventory for AMC rapid response"
-            },
-            {
-              icon:<Truck size={18} strokeWidth={1.8} />,
-              label:"Fleet",
-              val:"12 service vehicles for site inspection and emergency response"
-            },
-            {
-              icon:<MonitorCog size={18} strokeWidth={1.8} />,
-              label:"Engineering Software",
-              val:"AutoCAD MEP · Revit MEP · HydraCAD · AutoSPRINK"
-            },
-            {
-              icon:<RadioTower size={18} strokeWidth={1.8} />,
-              label:"AMC Management",
-              val:"Digital site register with scheduled inspection alerts"
-            }
+            
+            // {
+            //   icon:<Truck size={18} strokeWidth={1.8} />,
+            //   label:"Fleet",
+            //   val:"12 service vehicles for site inspection and emergency response"
+            // },
+            // {
+            //   icon:<MonitorCog size={18} strokeWidth={1.8} />,
+            //   label:"Engineering Software",
+            //   val:"AutoCAD MEP · Revit MEP · HydraCAD · AutoSPRINK"
+            // },
+            // {
+            //   icon:<RadioTower size={18} strokeWidth={1.8} />,
+            //   label:"AMC Management",
+            //   val:"Digital site register with scheduled inspection alerts"
+            // }
           ].map((item)=>(
             <div
               key={item.label}
@@ -1322,50 +1424,27 @@ export default function AboutPage() {
       </section>
 
       {/* ══ TEAM ══ */}
-      <section style={{ padding:"100px 24px", background:"#f8fafc" }}>
-        <div style={{ maxWidth:1280, margin:"0 auto" }}>
+      <section className="py-[100px] px-6 bg-[#F8FAFC]">
+        <div className="max-w-7xl mx-auto">
           <FadeIn>
-            <div style={{ textAlign:"center", marginBottom:72 }}>
-              <SectionLabel>Leadership</SectionLabel>
-              <h2 style={{ fontFamily:"'Georgia',serif", fontSize:"clamp(28px,4vw,44px)", fontWeight:700, color:"#0f172a", margin:"0 0 16px" }}>The People Behind Every Safe Facility</h2>
-              <p style={{ color:"#64748b", fontSize:16, maxWidth:560, margin:"0 auto", lineHeight:1.7 }}>
-                Four decades of combined expertise — engineering fire safety solutions that protect lives, assets, and reputations every day.
-                <br /><span style={{ fontSize:13, color:"#94a3b8", marginTop:8, display:"block" }}>Hover over each card to learn more.</span>
+            <div className="text-center mb-16">
+              <h2 className="font-serif text-3xl md:text-5xl font-bold text-[#0B1F3A] mb-4">
+                Leadership Team
+              </h2>
+              <p className="text-[#64748B] text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                Meet the experienced professionals leading our organization with excellence, innovation, and commitment.
               </p>
             </div>
           </FadeIn>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:28 }}>
-            <FadeIn delay={0.05}>
-              <TeamCard name="Jayesh R. Patel" role="Managing Director" dept="Leadership" since="2002 (Founder)" initials="JP" color="#dc2626"
-                bio="Jayesh founded Sejal Engineering in 2002 and has steered it from a 3-person consultancy to a 120-person integrated manufacturer and contractor. A mechanical engineer from L.D. College, Ahmedabad, he holds NFPA 13 and FM Global certifications and oversees all strategic decisions including the 2012 manufacturing plant expansion."
-                skills={["Strategic Leadership","Client Relations","NFPA Standards","Business Development","FM Global"]} />
-            </FadeIn>
-            <FadeIn delay={0.12}>
-              <TeamCard name="Nilesh K. Shah" role="Head — Quality Control" dept="Quality" since="2006" initials="NS" color="#2563eb"
-                bio="Nilesh oversees all technical quality systems — from design review and material inspection to in-house lab testing of manufactured products and commissioning certification. He authored Sejal's QC manual aligned with IS 15683, IS 884, and ISO 9001:2015 and has maintained a zero-defect record on all BIS factory audits since 2018."
-                skills={["ISO 9001:2015","Product Testing","Technical Audits","BIS Compliance","Design Review"]} />
-            </FadeIn>
-            <FadeIn delay={0.19}>
-              <TeamCard name="Manish D. Desai" role="Head — Projects & Production" dept="Operations" since="2009" initials="MD" color="#16a34a"
-                bio="Manish leads both the manufacturing plant at Naroda GIDC and all field project execution — coordinating design, raw material procurement, in-plant fabrication, site installation, and commissioning. He has personally overseen 300+ project completions and manages production scheduling for extinguisher and hose reel batches."
-                skills={["Project Management","Plant Operations","Site Execution","Piping Fabrication","Commissioning"]} />
-            </FadeIn>
-            <FadeIn delay={0.26}>
-              <TeamCard name="Pooja V. Mehta" role="Head — Marketing & Business Dev." dept="Marketing" since="2014" initials="PM" color="#d97706"
-                bio="Pooja drives Sejal's client acquisition, brand strategy, and key account management. A B.E. Mechanical graduate with an MBA from MICA Ahmedabad, she has grown the enquiry pipeline 4× since joining — opening healthcare, hospitality, and government segments and managing Sejal's relationships with tier-1 EPC contractors."
-                skills={["Business Development","Key Account Mgmt","Tender & Proposals","Brand Strategy","EPC Partnerships"]} />
-            </FadeIn>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch justify-center">
+            {LEADERSHIP_TEAM.map((member) => (
+              <LeadershipCard
+                key={member.name}
+                {...member}
+              />
+            ))}
           </div>
-          <FadeIn delay={0.1}>
-            <div style={{ marginTop:64, background:"#fff", borderRadius:16, border:"1.5px solid #f0f0f0", padding:"36px 40px", display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:28 }}>
-              {[{icon:"🤝",label:"120+ Team Members"},{icon:"🎓",label:"Avg 12 Yrs Experience"},{icon:"🔧",label:"60+ Field Technicians"},{icon:"📐",label:"18 Licensed Fire Engineers"},{icon:"🏅",label:"DGFASLI Certified"}].map(item=>(
-                <div key={item.label} style={{ display:"flex", alignItems:"center", gap:14 }}>
-                  <div style={{ width:46, height:46, background:"#fef2f2", borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:22, flexShrink:0 }}>{item.icon}</div>
-                  <div style={{ fontWeight:700, fontSize:14, color:"#0f172a" }}>{item.label}</div>
-                </div>
-              ))}
-            </div>
-          </FadeIn>
         </div>
       </section>
 
@@ -1379,12 +1458,15 @@ export default function AboutPage() {
             <p style={{ color:"#94a3b8", fontSize:17, lineHeight:1.75, margin:"0 0 40px" }}>Get a no-obligation site assessment from our senior engineers. We'll evaluate your facility, identify gaps, and deliver a clear, competitive proposal — typically within 72 hours.</p>
             <div style={{ display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap" }}>
               <motion.button whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }}
-                style={{ padding:"16px 40px", background:"#dc2626", color:"#fff", border:"none", borderRadius:8, fontWeight:700, fontSize:16, cursor:"pointer", boxShadow:"0 4px 24px rgba(220,38,38,0.40)" }}>
+                style={{ padding:"16px 40px", background:"#dc2626", color:"#fff", border:"none", borderRadius:8, fontWeight:700, fontSize:16, cursor:"pointer" }}>
                 Request Site Assessment →
               </motion.button>
               <motion.button whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }}
-                style={{ padding:"16px 40px", background:"transparent", color:"#fff", border:"1.5px solid #334155", borderRadius:8, fontWeight:600, fontSize:16, cursor:"pointer" }}>
-                📞 +91 79 4000 1234
+                style={{ padding:"16px 40px", background:"transparent", color:"#fff", border:"1.5px solid #334155", borderRadius:8, fontWeight:600, fontSize:16, cursor:"pointer", display: "inline-flex", alignItems: "center" }}>
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8 }}>
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+                +91 99983 56941
               </motion.button>
             </div>
           </FadeIn>

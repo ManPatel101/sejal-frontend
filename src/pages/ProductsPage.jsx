@@ -1,12 +1,15 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/ui/FadeIn.jsx";
 import Badge from "../components/ui/Badge.jsx";
 import { CATEGORIES } from "../data/index.js";
-import { useEffect } from "react";
 import axios from "axios";
 
 export default function ProductsPage() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+
   const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
   const [cat, setCat] = useState("All");
@@ -15,115 +18,128 @@ export default function ProductsPage() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
 
-
   useEffect(() => {
-  fetchProducts();
-}, []);
+    fetchProducts();
+  }, []);
 
-const fetchProducts = async () => {
-  try {
-    const res = await axios.get(
-      "https://sejal-backend.onrender.com/api/products"
-    );
+  const fetchProducts = async () => {
+    try {
+      const apiBase = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
+      const res = await axios.get(
+        `${apiBase}/api/products`
+      );
 
-    console.log(res.data);  
-    console.log(res.data.products);
+      console.log(res.data);  
+      console.log(res.data.products);
 
-    setProducts(res.data.products || []);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      setProducts(res.data.products || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
- const filtered = products.filter(
-  (p) =>
-    (
-      cat === "All" ||
-      (p.category || "").trim().toLowerCase() ===
-      cat.trim().toLowerCase()
-    ) &&
-    (
-      (p.title || p.name || "")
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-
-      (p.category || "")
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    )
-);
+  const filtered = products.filter(
+    (p) =>
+      (
+        cat === "All" ||
+        (p.category || "").trim().toLowerCase() ===
+        cat.trim().toLowerCase()
+      ) &&
+      (
+        (p.title || p.name || "")
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        (p.desc || p.description || "")
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      )
+  );
 
   const sendInquiry = async () => {
-  // ✅ VALIDATION FIRST
-  if (
-    !inquiryForm.name ||
-    !inquiryForm.email ||
-    !inquiryForm.phone ||
-    !inquiryForm.message
-  ) {
-    alert("⚠️ Please fill all fields before submitting inquiry");
-    return;
-  }
-
-  setSending(true);
-
-  try {
-    const response = await fetch(
-      "https://sejal-backend.onrender.com/api/inquiries",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...inquiryForm,
-          product: modal?.title || modal?.name,
-        }),
-      }
-    );
-
-    const data = await response.json();
-
-    if (data.success) {
-      setSent(true);
-
-      setTimeout(() => {
-        setSent(false);
-        setModal(null);
-
-        setInquiryForm({
-          name: "",
-          email: "",
-          phone: "",
-          message: "",
-        });
-      }, 2000);
-    } else {
-      alert(data.message || "Something went wrong");
+    if (
+      !inquiryForm.name ||
+      !inquiryForm.email ||
+      !inquiryForm.phone ||
+      !inquiryForm.message
+    ) {
+      alert("⚠️ Please fill all fields before submitting inquiry");
+      return;
     }
-  } catch (error) {
-    console.log(error);
-    alert("Server error");
-  } finally {
-    setSending(false);
-  }
-};
+
+    setSending(true);
+
+    try {
+      const apiBase = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
+      const response = await fetch(
+        `${apiBase}/api/inquiries`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            ...inquiryForm,
+            product: modal?.title || modal?.name,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSent(true);
+
+        setTimeout(() => {
+          setSent(false);
+          setModal(null);
+
+          setInquiryForm({
+            name: "",
+            email: "",
+            phone: "",
+            message: "",
+          });
+        }, 2000);
+      } else {
+        alert(data.message || "Something went wrong");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Server error");
+    } finally {
+      setSending(false);
+    }
+  };
 
   return (
-    <div style={{ paddingTop: 68 }}>
+    <div style={{ paddingTop: 68, overflowX: "hidden" }}>
       {/* Hero */}
-      <section style={{ background: "linear-gradient(135deg,#fef2f2,#fff)", padding: "80px 24px 60px" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <FadeIn>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, color: "#dc2626", textTransform: "uppercase", marginBottom: 12 }}>Products</div>
-            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(36px,5vw,56px)", color: "#0f172a", fontWeight: 700, margin: "0 0 20px" }}>
+      <section ref={heroRef} style={{ position: "relative", height: "62vh", minHeight: 460, overflow: "hidden", display: "flex", alignItems: "center" }}>
+        {/* Parallax Background Image */}
+        <motion.div style={{ position: "absolute", inset: 0, y: yBg, backgroundImage: 'url("/page_photo/product.png")', backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.55)" }} />
+        {/* Dark Overlays */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
+        
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
+            <span style={{ display: "inline-block", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", borderRadius: 4, padding: "3px 10px", marginBottom: 16 }}>
+              Products
+            </span>
+            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(36px,5vw,60px)", color: "#fff", fontWeight: 700, lineHeight: 1.1, margin: "0 0 24px", maxWidth: 750 }}>
               Fire Safety Equipment
             </h1>
-            <p style={{ color: "#475569", fontSize: 18, lineHeight: 1.7 }}>
+            <p style={{ color: "#cbd5e1", fontSize: 18, lineHeight: 1.7, maxWidth: 650, margin: 0 }}>
               BIS / UL / FM approved fire protection equipment from globally certified manufacturers.
             </p>
-          </FadeIn>
+          </motion.div>
         </div>
+        
+        {/* Spinning Rings */}
+        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
+        <motion.div animate={{ rotate: [360, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 320, height: 320, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.10)", pointerEvents: "none" }} />
       </section>
 
       {/* Products */}

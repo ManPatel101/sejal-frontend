@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/ui/FadeIn.jsx";
 import { PROJECTS } from "../data/index.js";
 
@@ -15,25 +15,43 @@ const TYPE_COLORS = {
 };
 
 export default function ProjectsPage() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+
   const [activeType, setActiveType] = useState("All");
   const types = ["All", ...new Set(PROJECTS.map(p => p.type))];
   const filtered = activeType === "All" ? PROJECTS : PROJECTS.filter(p => p.type === activeType);
 
   return (
-    <div style={{ paddingTop: 68 }}>
+    <div style={{ paddingTop: 68, overflowX: "hidden" }}>
       {/* Hero */}
-      <section style={{ background: "linear-gradient(135deg,#fef2f2,#fff)", padding: "80px 24px 60px" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <FadeIn>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, color: "#dc2626", textTransform: "uppercase", marginBottom: 12 }}>Projects</div>
-            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(36px,5vw,56px)", color: "#0f172a", fontWeight: 700, margin: "0 0 20px" }}>
+      <section ref={heroRef} style={{ position: "relative", height: "62vh", minHeight: 460, overflow: "hidden", display: "flex", alignItems: "center" }}>
+        {/* Parallax Background Image */}
+        <motion.div style={{ position: "absolute", inset: 0, y: yBg, backgroundImage: 'url("/page_photo/project.png")', backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.55)" }} />
+        {/* Dark Overlays */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
+        
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
+            <span style={{ display: "inline-block", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", borderRadius: 4, padding: "3px 10px", marginBottom: 16 }}>
+              Projects
+            </span>
+            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(36px,5vw,60px)", color: "#fff", fontWeight: 700, lineHeight: 1.1, margin: "0 0 24px", maxWidth: 750 }}>
               Our Landmark Projects
             </h1>
-            <p style={{ color: "#475569", fontSize: 18, lineHeight: 1.7, maxWidth: 650 }}>
+            <p style={{ color: "#cbd5e1", fontSize: 18, lineHeight: 1.7, maxWidth: 650, margin: 0 }}>
               850+ completed projects across industrial, commercial, healthcare, and infrastructure sectors — each delivered on time and to the highest safety standards.
             </p>
-          </FadeIn>
+          </motion.div>
         </div>
+        
+        {/* Spinning Rings */}
+        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
+        <motion.div animate={{ rotate: [360, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 320, height: 320, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.10)", pointerEvents: "none" }} />
       </section>
 
       {/* Projects Grid */}
@@ -121,7 +139,7 @@ export default function ProjectsPage() {
                 { value: "850+", label: "Projects Completed" },
                 { value: "18+", label: "Years Experience" },
                 { value: "120+", label: "Cities Covered" },
-                { value: "96%", label: "Client Retention" },
+                { value: "500+", label: "Industrial Clients" },
               ].map((s, i) => (
                 <div key={i} style={{ color: "#fff" }}>
                   <div style={{ fontFamily: "'Georgia',serif", fontSize: 44, fontWeight: 700, color: "#dc2626", lineHeight: 1 }}>{s.value}</div>

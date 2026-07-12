@@ -1,9 +1,13 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/ui/FadeIn";
 import axios from "axios"; // make sure this is at top
 
 export default function ContactPage() {
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -13,112 +17,92 @@ export default function ContactPage() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  
-const [loading, setLoading] = useState(false);
-const handleSubmit = async () => {
-  try {
-    if (
-      !form.name ||
-      !form.email ||
-      !form.phone ||
-      !form.subject ||
-      !form.message
-    ) {
-      alert("Please fill all fields");
-      return;
+  const handleSubmit = async () => {
+    try {
+      if (
+        !form.name ||
+        !form.email ||
+        !form.phone ||
+        !form.subject ||
+        !form.message
+      ) {
+        alert("Please fill all fields");
+        return;
+      }
+
+      setLoading(true);
+
+      const apiBase = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
+      const response = await fetch(
+        `${apiBase}/api/inquiries`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            phone: form.phone,
+            product: form.subject,
+            message: form.message,
+          }),
+        }
+      );
+
+      const data = await response.json();
+      setLoading(false);
+
+      if (data.success) {
+        setSubmitted(true);
+        setForm({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+      } else {
+        alert(data.message || "Failed to submit. Try again.");
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+      alert("Server error. Try again later.");
     }
+  };
 
-    setLoading(true); // 🔥 show instant loading
-
-    const response = await fetch(
-  "https://sejal-backend.onrender.com/api/inquiries",
-  {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      name: form.name,
-      email: form.email,
-      phone: form.phone,
-      product: form.subject,
-      message: form.message,
-    }),
-  }
-);
-    const data = await response.json();
-
-    setLoading(false); // stop loading
-
-    if (data.success) {
-      setSubmitted(true);
-
-      setTimeout(() => setSubmitted(false), 3000);
-
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
-      });
-    } else {
-      alert(data.message || "Failed to send inquiry");
-    }
-  } catch (error) {
-    setLoading(false);
-    console.log(error);
-    alert("Server error. Try again later.");
-  }
-};
   return (
-    <div style={{ paddingTop: 68 }}>
-      <section
-        style={{
-          background: "linear-gradient(135deg,#fef2f2,#fff)",
-          padding: "80px 24px 60px",
-        }}
-      >
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <FadeIn>
-            <div
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: 2,
-                color: "#dc2626",
-                textTransform: "uppercase",
-                marginBottom: 12,
-              }}
-            >
+    <div style={{ paddingTop: 68, overflowX: "hidden" }}>
+      {/* Hero */}
+      <section ref={heroRef} style={{ position: "relative", height: "62vh", minHeight: 460, overflow: "hidden", display: "flex", alignItems: "center" }}>
+        {/* Parallax Background Image */}
+        <motion.div style={{ position: "absolute", inset: 0, y: yBg, backgroundImage: 'url("/page_photo/contact.png")', backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.55)" }} />
+        {/* Dark Overlays */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
+        
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
+            <span style={{ display: "inline-block", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", borderRadius: 4, padding: "3px 10px", marginBottom: 16 }}>
               Contact
-            </div>
-
-            <h1
-              style={{
-                fontFamily: "'Georgia',serif",
-                fontSize: "clamp(36px,5vw,56px)",
-                color: "#0f172a",
-                fontWeight: 700,
-                margin: "0 0 20px",
-              }}
-            >
+            </span>
+            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(36px,5vw,60px)", color: "#fff", fontWeight: 700, lineHeight: 1.1, margin: "0 0 24px", maxWidth: 750 }}>
               Get In Touch
             </h1>
-
-            <p
-              style={{
-                color: "#475569",
-                fontSize: 18,
-                lineHeight: 1.7,
-              }}
-            >
-              Our fire safety engineers are ready to assess your project.
-              Reach out for a free consultation.
+            <p style={{ color: "#cbd5e1", fontSize: 18, lineHeight: 1.7, maxWidth: 650, margin: 0 }}>
+              Our fire safety engineers are ready to assess your project. Reach out for a free consultation.
             </p>
-          </FadeIn>
+          </motion.div>
         </div>
+        
+        {/* Spinning Rings */}
+        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
+        <motion.div animate={{ rotate: [360, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 320, height: 320, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.10)", pointerEvents: "none" }} />
       </section>
 
       <section

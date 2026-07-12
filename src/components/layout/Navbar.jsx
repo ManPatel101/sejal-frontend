@@ -120,24 +120,6 @@ export default function Navbar() {
                 </Link>
               ))}
 
-              {/* ADMIN BUTTON */}
-{localStorage.getItem("adminToken") && (
-  <Link
-    to="/admin"
-    style={{
-      marginLeft: "8px",
-      padding: "8px 16px",
-      borderRadius: "8px",
-      background: "#dc2626",
-      color: "#fff",
-      fontWeight: "700",
-      fontSize: "14px",
-      textDecoration: "none",
-    }}
-  >
-    Admin
-  </Link>
-)}
             </nav>
           )}
 
@@ -235,27 +217,6 @@ export default function Navbar() {
           </Link>
         ))}
 
-        {/* ADMIN BUTTON */}
-        {/* ADMIN BUTTON */}
-{localStorage.getItem("adminToken") && (
-  <Link
-    to="/admin"
-    onClick={() => setMenuOpen(false)}
-    style={{
-      marginTop: "10px",
-      padding: "12px 16px",
-      borderRadius: "10px",
-      background: "#dc2626",
-      color: "#fff",
-      fontWeight: "700",
-      fontSize: "15px",
-      textDecoration: "none",
-      textAlign: "center",
-    }}
-  >
-    Admin
-  </Link>
-)}
       </div>
     </>
   );

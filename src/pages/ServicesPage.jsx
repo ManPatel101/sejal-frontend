@@ -1,26 +1,44 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/ui/FadeIn.jsx";
 import { SERVICES } from "../data/index.js";
 import { useNavigate } from "react-router-dom";
 
 export default function ServicesPage({ setPage }) {
   const navigate = useNavigate();
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
   return (
-    <div style={{ paddingTop: 68 }}>
+    <div style={{ paddingTop: 68, overflowX: "hidden" }}>
       {/* Hero */}
-      <section style={{ background: "linear-gradient(135deg,#fef2f2,#fff)", padding: "80px 24px 60px" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <FadeIn>
-            <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, color: "#dc2626", textTransform: "uppercase", marginBottom: 12 }}>Services</div>
-            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(36px,5vw,56px)", color: "#0f172a", fontWeight: 700, margin: "0 0 20px" }}>
+      <section ref={heroRef} style={{ position: "relative", height: "62vh", minHeight: 460, overflow: "hidden", display: "flex", alignItems: "center" }}>
+        {/* Parallax Background Image */}
+        <motion.div style={{ position: "absolute", inset: 0, y: yBg, backgroundImage: 'url("/page_photo/service.png")', backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.55)" }} />
+        {/* Dark Overlays */}
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
+        
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
+            <span style={{ display: "inline-block", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", borderRadius: 4, padding: "3px 10px", marginBottom: 16 }}>
+              Services
+            </span>
+            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(36px,5vw,60px)", color: "#fff", fontWeight: 700, lineHeight: 1.1, margin: "0 0 24px", maxWidth: 750 }}>
               Comprehensive Fire Protection Services
             </h1>
-            <p style={{ color: "#475569", fontSize: 18, lineHeight: 1.7, maxWidth: 650 }}>
+            <p style={{ color: "#cbd5e1", fontSize: 18, lineHeight: 1.7, maxWidth: 650, margin: 0 }}>
               From initial engineering design to ongoing maintenance — we cover every aspect of your facility's fire safety lifecycle.
             </p>
-          </FadeIn>
+          </motion.div>
         </div>
+        
+        {/* Spinning Rings */}
+        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
+        <motion.div animate={{ rotate: [360, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 320, height: 320, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.10)", pointerEvents: "none" }} />
       </section>
 
       {/* Services Grid */}
@@ -34,11 +52,16 @@ export default function ServicesPage({ setPage }) {
                   style={{
                     background: "#fff", border: "1px solid #f1f5f9", borderRadius: 16,
                     padding: 32, boxShadow: "0 2px 16px rgba(0,0,0,0.04)",
-                    height: "100%", boxSizing: "border-box"
+                    minHeight: 480, height: "100%", boxSizing: "border-box",
+                    display: "flex", flexDirection: "column"
                   }}
                 >
-                  <div style={{ width: 60, height: 60, background: "#fef2f2", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, marginBottom: 22 }}>
-                    {s.icon}
+                  <div style={{ width: 60, height: 60, background: "#fef2f2", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 22 }}>
+                    <img
+                      src={s.image}
+                      alt={s.title}
+                      style={{ width: "70%", height: "70%", objectFit: "contain" }}
+                    />
                   </div>
                   <h2 style={{ fontWeight: 700, fontSize: 20, color: "#0f172a", margin: "0 0 12px" }}>{s.title}</h2>
                   <p style={{ color: "#475569", fontSize: 15, lineHeight: 1.75, margin: "0 0 24px" }}>{s.desc}</p>
@@ -53,7 +76,7 @@ export default function ServicesPage({ setPage }) {
                   <motion.button
                     whileHover={{ scale: 1.02 }}
                     onClick={() => navigate("/contact")}
-                    style={{ marginTop: 24, padding: "10px 22px", background: "#dc2626", color: "#fff", border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: "pointer" }}
+                    style={{ marginTop: "auto", padding: "10px 22px", background: "#dc2626", color: "#fff", border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: "pointer", alignSelf: "flex-start" }}
                   >
                     Get Quote →
                   </motion.button>

@@ -32,8 +32,9 @@ export default function AdminDashboard() {
   /* ─────────────────────────────────────────────
      API URLS
   ───────────────────────────────────────────── */
-  const INQUIRY_API = "https://sejal-backend.onrender.com/api/inquiries";;
-  const PRODUCT_API = "https://sejal-backend.onrender.com/api/products";
+  const API_BASE = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
+  const INQUIRY_API = `${API_BASE}/api/inquiries`;
+  const PRODUCT_API = `${API_BASE}/api/products`;
 
   /* FETCH INQUIRIES */
   const fetchInquiries = async () => {
@@ -209,7 +210,7 @@ export default function AdminDashboard() {
   return (
     <div
       style={{
-        paddingTop: 68,
+        paddingTop: 0,
         display: "flex",
         minHeight: "100vh",
         background: "#f8fafc",
@@ -222,8 +223,8 @@ export default function AdminDashboard() {
           background: "#0f172a",
           padding: "24px 0",
           position: "sticky",
-          top: 68,
-          height: "calc(100vh - 68px)",
+          top: 0,
+          height: "100vh",
           flexShrink: 0,
           overflowY: "auto",
         }}
@@ -296,6 +297,39 @@ export default function AdminDashboard() {
               {item.label}
             </button>
           ))}
+
+          {/* LOGOUT BUTTON */}
+          <button
+            onClick={() => {
+              localStorage.removeItem("adminToken");
+              window.location.href = "/";
+            }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              width: "100%",
+              padding: "11px 14px",
+              borderRadius: 8,
+              border: "none",
+              background: "transparent",
+              color: "#ef4444",
+              fontWeight: 600,
+              fontSize: 14,
+              cursor: "pointer",
+              marginTop: 24,
+              textAlign: "left",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
+          >
+            <span style={{ fontSize: 18 }}>🚪</span>
+            Logout
+          </button>
         </div>
       </div>
 
