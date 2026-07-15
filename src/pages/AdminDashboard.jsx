@@ -45,6 +45,7 @@ export default function AdminDashboard() {
       const formatted = data.map((item) => ({
         id: item._id,
         name: item.name || "-",
+        company: item.company || "-",
         email: item.email || "-",
         phone: item.phone || "-",
         product: item.product || "-",
@@ -110,7 +111,12 @@ export default function AdminDashboard() {
   /* DELETE PRODUCT */
   const deleteProduct = async (id) => {
     try {
-      await axios.delete(`${PRODUCT_API}/${id}`);
+      const token = localStorage.getItem("adminToken");
+      await axios.delete(`${PRODUCT_API}/${id}`, {
+        headers: {
+          Authorization: token,
+        },
+      });
       setProducts((prev) => prev.filter((p) => p._id !== id));
     } catch (error) {
       console.log(error);
@@ -130,7 +136,12 @@ export default function AdminDashboard() {
     }
 
     try {
-      const res = await axios.post(PRODUCT_API, newProduct);
+      const token = localStorage.getItem("adminToken");
+      const res = await axios.post(PRODUCT_API, newProduct, {
+        headers: {
+          Authorization: token,
+        },
+      });
 
       setProducts((prev) => [res.data.product, ...prev]);
 
@@ -162,9 +173,15 @@ export default function AdminDashboard() {
     }
 
     try {
+      const token = localStorage.getItem("adminToken");
       const res = await axios.put(
         `${PRODUCT_API}/${editProduct._id}`,
-        editProduct
+        editProduct,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       );
 
       setProducts((prev) =>
@@ -194,6 +211,7 @@ export default function AdminDashboard() {
 
   const filteredInquiries = inquiries.filter((inq) =>
     (inq.name || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
+    (inq.company || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
     (inq.email || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
     (inq.phone || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
     (inq.product || "").toLowerCase().includes(inquirySearch.toLowerCase()) ||
@@ -302,6 +320,7 @@ export default function AdminDashboard() {
           <button
             onClick={() => {
               localStorage.removeItem("adminToken");
+              localStorage.removeItem("adminTokenTime");
               window.location.href = "/";
             }}
             style={{
@@ -1190,6 +1209,7 @@ export default function AdminDashboard() {
                     >
                       {[
                         "Name",
+                        "Company",
                         "Email",
                         "Phone",
                         "Product",
@@ -1229,6 +1249,14 @@ export default function AdminDashboard() {
                             }}
                           >
                             {inq.name}
+                          </td>
+
+                          <td
+                            style={{
+                              padding: 14,
+                            }}
+                          >
+                            {inq.company}
                           </td>
 
                           <td

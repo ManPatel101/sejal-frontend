@@ -87,7 +87,7 @@ export default function Footer() {
               }}
             >
               India's trusted fire protection engineering company.
-              NBC, NFPA, and FM Global compliant solutions since 2006.
+              NBC, NFPA, and FM Global compliant solutions since 2002.
             </p>
 
             <div

@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useInView, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/ui/FadeIn.jsx";
 import Counter from "../components/ui/Counter.jsx";
@@ -35,14 +36,14 @@ function SectionLabel({ children, light }) {
 
 /* ─────────────── Certificate data ────────────────────────────────────── */
 const CERTS = [
-  { id:1, title:"ISO 9001:2015", authority:"Bureau Veritas Certification", scope:"Design, Engineering, Supply, Installation & Maintenance of Fire Protection Systems", issued:"March 2022", valid:"March 2025", ref:"BV-QMS-GJ-2022-1043", accent:"#ef4444", seal:"🏅", bgFrom:"#fffbeb", bgTo:"#fef3c7", detail:"Sejal Engineering holds ISO 9001:2015 Quality Management System certification from Bureau Veritas — one of the world's most respected conformity assessment bodies. The certificate covers every operational function: design review, material procurement, installation methodology, testing protocols, and post-commissioning AMC services. Our QMS is re-audited annually with zero major non-conformances recorded since first certification in 2011." },
-  { id:2, title:"BIS / ISI Mark Licence", authority:"Bureau of Indian Standards", scope:"Manufacture of Fire Extinguishers (IS 15683) & Hose Reels (IS 884)", issued:"January 2018", valid:"Perpetual (Annual Renewal)", ref:"CM/L-7310XXX · CM/L-6812XXX", accent:"#ef4444", seal:"⭐", bgFrom:"#f0f9ff", bgTo:"#e0f2fe", detail:"Sejal Engineering holds ISI Mark licences from the Bureau of Indian Standards for two manufactured product categories. Licence CM/L-7310XXX covers our DCP fire extinguisher range (IS 15683) in 2kg–9kg capacities. Licence CM/L-6812XXX covers our swinging-type hose reel drums (IS 884) in 19mm and 25mm bore. Both licences require BIS factory audits and batch sampling tests every six months." },
-  { id:3, title:"DGFASLI Empanelment", authority:"Directorate General, Factory Advice Service & Labour Institutes", scope:"Empanelled Contractor for Fire Fighting System Installation in Factories", issued:"June 2016", valid:"Renewed Biennially", ref:"DGFASLI/GJ/FFS/2016/048", accent:"#ef4444", seal:"🔴", bgFrom:"#fff1f2", bgTo:"#ffe4e6", detail:"DGFASLI empanelment authorises Sejal Engineering to execute fire fighting system installations in factories regulated under the Factories Act 1948. This registration is mandatory for industrial clients seeking compliance under Schedule 8 of the Gujarat Factories Rules. Our empanelment is renewed every two years following inspection of completed projects and verification of technical manpower." },
-  { id:4, title:"Gujarat Fire NOC Liaison", authority:"Gujarat State Fire & Emergency Services", scope:"Recognised Agency for Fire NOC Plan Submission & Approval", issued:"2009", valid:"Active (22nd year)", ref:"GSFES/AMD/LA/2009/017", accent:"#ef4444", seal:"🛡️", bgFrom:"#faf5ff", bgTo:"#ede9fe", detail:"Sejal Engineering has been a recognised liaison agency with the Gujarat State Fire & Emergency Services since 2009 — one of only a select number of private firms authorised to submit and represent fire safety plans for plan sanction in Ahmedabad, Surat, Vadodara, and Rajkot fire authority jurisdictions. This recognition substantially reduces plan sanction time for our clients." },
-  { id:5, title:"NFPA Member & Certified", authority:"National Fire Protection Association, USA", scope:"Engineering team certified in NFPA 13, NFPA 14, NFPA 20, NFPA 72", issued:"2014 (ongoing)", valid:"Annual renewal per standard update", ref:"NFPA-IND-GJ-SE-2014", accent:"#ef4444", seal:"🌐", bgFrom:"#f0fdf4", bgTo:"#dcfce7", detail:"Sejal Engineering's senior engineering team holds NFPA certifications across four critical standards: NFPA 13 (Sprinkler Systems), NFPA 14 (Standpipe & Hose Systems), NFPA 20 (Stationary Pumps), and NFPA 72 (Fire Alarm & Signaling). These certifications are renewed with each edition cycle ensuring our designs always reflect the latest international best practices." },
-  { id:6, title:"MSME Udyam Registration", authority:"Ministry of Micro, Small & Medium Enterprises, Govt. of India", scope:"Manufacturing & Service Enterprise Registration", issued:"August 2020", valid:"Perpetual", ref:"UDYAM-GJ-01-XXXXXXX", accent:"#ef4444", seal:"🏭", bgFrom:"#fff7ed", bgTo:"#ffedd5", detail:"Sejal Engineering is registered under the MSME Udyam scheme as a manufacturing and service enterprise, making us eligible for government procurement preferences, PSU vendor lists, and priority credit facilities. Our MSME status reflects our roots as a Gujarat-based enterprise and our commitment to building indigenous fire safety manufacturing capability within India." },
-  { id:7, title:"FM Global Compliance", authority:"Factory Mutual Global (FM Approvals)", scope:"Sprinkler & Suppression System Design — FM Data Sheet Compliance", issued:"2019", valid:"Project-wise verification", ref:"FM-DS-2-0/8-9/10-2 Compliant", accent:"#ef4444", seal:"✅", bgFrom:"#ecfeff", bgTo:"#cffafe", detail:"Several Sejal Engineering clients carry FM Global property insurance which requires fire protection systems to comply with FM Global data sheets (DS 2-0, DS 8-9, DS 10-2 etc.). Our engineering team is trained in FM Global loss prevention standards and has delivered FM-compliant sprinkler and foam suppression systems for petrochemical and warehousing clients." },
-  { id:8, title:"IS / NBC Standards Compliance", authority:"Bureau of Indian Standards & CPWD", scope:"IS 884, IS 636, IS 2175, IS 2189, IS 12469, IS 1239 — full portfolio", issued:"Since inception", valid:"Continuous", ref:"Multi-standard compliance portfolio", accent:"#ef4444", seal:"📋", bgFrom:"#fdf2f8", bgTo:"#fce7f3", detail:"Every Sejal Engineering system and manufactured product complies with the full suite of relevant BIS codes. Our fabricated piping meets IS 1239, hose reels meet IS 884, hose boxes meet IS 636, smoke detectors meet IS 2175, alarm panels meet IS 2189, and our pumps meet IS 12469. Compliance is verified at every stage of production and installation." },
+  { id: 1, title: "ISO 9001:2015", authority: "Bureau Veritas Certification", scope: "Design, Engineering, Supply, Installation & Maintenance of Fire Protection Systems", issued: "March 2022", valid: "March 2025", ref: "BV-QMS-GJ-2022-1043", accent: "#ef4444", seal: "🏅", bgFrom: "#fffbeb", bgTo: "#fef3c7", detail: "Sejal Engineering holds ISO 9001:2015 Quality Management System certification from Bureau Veritas — one of the world's most respected conformity assessment bodies. The certificate covers every operational function: design review, material procurement, installation methodology, testing protocols, and post-commissioning AMC services. Our QMS is re-audited annually with zero major non-conformances recorded since first certification in 2011." },
+  { id: 2, title: "BIS / ISI Mark Licence", authority: "Bureau of Indian Standards", scope: "Manufacture of Fire Extinguishers (IS 15683) & Hose Reels (IS 884)", issued: "January 2018", valid: "Perpetual (Annual Renewal)", ref: "CM/L-7310XXX · CM/L-6812XXX", accent: "#ef4444", seal: "⭐", bgFrom: "#f0f9ff", bgTo: "#e0f2fe", detail: "Sejal Engineering holds ISI Mark licences from the Bureau of Indian Standards for two manufactured product categories. Licence CM/L-7310XXX covers our DCP fire extinguisher range (IS 15683) in 2kg–9kg capacities. Licence CM/L-6812XXX covers our swinging-type hose reel drums (IS 884) in 19mm and 25mm bore. Both licences require BIS factory audits and batch sampling tests every six months." },
+  { id: 3, title: "DGFASLI Empanelment", authority: "Directorate General, Factory Advice Service & Labour Institutes", scope: "Empanelled Contractor for Fire Fighting System Installation in Factories", issued: "June 2016", valid: "Renewed Biennially", ref: "DGFASLI/GJ/FFS/2016/048", accent: "#ef4444", seal: "🔴", bgFrom: "#fff1f2", bgTo: "#ffe4e6", detail: "DGFASLI empanelment authorises Sejal Engineering to execute fire fighting system installations in factories regulated under the Factories Act 1948. This registration is mandatory for industrial clients seeking compliance under Schedule 8 of the Gujarat Factories Rules. Our empanelment is renewed every two years following inspection of completed projects and verification of technical manpower." },
+  { id: 4, title: "Gujarat Fire NOC Liaison", authority: "Gujarat State Fire & Emergency Services", scope: "Recognised Agency for Fire NOC Plan Submission & Approval", issued: "2009", valid: "Active (22nd year)", ref: "GSFES/AMD/LA/2009/017", accent: "#ef4444", seal: "🛡️", bgFrom: "#faf5ff", bgTo: "#ede9fe", detail: "Sejal Engineering has been a recognised liaison agency with the Gujarat State Fire & Emergency Services since 2009 — one of only a select number of private firms authorised to submit and represent fire safety plans for plan sanction in Ahmedabad, Surat, Vadodara, and Rajkot fire authority jurisdictions. This recognition substantially reduces plan sanction time for our clients." },
+  { id: 5, title: "NFPA Member & Certified", authority: "National Fire Protection Association, USA", scope: "Engineering team certified in NFPA 13, NFPA 14, NFPA 20, NFPA 72", issued: "2014 (ongoing)", valid: "Annual renewal per standard update", ref: "NFPA-IND-GJ-SE-2014", accent: "#ef4444", seal: "🌐", bgFrom: "#f0fdf4", bgTo: "#dcfce7", detail: "Sejal Engineering's senior engineering team holds NFPA certifications across four critical standards: NFPA 13 (Sprinkler Systems), NFPA 14 (Standpipe & Hose Systems), NFPA 20 (Stationary Pumps), and NFPA 72 (Fire Alarm & Signaling). These certifications are renewed with each edition cycle ensuring our designs always reflect the latest international best practices." },
+  { id: 6, title: "MSME Udyam Registration", authority: "Ministry of Micro, Small & Medium Enterprises, Govt. of India", scope: "Manufacturing & Service Enterprise Registration", issued: "August 2020", valid: "Perpetual", ref: "UDYAM-GJ-01-XXXXXXX", accent: "#ef4444", seal: "🏭", bgFrom: "#fff7ed", bgTo: "#ffedd5", detail: "Sejal Engineering is registered under the MSME Udyam scheme as a manufacturing and service enterprise, making us eligible for government procurement preferences, PSU vendor lists, and priority credit facilities. Our MSME status reflects our roots as a Gujarat-based enterprise and our commitment to building indigenous fire safety manufacturing capability within India." },
+  { id: 7, title: "FM Global Compliance", authority: "Factory Mutual Global (FM Approvals)", scope: "Sprinkler & Suppression System Design — FM Data Sheet Compliance", issued: "2019", valid: "Project-wise verification", ref: "FM-DS-2-0/8-9/10-2 Compliant", accent: "#ef4444", seal: "✅", bgFrom: "#ecfeff", bgTo: "#cffafe", detail: "Several Sejal Engineering clients carry FM Global property insurance which requires fire protection systems to comply with FM Global data sheets (DS 2-0, DS 8-9, DS 10-2 etc.). Our engineering team is trained in FM Global loss prevention standards and has delivered FM-compliant sprinkler and foam suppression systems for petrochemical and warehousing clients." },
+  { id: 8, title: "IS / NBC Standards Compliance", authority: "Bureau of Indian Standards & CPWD", scope: "IS 884, IS 636, IS 2175, IS 2189, IS 12469, IS 1239 — full portfolio", issued: "Since inception", valid: "Continuous", ref: "Multi-standard compliance portfolio", accent: "#ef4444", seal: "📋", bgFrom: "#fdf2f8", bgTo: "#fce7f3", detail: "Every Sejal Engineering system and manufactured product complies with the full suite of relevant BIS codes. Our fabricated piping meets IS 1239, hose reels meet IS 884, hose boxes meet IS 636, smoke detectors meet IS 2175, alarm panels meet IS 2189, and our pumps meet IS 12469. Compliance is verified at every stage of production and installation." },
 ];
 
 /* ─────────────────── CertLogo Component (SVGs) ───────────────────────── */
@@ -467,20 +468,20 @@ const LEADERSHIP_TEAM = [
   {
     name: "Pragnesh Patel",
     designation: "Managing Director & Founder",
-    image: "/staff_photo/MD.jpeg"
+    image: "/staff_photo/CEO & MD.jpeg"
   },
   {
-    name: "Nilesh K. Shah",
+    name: "Harshad Patel",
     designation: "Head — Quality Control",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200&h=200"
+    image: "/staff_photo/QC.jpeg"
   },
   {
-    name: "Manish D. Desai",
+    name: "Mayur Patel",
     designation: "Head — Projects & Production",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200"
   },
   {
-    name: "Pooja V. Mehta",
+    name: "Akshita ",
     designation: "Head — Marketing & Business Dev.",
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200"
   }
@@ -529,23 +530,23 @@ function LeadershipCard({ name, designation, image }) {
 /* ─────────────────────────── Timeline ───────────────────────────────── */
 function TimelineItem({ year, title, desc, side, last }) {
   const ref = useRef(null);
-  const inView = useInView(ref, { once:true, margin:"-60px" });
+  const inView = useInView(ref, { once: true, margin: "-60px" });
   const isLeft = side === "left";
   return (
-    <div ref={ref} style={{ display:"grid", gridTemplateColumns:"1fr 60px 1fr" }}>
-      <motion.div initial={{ opacity:0, x:-30 }} animate={inView?{opacity:1,x:0}:{}} transition={{ duration:0.6 }}
-        style={{ padding:"0 32px 48px 0", textAlign:"right", visibility:isLeft?"visible":"hidden" }}>
+    <div ref={ref} style={{ display: "grid", gridTemplateColumns: "1fr 60px 1fr" }}>
+      <motion.div initial={{ opacity: 0, x: -30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }}
+        style={{ padding: "0 32px 48px 0", textAlign: "right", visibility: isLeft ? "visible" : "hidden" }}>
         {isLeft && <TLContent year={year} title={title} desc={desc} />}
       </motion.div>
-      <div style={{ display:"flex", flexDirection:"column", alignItems:"center" }}>
-        <motion.div initial={{ scale:0 }} animate={inView?{scale:1}:{}} transition={{ duration:0.4, delay:0.2 }}
-          style={{ width:48, height:48, borderRadius:"50%", background:"linear-gradient(135deg,#dc2626,#991b1b)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:1, flexShrink:0, boxShadow:"0 0 0 6px #fef2f2" }}>
-          <span style={{ color:"#fff", fontWeight:800, fontSize:12 }}>{year.slice(2)}</span>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <motion.div initial={{ scale: 0 }} animate={inView ? { scale: 1 } : {}} transition={{ duration: 0.4, delay: 0.2 }}
+          style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(135deg,#dc2626,#991b1b)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1, flexShrink: 0, boxShadow: "0 0 0 6px #fef2f2" }}>
+          <span style={{ color: "#fff", fontWeight: 800, fontSize: 12 }}>{year.slice(2)}</span>
         </motion.div>
-        {!last && <div style={{ width:2, flex:1, background:"linear-gradient(180deg,#dc2626,#fee2e2)", marginTop:4 }} />}
+        {!last && <div style={{ width: 2, flex: 1, background: "linear-gradient(180deg,#dc2626,#fee2e2)", marginTop: 4 }} />}
       </div>
-      <motion.div initial={{ opacity:0, x:30 }} animate={inView?{opacity:1,x:0}:{}} transition={{ duration:0.6 }}
-        style={{ padding:"0 0 48px 32px", visibility:!isLeft?"visible":"hidden" }}>
+      <motion.div initial={{ opacity: 0, x: 30 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ duration: 0.6 }}
+        style={{ padding: "0 0 48px 32px", visibility: !isLeft ? "visible" : "hidden" }}>
         {!isLeft && <TLContent year={year} title={title} desc={desc} />}
       </motion.div>
     </div>
@@ -554,80 +555,81 @@ function TimelineItem({ year, title, desc, side, last }) {
 function TLContent({ year, title, desc }) {
   return (
     <div>
-      <div style={{ fontFamily:"'Georgia',serif", fontWeight:800, fontSize:13, color:"#dc2626", marginBottom:6 }}>{year}</div>
-      <div style={{ fontWeight:700, fontSize:16, color:"#0f172a", marginBottom:8 }}>{title}</div>
-      <div style={{ fontSize:14, color:"#64748b", lineHeight:1.7 }}>{desc}</div>
+      <div style={{ fontFamily: "'Georgia',serif", fontWeight: 800, fontSize: 13, color: "#dc2626", marginBottom: 6 }}>{year}</div>
+      <div style={{ fontWeight: 700, fontSize: 16, color: "#0f172a", marginBottom: 8 }}>{title}</div>
+      <div style={{ fontSize: 14, color: "#64748b", lineHeight: 1.7 }}>{desc}</div>
     </div>
   );
 }
 
 /* ═══════════════════════════ ABOUT PAGE ═══════════════════════════════ */
 export default function AboutPage() {
+  const navigate = useNavigate();
   const heroRef = useRef(null);
   const [activeCert, setActiveCert] = useState(null);
-  const { scrollYProgress } = useScroll({ target:heroRef, offset:["start start","end start"] });
-  const yBg = useTransform(scrollYProgress,[0,1],["0%","25%"]);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
   return (
-    <div style={{ paddingTop:68, overflowX:"hidden" }}>
+    <div style={{ paddingTop: 68, overflowX: "hidden" }}>
 
       {/* ══ HERO ══ */}
-      <section ref={heroRef} style={{ position:"relative", height:"62vh", minHeight:460, overflow:"hidden", display:"flex", alignItems:"center" }}>
-        <motion.div style={{ position:"absolute", inset:0, y:yBg, backgroundImage:'url("https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1920&q=80")', backgroundSize:"cover", backgroundPosition:"center", filter:"brightness(0.55)" }} />
-        <div style={{ position:"absolute", inset:0, background:"linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
-        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize:"28px 28px" }} />
-        <div style={{ maxWidth:1280, margin:"0 auto", padding:"0 24px", position:"relative", zIndex:1, width:"100%" }}>
-          <motion.div initial={{ opacity:0, y:40 }} animate={{ opacity:1, y:0 }} transition={{ duration:0.9 }}>
+      <section ref={heroRef} style={{ position: "relative", height: "62vh", minHeight: 460, overflow: "hidden", display: "flex", alignItems: "center" }}>
+        <motion.div style={{ position: "absolute", inset: 0, y: yBg, backgroundImage: 'url("https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=1920&q=80")', backgroundSize: "cover", backgroundPosition: "center", filter: "brightness(0.55)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
+        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
+          <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
             <Tag>Established 2002 · Ahmedabad, Gujarat</Tag>
-            <h1 style={{ fontFamily:"'Georgia',serif", fontSize:"clamp(38px,6vw,72px)", fontWeight:700, color:"#fff", lineHeight:1.1, margin:"20px 0 24px", maxWidth:700 }}>
-              Two Decades of <span style={{ color:"#ef4444" }}>Fire Safety</span> Excellence
+            <h1 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(38px,6vw,72px)", fontWeight: 700, color: "#fff", lineHeight: 1.1, margin: "20px 0 24px", maxWidth: 700 }}>
+              Two Decades of <span style={{ color: "#ef4444" }}>Fire Safety</span> Excellence
             </h1>
-            <p style={{ fontSize:18, color:"#94a3b8", lineHeight:1.7, maxWidth:560, margin:0 }}>
+            <p style={{ fontSize: 18, color: "#94a3b8", lineHeight: 1.7, maxWidth: 560, margin: 0 }}>
               From a Vision of Safety to a Trusted Fire Protection Leader Across Gujarat — This is the Story of Sejal Engineering.
             </p>
           </motion.div>
         </div>
-        <motion.div animate={{ rotate:[0,360] }} transition={{ duration:40, repeat:Infinity, ease:"linear" }}
-          style={{ position:"absolute", right:"8%", top:"15%", width:220, height:220, borderRadius:"50%", border:"1px solid rgba(220,38,38,0.20)", pointerEvents:"none" }} />
-        <motion.div animate={{ rotate:[360,0] }} transition={{ duration:30, repeat:Infinity, ease:"linear" }}
-          style={{ position:"absolute", right:"8%", top:"15%", width:320, height:320, borderRadius:"50%", border:"1px solid rgba(220,38,38,0.10)", pointerEvents:"none" }} />
+        <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
+        <motion.div animate={{ rotate: [360, 0] }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+          style={{ position: "absolute", right: "8%", top: "15%", width: 320, height: 320, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.10)", pointerEvents: "none" }} />
       </section>
 
       {/* ══ RED STAT STRIP ══ */}
-      
+
 
       {/* ══ COMPANY STORY ══ */}
-      <section style={{ padding:"100px 24px", background:"#fff" }}>
-        <div style={{ maxWidth:1280, margin:"0 auto" }}>
-          <div style={{ display:"grid", gridTemplateColumns:"5fr 4fr", gap:80, alignItems:"start" }} className="two-col">
+      <section style={{ padding: "100px 24px", background: "#fff" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "5fr 4fr", gap: 80, alignItems: "start" }} className="two-col">
             <FadeIn>
               <SectionLabel>Our Story</SectionLabel>
-              <h2 style={{ fontFamily:"'Georgia',serif", fontSize:"clamp(30px,4vw,48px)", fontWeight:700, color:"#0f172a", lineHeight:1.2, margin:"0 0 32px" }}>Born in Ahmedabad.<br />Built for India's Toughest Facilities.</h2>
-              <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
+              <h2 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(30px,4vw,48px)", fontWeight: 700, color: "#0f172a", lineHeight: 1.2, margin: "0 0 32px" }}>Born in Ahmedabad.<br />Built for India's Toughest Facilities.</h2>
+              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 {["Sejal Engineering was founded in 2002 by Pragnesh Patel, a fire safety engineer and industry professional, who identified a critical gap in Gujarat’s rapidly industrialising landscape — the absence of specialist fire protection consultants capable of designing, supplying, and commissioning compliant systems under one roof. Starting from a modest office in Ahmedabad, the company began its journey by serving residential buildings and small-scale industries with reliable and standards-driven fire safety solutions.",
                   "Over the following decade, Sejal Engineering expanded its technical expertise and operational reach across Gujarat. By 2008, the company was successfully executing turnkey fire protection projects for industrial facilities, commercial developments, and residential infrastructures throughout the state. A major milestone came when Sejal Engineering earned the opportunity to work with reputed national-level companies, including projects associated with the Jamshed Tata group in Kolkata — reinforcing the company’s reputation for quality, reliability, and engineering excellence in the fire safety industry.",
                   "Today, Sejal Engineering stands as one of western India’s trusted fire safety companies with expertise spanning project execution, manufacturing, testing, and long-term maintenance services. Alongside executing large-scale fire protection projects and government tenders, the company manufactures high-quality fire safety products supported by an in-house testing laboratory to ensure performance, reliability, and compliance with industry standards. We also provide comprehensive Annual Maintenance Contract (AMC) services and currently manage a portfolio of 200+ active sites across industrial, commercial, and residential sectors.",
                   "What has never changed since 2002 is our founding principle: fire safety is not a compliance checkbox — it is a moral commitment to every person who enters a building we have protected. That philosophy drives every system we design, every product we manufacture, and every service we deliver.",
-                ].map((p,i)=>(<p key={i} style={{ fontSize:16, color:"#475569", lineHeight:1.85, margin:0 }}>{p}</p>))}
+                ].map((p, i) => (<p key={i} style={{ fontSize: 16, color: "#475569", lineHeight: 1.85, margin: 0 }}>{p}</p>))}
               </div>
             </FadeIn>
             <FadeIn delay={0.2}>
-              <div style={{ display:"flex", flexDirection:"column", gap:14, position:"sticky", top:100 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 14, position: "sticky", top: 100 }}>
                 {[
-                  {label:"Founded",value:"2002",sub:"Ahmedabad, Gujarat"},
-                  {label:"Registered Office",value:"Ahmedabad",sub:"Gujarat, India — PIN 380015"},
+                  { label: "Founded", value: "2002", sub: "Ahmedabad, Gujarat" },
+                  { label: "Registered Office", value: "Ahmedabad", sub: "Gujarat, India — PIN 380015" },
                   /*{label:"CIN",value:"U74900GJ2002PTC049XXX",sub:"Company Identification Number"}*/,
-                  {label:"GSTIN",value:"24AAXXX1234X1Z5",sub:"Gujarat State GST Registration"},
-                  {label:"Warehouse",value:"Sukhram Estate, Virat Nagar",sub:"Fire Safety Operations Center"},
+                  { label: "GSTIN", value: "24AAXXX1234X1Z5", sub: "Gujarat State GST Registration" },
+                  { label: "Warehouse", value: "Sukhram Estate, Virat Nagar", sub: "Fire Safety Operations Center" },
                   /*{label:"ISI Licences",value:"2 Active Licences",sub:"IS 15683 (Extinguisher) · IS 884 (Hose Reel)"}*/,
-                  {label:"Team Strength",value:"120+ Professionals",sub:"Engineers · Technicians · QC · Sales"},
+                  { label: "Team Strength", value: "120+ Professionals", sub: "Engineers · Technicians · QC · Sales" },
                  /* {label:"Turnover Range",value:"₹50 Cr+",sub:"Annual consolidated revenue"}*/,
-                ].map(c=>(
-                  <div key={c.label} style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", padding:"13px 16px", background:"#f8fafc", borderRadius:10, borderLeft:"3px solid #dc2626" }}>
-                    <div style={{ fontSize:11, color:"#94a3b8", fontWeight:600, textTransform:"uppercase", letterSpacing:0.5 }}>{c.label}</div>
-                    <div style={{ textAlign:"right" }}>
-                      <div style={{ fontWeight:700, fontSize:13, color:"#0f172a" }}>{c.value}</div>
-                      <div style={{ fontSize:11, color:"#64748b", marginTop:2 }}>{c.sub}</div>
+                ].map(c => (
+                  <div key={c.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "13px 16px", background: "#f8fafc", borderRadius: 10, borderLeft: "3px solid #dc2626" }}>
+                    <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, textTransform: "uppercase", letterSpacing: 0.5 }}>{c.label}</div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ fontWeight: 700, fontSize: 13, color: "#0f172a" }}>{c.value}</div>
+                      <div style={{ fontSize: 11, color: "#64748b", marginTop: 2 }}>{c.sub}</div>
                     </div>
                   </div>
                 ))}
@@ -639,270 +641,270 @@ export default function AboutPage() {
       </section>
 
       {/* ══ MISSION / VISION / VALUES ══ */}
-<section style={{ padding:"100px 24px", background:"#0f172a", position:"relative", overflow:"hidden" }}>
-  <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0)", backgroundSize:"30px 30px", pointerEvents:"none" }} />
-  
-  <div style={{ maxWidth:1180, margin:"0 auto", position:"relative" }}>
-    
-    <FadeIn>
-      <SectionLabel light>What We Stand For</SectionLabel>
+      <section style={{ padding: "100px 24px", background: "#0f172a", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.025) 1px, transparent 0)", backgroundSize: "30px 30px", pointerEvents: "none" }} />
 
-      <h2
-        style={{
-          fontFamily:"'Georgia',serif",
-          fontSize:"clamp(26px,3.5vw,40px)",
-          fontWeight:700,
-          color:"#fff",
-          margin:"0 0 52px",
-          maxWidth:520,
-          lineHeight:1.2,
-        }}
-      >
-        Mission, Vision &amp; Core Values
-      </h2>
-    </FadeIn>
+        <div style={{ maxWidth: 1180, margin: "0 auto", position: "relative" }}>
 
-    <div
-      style={{
-        display:"grid",
-        gridTemplateColumns:"repeat(3,1fr)",
-        gap:20,
-      }}
-      className="mvv-grid"
-    >
-      {[
-        {
-          title:"Our Mission",
-          color:"#dc2626",
-          body:"To deliver engineering-grade fire protection systems that are code-compliant, reliable, and affordable — making every facility in India a safer place. We accomplish this through honest advice, precise engineering, and zero-compromise installation and manufacturing."
-        },
+          <FadeIn>
+            <SectionLabel light>What We Stand For</SectionLabel>
 
-        {
-          title:"Our Vision",
-          color:"#2563eb",
-          body:"To be India's most trusted independent fire safety partner — known not for the size of our projects but for the certainty of our outcomes. We aspire to set the benchmark for technical excellence, manufacturing quality, and post-installation accountability."
-        },
-
-        {
-          title:"Our Values",
-          color:"#16a34a",
-          body:null,
-          values:[
-            "Safety above profit — always",
-            "Engineering honesty over commercial convenience",
-            "Lifelong accountability for every system we install",
-            "Continuous learning in a rapidly evolving field",
-            "Respect for every client, every site, every life"
-          ]
-        },
-      ].map(card=>(
-        <FadeIn key={card.title} delay={0.1}>
-
-          <motion.div
-            whileHover={{
-              y:-6,
-              borderColor:`${card.color}55`,
-              boxShadow:`0 16px 45px rgba(0,0,0,0.32)`,
-            }}
-            transition={{ duration:0.35 }}
-            style={{
-  position:"relative",
-  overflow:"hidden",
-  background:"linear-gradient(180deg,#1e293b 0%, #172033 100%)",
-  borderRadius:20,
-  border:`1px solid ${card.color}25`,
-  padding:"28px 26px",
-
-  /* same size for all cards */
-  minHeight:340,
-  height:"100%",
-
-  boxSizing:"border-box",
-  boxShadow:"0 8px 30px rgba(0,0,0,0.20)",
-  transition:"all 0.35s ease",
-
-  display:"flex",
-  flexDirection:"column",
-  justifyContent:"space-between",
-}}
-          >
-
-            {/* premium top accent */}
-            <div
+            <h2
               style={{
-                position:"absolute",
-                top:0,
-                left:0,
-                width:"100%",
-                height:3,
-                background:`linear-gradient(
+                fontFamily: "'Georgia',serif",
+                fontSize: "clamp(26px,3.5vw,40px)",
+                fontWeight: 700,
+                color: "#fff",
+                margin: "0 0 52px",
+                maxWidth: 520,
+                lineHeight: 1.2,
+              }}
+            >
+              Mission, Vision &amp; Core Values
+            </h2>
+          </FadeIn>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3,1fr)",
+              gap: 20,
+            }}
+            className="mvv-grid"
+          >
+            {[
+              {
+                title: "Our Mission",
+                color: "#dc2626",
+                body: "To deliver engineering-grade fire protection systems that are code-compliant, reliable, and affordable — making every facility in India a safer place. We accomplish this through honest advice, precise engineering, and zero-compromise installation and manufacturing."
+              },
+
+              {
+                title: "Our Vision",
+                color: "#2563eb",
+                body: "To be India's most trusted independent fire safety partner — known not for the size of our projects but for the certainty of our outcomes. We aspire to set the benchmark for technical excellence, manufacturing quality, and post-installation accountability."
+              },
+
+              {
+                title: "Our Values",
+                color: "#16a34a",
+                body: null,
+                values: [
+                  "Safety above profit — always",
+                  "Engineering honesty over commercial convenience",
+                  "Lifelong accountability for every system we install",
+                  "Continuous learning in a rapidly evolving field",
+                  "Respect for every client, every site, every life"
+                ]
+              },
+            ].map(card => (
+              <FadeIn key={card.title} delay={0.1}>
+
+                <motion.div
+                  whileHover={{
+                    y: -6,
+                    borderColor: `${card.color}55`,
+                    boxShadow: `0 16px 45px rgba(0,0,0,0.32)`,
+                  }}
+                  transition={{ duration: 0.35 }}
+                  style={{
+                    position: "relative",
+                    overflow: "hidden",
+                    background: "linear-gradient(180deg,#1e293b 0%, #172033 100%)",
+                    borderRadius: 20,
+                    border: `1px solid ${card.color}25`,
+                    padding: "28px 26px",
+
+                    /* same size for all cards */
+                    minHeight: 340,
+                    height: "100%",
+
+                    boxSizing: "border-box",
+                    boxShadow: "0 8px 30px rgba(0,0,0,0.20)",
+                    transition: "all 0.35s ease",
+
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                  }}
+                >
+
+                  {/* premium top accent */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      width: "100%",
+                      height: 3,
+                      background: `linear-gradient(
                   90deg,
                   ${card.color} 0%,
                   ${card.color}cc 25%,
                   transparent 100%
                 )`,
-                boxShadow:`0 0 18px ${card.color}44`,
-              }}
-            />
+                      boxShadow: `0 0 18px ${card.color}44`,
+                    }}
+                  />
 
-            {/* top glow */}
-            <div
-              style={{
-                position:"absolute",
-                top:-40,
-                left:-40,
-                width:180,
-                height:120,
-                background:`${card.color}10`,
-                filter:"blur(60px)",
-                pointerEvents:"none",
-              }}
-            />
-
-            {/* icon box */}
-            <div
-              style={{
-                width:54,
-                height:54,
-                borderRadius:16,
-                background:`linear-gradient(135deg, ${card.color}18, ${card.color}08)`,
-                border:`1px solid ${card.color}35`,
-                display:"flex",
-                alignItems:"center",
-                justifyContent:"center",
-                marginBottom:22,
-                position:"relative",
-                overflow:"hidden",
-                boxShadow:`0 8px 24px ${card.color}12`,
-                flexShrink:0,
-              }}
-            >
-
-              <div
-                style={{
-                  position:"absolute",
-                  inset:0,
-                  background:`radial-gradient(circle at top left, ${card.color}25, transparent 70%)`,
-                }}
-              />
-
-              <div
-                style={{
-                  width:15,
-                  height:15,
-                  background:card.color,
-                  borderRadius:4,
-                  transform:"rotate(45deg)",
-                  boxShadow:`0 0 14px ${card.color}55`,
-                  zIndex:1,
-                }}
-              />
-            </div>
-
-            {/* title */}
-            <div
-              style={{
-                fontFamily:"'Georgia', serif",
-                fontWeight:700,
-                fontSize:20,
-                color:"#fff",
-                marginBottom:14,
-                letterSpacing:0.2,
-                lineHeight:1.3,
-              }}
-            >
-              {card.title}
-            </div>
-
-            {/* content */}
-            {card.body ? (
-              <p
-                style={{
-                  fontSize:13.8,
-                  color:"#94a3b8",
-                  lineHeight:1.8,
-                  margin:0,
-                }}
-              >
-                {card.body}
-              </p>
-            ) : (
-              <ul
-                style={{
-                  margin:0,
-                  padding:0,
-                  listStyle:"none",
-                  display:"flex",
-                  flexDirection:"column",
-                  gap:12,
-                }}
-              >
-                {card.values.map(v=>(
-                  <li
-                    key={v}
+                  {/* top glow */}
+                  <div
                     style={{
-                      display:"flex",
-                      gap:10,
-                      alignItems:"flex-start",
+                      position: "absolute",
+                      top: -40,
+                      left: -40,
+                      width: 180,
+                      height: 120,
+                      background: `${card.color}10`,
+                      filter: "blur(60px)",
+                      pointerEvents: "none",
+                    }}
+                  />
+
+                  {/* icon box */}
+                  <div
+                    style={{
+                      width: 54,
+                      height: 54,
+                      borderRadius: 16,
+                      background: `linear-gradient(135deg, ${card.color}18, ${card.color}08)`,
+                      border: `1px solid ${card.color}35`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      marginBottom: 22,
+                      position: "relative",
+                      overflow: "hidden",
+                      boxShadow: `0 8px 24px ${card.color}12`,
+                      flexShrink: 0,
                     }}
                   >
 
                     <div
                       style={{
-                        width:7,
-                        height:7,
-                        borderRadius:"50%",
-                        background:card.color,
-                        marginTop:7,
-                        flexShrink:0,
-                        boxShadow:`0 0 10px ${card.color}66`,
+                        position: "absolute",
+                        inset: 0,
+                        background: `radial-gradient(circle at top left, ${card.color}25, transparent 70%)`,
                       }}
                     />
 
-                    <span
+                    <div
                       style={{
-                        fontSize:13.5,
-                        color:"#94a3b8",
-                        lineHeight:1.7,
+                        width: 15,
+                        height: 15,
+                        background: card.color,
+                        borderRadius: 4,
+                        transform: "rotate(45deg)",
+                        boxShadow: `0 0 14px ${card.color}55`,
+                        zIndex: 1,
+                      }}
+                    />
+                  </div>
+
+                  {/* title */}
+                  <div
+                    style={{
+                      fontFamily: "'Georgia', serif",
+                      fontWeight: 700,
+                      fontSize: 20,
+                      color: "#fff",
+                      marginBottom: 14,
+                      letterSpacing: 0.2,
+                      lineHeight: 1.3,
+                    }}
+                  >
+                    {card.title}
+                  </div>
+
+                  {/* content */}
+                  {card.body ? (
+                    <p
+                      style={{
+                        fontSize: 13.8,
+                        color: "#94a3b8",
+                        lineHeight: 1.8,
+                        margin: 0,
                       }}
                     >
-                      {v}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
+                      {card.body}
+                    </p>
+                  ) : (
+                    <ul
+                      style={{
+                        margin: 0,
+                        padding: 0,
+                        listStyle: "none",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 12,
+                      }}
+                    >
+                      {card.values.map(v => (
+                        <li
+                          key={v}
+                          style={{
+                            display: "flex",
+                            gap: 10,
+                            alignItems: "flex-start",
+                          }}
+                        >
 
-            {/* corner glow */}
-            <div
-              style={{
-                position:"absolute",
-                width:180,
-                height:180,
-                borderRadius:"50%",
-                background:`${card.color}08`,
-                filter:"blur(70px)",
-                right:-90,
-                bottom:-90,
-                pointerEvents:"none",
-              }}
-            />
+                          <div
+                            style={{
+                              width: 7,
+                              height: 7,
+                              borderRadius: "50%",
+                              background: card.color,
+                              marginTop: 7,
+                              flexShrink: 0,
+                              boxShadow: `0 0 10px ${card.color}66`,
+                            }}
+                          />
 
-          </motion.div>
+                          <span
+                            style={{
+                              fontSize: 13.5,
+                              color: "#94a3b8",
+                              lineHeight: 1.7,
+                            }}
+                          >
+                            {v}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
-        </FadeIn>
-      ))}
-    </div>
-  </div>
+                  {/* corner glow */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      width: 180,
+                      height: 180,
+                      borderRadius: "50%",
+                      background: `${card.color}08`,
+                      filter: "blur(70px)",
+                      right: -90,
+                      bottom: -90,
+                      pointerEvents: "none",
+                    }}
+                  />
 
-  <style>{`
+                </motion.div>
+
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+
+        <style>{`
     @media(max-width:900px){
       .mvv-grid{
         grid-template-columns:1fr!important;
       }
     }
   `}</style>
-</section>
+      </section>
 
       {/* ══ TIMELINE ══ */}
       {/* <section style={{ padding:"100px 24px", background:"#f8fafc" }}>
@@ -928,266 +930,266 @@ export default function AboutPage() {
       </section> */}
 
       {/* ══ OUR DIFFERENTIATORS — manufacturing-focused, unique content ══ */}
-<section style={{ padding: "90px 22px", background: "#fff" }}>
-  <div style={{ maxWidth: 1240, margin: "0 auto" }}>
-    
-    <FadeIn>
-      <div style={{ textAlign: "center", marginBottom: 60 }}>
-        <SectionLabel>Our Differentiators</SectionLabel>
+      <section style={{ padding: "90px 22px", background: "#fff" }}>
+        <div style={{ maxWidth: 1240, margin: "0 auto" }}>
 
-        <h2
-          style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: "clamp(28px,4vw,44px)",
-            fontWeight: 700,
-            color: "#0f172a",
-            margin: "0 0 14px",
-            lineHeight: 1.2,
-          }}
-        >
-          What Makes Sejal Engineering Different
-        </h2>
+          <FadeIn>
+            <div style={{ textAlign: "center", marginBottom: 60 }}>
+              <SectionLabel>Our Differentiators</SectionLabel>
 
-        <p
-          style={{
-            color: "#64748b",
-            fontSize: 15,
-            maxWidth: 650,
-            margin: "0 auto",
-            lineHeight: 1.75,
-          }}
-        >
-          Engineering expertise, manufacturing capability, and long-term
-          accountability combined under one trusted fire protection partner.
-        </p>
-      </div>
-    </FadeIn>
-
-    <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
-        gap: 22,
-      }}
-    >
-      {[
-        {
-          no: "01",
-          tag: "Manufacturing",
-          title: "Integrated Manufacturing",
-          body:
-            "In-house manufacturing of ISI-certified extinguishers and hose reels with turnkey execution support.",
-          color: "#ef4444",
-        },
-
-        {
-          no: "02",
-          tag: "Testing Lab",
-          title: "Advanced Testing Facility",
-          body:
-            "Dedicated testing systems for pressure checks, discharge verification, and quality inspection.",
-          color: "#ef4444",
-        },
-
-        {
-          no: "03",
-          tag: "Compliance",
-          title: "BIS Licensed Products",
-          body:
-            "Products certified under IS standards with strict BIS compliance and audited production processes.",
-          color: "#ef4444",
-        },
-
-        {
-          no: "04",
-          tag: "Cost Efficiency",
-          title: "Factory-Direct Supply",
-          body:
-            "Direct manufacturing capability delivering better pricing with controlled engineering quality.",
-          color: "#ef4444",
-        },
-
-        {
-          no: "05",
-          tag: "Quality Control",
-          title: "Material Traceability",
-          body:
-            "Complete traceability of production batches with certified raw material documentation.",
-          color: "#ef4444",
-        },
-
-        {
-          no: "06",
-          tag: "Service Support",
-          title: "Certified Refilling Systems",
-          body:
-            "Factory-standard DCP and CO₂ refilling support for reliable AMC maintenance services.",
-          color: "#ef4444",
-        },
-      ].map((item, i) => (
-        <FadeIn key={item.no} delay={i * 0.05}>
-          <motion.div
-            whileHover={{
-              y: -6,
-              borderColor: "rgba(239, 68, 68, 0.35)",
-              boxShadow: "0 18px 50px rgba(15,23,42,0.10)",
-            }}
-            transition={{ duration: 0.3 }}
-            style={{
-              position: "relative",
-              background: "#ffffff",
-              borderRadius: 20,
-              border: "1px solid rgba(15,23,42,0.08)",
-              overflow: "hidden",
-              padding: "26px 24px",
-              boxShadow: "0 8px 32px rgba(15,23,42,0.05)",
-              transition: "all 0.35s ease",
-
-              minHeight: 250,
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
-            {/* side accent */}
-            <div
-              style={{
-                position: "absolute",
-                left: 0,
-                top: 0,
-                width: 4,
-                height: "100%",
-                background: item.color,
-              }}
-            />
-
-            {/* glow */}
-            <div
-              style={{
-                position: "absolute",
-                width: 140,
-                height: 140,
-                borderRadius: "50%",
-                background: `${item.color}10`,
-                filter: "blur(55px)",
-                right: -70,
-                top: -70,
-                pointerEvents: "none",
-              }}
-            />
-
-            {/* number */}
-            <div
-              style={{
-                position: "absolute",
-                top: 16,
-                right: 18,
-                fontSize: 48,
-                fontWeight: 700,
-                fontFamily: "'Georgia', serif",
-                color: "#f8fafc",
-                lineHeight: 1,
-                userSelect: "none",
-              }}
-            >
-              {item.no}
-            </div>
-
-            {/* top badge */}
-            <div
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 8,
-                marginBottom: 18,
-                position: "relative",
-                zIndex: 1,
-              }}
-            >
-              <div
+              <h2
                 style={{
-                  width: 10,
-                  height: 10,
-                  borderRadius: 3,
-                  background: item.color,
-                  boxShadow: `0 0 14px ${item.color}55`,
-                }}
-              />
-
-              <span
-                style={{
-                  fontSize: 10,
+                  fontFamily: "'Georgia', serif",
+                  fontSize: "clamp(28px,4vw,44px)",
                   fontWeight: 700,
-                  letterSpacing: 1.2,
-                  textTransform: "uppercase",
-                  color: item.color,
+                  color: "#0f172a",
+                  margin: "0 0 14px",
+                  lineHeight: 1.2,
                 }}
               >
-                {item.tag}
-              </span>
+                What Makes Sejal Engineering Different
+              </h2>
+
+              <p
+                style={{
+                  color: "#64748b",
+                  fontSize: 15,
+                  maxWidth: 650,
+                  margin: "0 auto",
+                  lineHeight: 1.75,
+                }}
+              >
+                Engineering expertise, manufacturing capability, and long-term
+                accountability combined under one trusted fire protection partner.
+              </p>
             </div>
+          </FadeIn>
 
-            {/* title */}
-            <h3
-              style={{
-                fontFamily: "'Georgia', serif",
-                fontSize: 20,
-                fontWeight: 700,
-                color: "#0f172a",
-                lineHeight: 1.3,
-                marginBottom: 14,
-                maxWidth: 260,
-                position: "relative",
-                zIndex: 1,
-              }}
-            >
-              {item.title}
-            </h3>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+              gap: 22,
+            }}
+          >
+            {[
+              {
+                no: "01",
+                tag: "Manufacturing",
+                title: "Integrated Manufacturing",
+                body:
+                  "In-house manufacturing of ISI-certified extinguishers and hose reels with turnkey execution support.",
+                color: "#ef4444",
+              },
 
-            {/* divider */}
-            <div
-              style={{
-                width: 48,
-                height: 2,
-                background: item.color,
-                marginBottom: 16,
-                borderRadius: 10,
-              }}
-            />
+              {
+                no: "02",
+                tag: "Testing Lab",
+                title: "Advanced Testing Facility",
+                body:
+                  "Dedicated testing systems for pressure checks, discharge verification, and quality inspection.",
+                color: "#ef4444",
+              },
 
-            {/* body */}
-            <p
-              style={{
-                fontSize: 13.5,
-                color: "#64748b",
-                lineHeight: 1.7,
-                margin: 0,
-                position: "relative",
-                zIndex: 1,
-              }}
-            >
-              {item.body}
-            </p>
-          </motion.div>
-        </FadeIn>
-      ))}
-    </div>
-  </div>
-</section>
+              {
+                no: "03",
+                tag: "Compliance",
+                title: "BIS Licensed Products",
+                body:
+                  "Products certified under IS standards with strict BIS compliance and audited production processes.",
+                color: "#ef4444",
+              },
+
+              {
+                no: "04",
+                tag: "Cost Efficiency",
+                title: "Factory-Direct Supply",
+                body:
+                  "Direct manufacturing capability delivering better pricing with controlled engineering quality.",
+                color: "#ef4444",
+              },
+
+              {
+                no: "05",
+                tag: "Quality Control",
+                title: "Material Traceability",
+                body:
+                  "Complete traceability of production batches with certified raw material documentation.",
+                color: "#ef4444",
+              },
+
+              {
+                no: "06",
+                tag: "Service Support",
+                title: "Certified Refilling Systems",
+                body:
+                  "Factory-standard DCP and CO₂ refilling support for reliable AMC maintenance services.",
+                color: "#ef4444",
+              },
+            ].map((item, i) => (
+              <FadeIn key={item.no} delay={i * 0.05}>
+                <motion.div
+                  whileHover={{
+                    y: -6,
+                    borderColor: "rgba(239, 68, 68, 0.35)",
+                    boxShadow: "0 18px 50px rgba(15,23,42,0.10)",
+                  }}
+                  transition={{ duration: 0.3 }}
+                  style={{
+                    position: "relative",
+                    background: "#ffffff",
+                    borderRadius: 20,
+                    border: "1px solid rgba(15,23,42,0.08)",
+                    overflow: "hidden",
+                    padding: "26px 24px",
+                    boxShadow: "0 8px 32px rgba(15,23,42,0.05)",
+                    transition: "all 0.35s ease",
+
+                    minHeight: 250,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  {/* side accent */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      left: 0,
+                      top: 0,
+                      width: 4,
+                      height: "100%",
+                      background: item.color,
+                    }}
+                  />
+
+                  {/* glow */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      width: 140,
+                      height: 140,
+                      borderRadius: "50%",
+                      background: `${item.color}10`,
+                      filter: "blur(55px)",
+                      right: -70,
+                      top: -70,
+                      pointerEvents: "none",
+                    }}
+                  />
+
+                  {/* number */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 16,
+                      right: 18,
+                      fontSize: 48,
+                      fontWeight: 700,
+                      fontFamily: "'Georgia', serif",
+                      color: "#f8fafc",
+                      lineHeight: 1,
+                      userSelect: "none",
+                    }}
+                  >
+                    {item.no}
+                  </div>
+
+                  {/* top badge */}
+                  <div
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: 8,
+                      marginBottom: 18,
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: 10,
+                        height: 10,
+                        borderRadius: 3,
+                        background: item.color,
+                        boxShadow: `0 0 14px ${item.color}55`,
+                      }}
+                    />
+
+                    <span
+                      style={{
+                        fontSize: 10,
+                        fontWeight: 700,
+                        letterSpacing: 1.2,
+                        textTransform: "uppercase",
+                        color: item.color,
+                      }}
+                    >
+                      {item.tag}
+                    </span>
+                  </div>
+
+                  {/* title */}
+                  <h3
+                    style={{
+                      fontFamily: "'Georgia', serif",
+                      fontSize: 20,
+                      fontWeight: 700,
+                      color: "#0f172a",
+                      lineHeight: 1.3,
+                      marginBottom: 14,
+                      maxWidth: 260,
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+
+                  {/* divider */}
+                  <div
+                    style={{
+                      width: 48,
+                      height: 2,
+                      background: item.color,
+                      marginBottom: 16,
+                      borderRadius: 10,
+                    }}
+                  />
+
+                  {/* body */}
+                  <p
+                    style={{
+                      fontSize: 13.5,
+                      color: "#64748b",
+                      lineHeight: 1.7,
+                      margin: 0,
+                      position: "relative",
+                      zIndex: 1,
+                    }}
+                  >
+                    {item.body}
+                  </p>
+                </motion.div>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+      </section>
       {/* ══ MANUFACTURED PRODUCTS ══ */}
 
       {/* ══ CERTIFICATIONS — photo-style cards with click modal ══ */}
-      <section style={{ padding:"100px 24px", background:"#f8fafc" }}>
-        <div style={{ maxWidth:1280, margin:"0 auto" }}>
+      <section style={{ padding: "100px 24px", background: "#f8fafc" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <FadeIn>
-            <div style={{ textAlign:"center", marginBottom:64 }}>
+            <div style={{ textAlign: "center", marginBottom: 64 }}>
               <SectionLabel>Accreditations</SectionLabel>
-              <h2 style={{ fontFamily:"'Georgia',serif", fontSize:"clamp(28px,4vw,44px)", fontWeight:700, color:"#0f172a", margin:"0 0 16px" }}>Our Certifications &amp; Licences</h2>
-              
+              <h2 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(28px,4vw,44px)", fontWeight: 700, color: "#0f172a", margin: "0 0 16px" }}>Our Certifications &amp; Licences</h2>
+
             </div>
           </FadeIn>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(270px,1fr))", gap:20 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(270px,1fr))", gap: 20 }}>
             {/* {CERTS.map((cert,i)=>(<FadeIn key={cert.id} delay={i*0.07}><CertCard cert={cert} onClick={setActiveCert} /></FadeIn>))} */}
-            {CERTS.map((cert,i)=>(<FadeIn key={cert.id} delay={i*0.07}><CertCard cert={cert} /></FadeIn>))}
+            {CERTS.map((cert, i) => (<FadeIn key={cert.id} delay={i * 0.07}><CertCard cert={cert} /></FadeIn>))}
           </div>
         </div>
       </section>
@@ -1196,225 +1198,225 @@ export default function AboutPage() {
       {/* <AnimatePresence>
         {activeCert && <CertModal cert={activeCert} onClose={()=>setActiveCert(null)} />}
       </AnimatePresence> */}
-{/* ══ INFRASTRUCTURE ══ */}
-<section style={{ padding:"100px 24px", background:"#0f172a" }}>
-  <div style={{ maxWidth:1280, margin:"0 auto" }}>
-
-    <div
-      style={{
-        display:"grid",
-        gridTemplateColumns:"1fr 1fr",
-        gap:80,
-        alignItems:"center"
-      }}
-      className="two-col"
-    >
-
-      {/* LEFT SIDE */}
-      <FadeIn>
-        <SectionLabel light>Infrastructure</SectionLabel>
-
-        <h2
-          style={{
-            fontFamily:"'Georgia',serif",
-            fontSize:"clamp(28px,4vw,44px)",
-            fontWeight:700,
-            color:"#fff",
-            margin:"0 0 32px"
-          }}
-        >
-          Built to Deliver at Scale
-        </h2>
-
-        <div style={{ display:"flex", flexDirection:"column", gap:20 }}>
-
-          {[
-            {
-              icon: <Building2 size={18} strokeWidth={1.8} />,
-              label:"Head Office",
-              val:"Ahmedabad, Gujarat "
-            },
-            {
-              icon:<Factory size={18} />,
-              label:"Warehouse",
-              val:"26-Sukhram Estate, NH-8, Ahmedabad, Gujarat"
-            },
-            {
-              icon:<ShieldCheck size={18} strokeWidth={1.8} />,
-              label:"QC Testing Lab",
-              val:"In-house product testing lab"
-            },
-            {
-              icon:<BriefcaseBusiness size={18} strokeWidth={1.8} />,
-              label:"Branch Offices",
-              val:"Surat"
-            },
-            
-            // {
-            //   icon:<Truck size={18} strokeWidth={1.8} />,
-            //   label:"Fleet",
-            //   val:"12 service vehicles for site inspection and emergency response"
-            // },
-            // {
-            //   icon:<MonitorCog size={18} strokeWidth={1.8} />,
-            //   label:"Engineering Software",
-            //   val:"AutoCAD MEP · Revit MEP · HydraCAD · AutoSPRINK"
-            // },
-            // {
-            //   icon:<RadioTower size={18} strokeWidth={1.8} />,
-            //   label:"AMC Management",
-            //   val:"Digital site register with scheduled inspection alerts"
-            // }
-          ].map((item)=>(
-            <div
-              key={item.label}
-              style={{
-                display:"flex",
-                gap:16,
-                alignItems:"flex-start"
-              }}
-            >
-
-              <div
-                style={{
-                  width:42,
-                  height:42,
-                  borderRadius:10,
-                  background:"#111827",
-                  border:"1px solid #334155",
-                  display:"flex",
-                  alignItems:"center",
-                  justifyContent:"center",
-                  color:"#ef4444",
-                  flexShrink:0
-                }}
-              >
-                {item.icon}
-              </div>
-
-              <div>
-                <div
-                  style={{
-                    fontWeight:700,
-                    fontSize:13,
-                    color:"#f1f5f9",
-                    marginBottom:3
-                  }}
-                >
-                  {item.label}
-                </div>
-
-                <div
-                  style={{
-                    fontSize:13,
-                    color:"#64748b",
-                    lineHeight:1.6
-                  }}
-                >
-                  {item.val}
-                </div>
-              </div>
-
-            </div>
-          ))}
-
-        </div>
-      </FadeIn>
-
-      {/* RIGHT SIDE */}
-      <FadeIn delay={0.2}>
-        <div>
-
-          <SectionLabel light>Sectors We Serve</SectionLabel>
-
-          <h2
-            style={{
-              fontFamily:"'Georgia',serif",
-              fontSize:"clamp(24px,3vw,36px)",
-              fontWeight:700,
-              color:"#fff",
-              margin:"0 0 28px"
-            }}
-          >
-            Every Occupancy, Every Scale
-          </h2>
+      {/* ══ INFRASTRUCTURE ══ */}
+      <section style={{ padding: "100px 24px", background: "#0f172a" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
 
           <div
             style={{
-              display:"grid",
-              gridTemplateColumns:"1fr 1fr",
-              gap:14
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: 80,
+              alignItems: "center"
             }}
+            className="two-col"
           >
 
-            {[
-              "Industrial & Manufacturing",
-              "Commercial & IT Parks",
-              "Healthcare & Pharma",
-              "Oil, Gas & Petrochemical",
-              "Education & Institutions",
-              "Hospitality & Retail",
-              "Infrastructure & Logistics",
-              "Residential High-Rise"
-            ].map((lb)=>(
-              <div
-                key={lb}
+            {/* LEFT SIDE */}
+            <FadeIn>
+              <SectionLabel light>Infrastructure</SectionLabel>
+
+              <h2
                 style={{
-                  display:"flex",
-                  gap:14,
-                  alignItems:"center",
-                  padding:"14px 16px",
-                  background:"linear-gradient(180deg,#1e293b,#172033)",
-                  borderRadius:12,
-                  border:"1px solid #334155"
+                  fontFamily: "'Georgia',serif",
+                  fontSize: "clamp(28px,4vw,44px)",
+                  fontWeight: 700,
+                  color: "#fff",
+                  margin: "0 0 32px"
                 }}
               >
+                Built to Deliver at Scale
+              </h2>
 
-                {/* CLEAN INDUSTRIAL DOT (NO EMOJI, NO ICON LIBRARY) */}
-                <div
-                  style={{
-                    width:8,
-                    height:8,
-                    borderRadius:"50%",
-                    background:"#dc2626",
-                    boxShadow:"0 0 10px rgba(220,38,38,0.45)",
-                    flexShrink:0
-                  }}
-                />
+              <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
 
-                <span
-                  style={{
-                    fontSize:13,
-                    fontWeight:600,
-                    color:"#cbd5e1",
-                    letterSpacing:"0.3px"
-                  }}
-                >
-                  {lb}
-                </span>
+                {[
+                  {
+                    icon: <Building2 size={18} strokeWidth={1.8} />,
+                    label: "Head Office",
+                    val: "Ahmedabad, Gujarat "
+                  },
+                  {
+                    icon: <Factory size={18} />,
+                    label: "Warehouse",
+                    val: "26-Sukhram Estate, NH-8, Ahmedabad, Gujarat"
+                  },
+                  {
+                    icon: <ShieldCheck size={18} strokeWidth={1.8} />,
+                    label: "QC Testing Lab",
+                    val: "In-house product testing lab"
+                  },
+                  {
+                    icon: <BriefcaseBusiness size={18} strokeWidth={1.8} />,
+                    label: "Branch Offices",
+                    val: "Surat"
+                  },
+
+                  // {
+                  //   icon:<Truck size={18} strokeWidth={1.8} />,
+                  //   label:"Fleet",
+                  //   val:"12 service vehicles for site inspection and emergency response"
+                  // },
+                  // {
+                  //   icon:<MonitorCog size={18} strokeWidth={1.8} />,
+                  //   label:"Engineering Software",
+                  //   val:"AutoCAD MEP · Revit MEP · HydraCAD · AutoSPRINK"
+                  // },
+                  // {
+                  //   icon:<RadioTower size={18} strokeWidth={1.8} />,
+                  //   label:"AMC Management",
+                  //   val:"Digital site register with scheduled inspection alerts"
+                  // }
+                ].map((item) => (
+                  <div
+                    key={item.label}
+                    style={{
+                      display: "flex",
+                      gap: 16,
+                      alignItems: "flex-start"
+                    }}
+                  >
+
+                    <div
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: 10,
+                        background: "#111827",
+                        border: "1px solid #334155",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        color: "#ef4444",
+                        flexShrink: 0
+                      }}
+                    >
+                      {item.icon}
+                    </div>
+
+                    <div>
+                      <div
+                        style={{
+                          fontWeight: 700,
+                          fontSize: 13,
+                          color: "#f1f5f9",
+                          marginBottom: 3
+                        }}
+                      >
+                        {item.label}
+                      </div>
+
+                      <div
+                        style={{
+                          fontSize: 13,
+                          color: "#64748b",
+                          lineHeight: 1.6
+                        }}
+                      >
+                        {item.val}
+                      </div>
+                    </div>
+
+                  </div>
+                ))}
 
               </div>
-            ))}
+            </FadeIn>
+
+            {/* RIGHT SIDE */}
+            <FadeIn delay={0.2}>
+              <div>
+
+                <SectionLabel light>Sectors We Serve</SectionLabel>
+
+                <h2
+                  style={{
+                    fontFamily: "'Georgia',serif",
+                    fontSize: "clamp(24px,3vw,36px)",
+                    fontWeight: 700,
+                    color: "#fff",
+                    margin: "0 0 28px"
+                  }}
+                >
+                  Every Occupancy, Every Scale
+                </h2>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "1fr 1fr",
+                    gap: 14
+                  }}
+                >
+
+                  {[
+                    "Industrial & Manufacturing",
+                    "Commercial & IT Parks",
+                    "Healthcare & Pharma",
+                    "Oil, Gas & Petrochemical",
+                    "Education & Institutions",
+                    "Hospitality & Retail",
+                    "Infrastructure & Logistics",
+                    "Residential High-Rise"
+                  ].map((lb) => (
+                    <div
+                      key={lb}
+                      style={{
+                        display: "flex",
+                        gap: 14,
+                        alignItems: "center",
+                        padding: "14px 16px",
+                        background: "linear-gradient(180deg,#1e293b,#172033)",
+                        borderRadius: 12,
+                        border: "1px solid #334155"
+                      }}
+                    >
+
+                      {/* CLEAN INDUSTRIAL DOT (NO EMOJI, NO ICON LIBRARY) */}
+                      <div
+                        style={{
+                          width: 8,
+                          height: 8,
+                          borderRadius: "50%",
+                          background: "#dc2626",
+                          boxShadow: "0 0 10px rgba(220,38,38,0.45)",
+                          flexShrink: 0
+                        }}
+                      />
+
+                      <span
+                        style={{
+                          fontSize: 13,
+                          fontWeight: 600,
+                          color: "#cbd5e1",
+                          letterSpacing: "0.3px"
+                        }}
+                      >
+                        {lb}
+                      </span>
+
+                    </div>
+                  ))}
+
+                </div>
+
+              </div>
+            </FadeIn>
 
           </div>
 
         </div>
-      </FadeIn>
-
-    </div>
-
-  </div>
-</section>
+      </section>
 
       {/* ══ STATS ══ */}
-      <section style={{ background:"linear-gradient(135deg,#dc2626,#991b1b)", padding:"80px 24px" }}>
-        <div style={{ maxWidth:1280, margin:"0 auto" }}>
-          <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:40, textAlign:"center" }} className="stats-grid">
-            {STATS.map((s,i)=>(
-              <FadeIn key={i} delay={i*0.1}>
-                <div style={{ color:"#fff" }}>
-                  <div style={{ fontFamily:"'Georgia',serif", fontSize:"clamp(40px,5vw,64px)", fontWeight:700, lineHeight:1 }}><Counter value={s.value} suffix={s.suffix} /></div>
-                  <div style={{ fontSize:14, opacity:0.85, marginTop:8, fontWeight:500 }}>{s.label}</div>
+      <section style={{ background: "linear-gradient(135deg,#dc2626,#991b1b)", padding: "80px 24px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 40, textAlign: "center" }} className="stats-grid">
+            {STATS.map((s, i) => (
+              <FadeIn key={i} delay={i * 0.1}>
+                <div style={{ color: "#fff" }}>
+                  <div style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(40px,5vw,64px)", fontWeight: 700, lineHeight: 1 }}><Counter value={s.value} suffix={s.suffix} /></div>
+                  <div style={{ fontSize: 14, opacity: 0.85, marginTop: 8, fontWeight: 500 }}>{s.label}</div>
                 </div>
               </FadeIn>
             ))}
@@ -1436,7 +1438,7 @@ export default function AboutPage() {
               </p>
             </div>
           </FadeIn>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch justify-center">
             {LEADERSHIP_TEAM.map((member) => (
               <LeadershipCard
@@ -1449,21 +1451,27 @@ export default function AboutPage() {
       </section>
 
       {/* ══ CTA ══ */}
-      <section style={{ padding:"100px 24px", background:"#0f172a", position:"relative", overflow:"hidden" }}>
-        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle at 70% 50%, rgba(220,38,38,0.08) 0%, transparent 60%)", pointerEvents:"none" }} />
-        <div style={{ maxWidth:760, margin:"0 auto", textAlign:"center", position:"relative" }}>
+      <section style={{ padding: "100px 24px", background: "#0f172a", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 70% 50%, rgba(220,38,38,0.08) 0%, transparent 60%)", pointerEvents: "none" }} />
+        <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center", position: "relative" }}>
           <FadeIn>
             <Tag>Talk to Our Team</Tag>
-            <h2 style={{ fontFamily:"'Georgia',serif", fontSize:"clamp(28px,4vw,44px)", color:"#fff", fontWeight:700, margin:"24px 0 20px", lineHeight:1.2 }}>Ready to Work with Gujarat's Most Trusted Fire Protection Partner?</h2>
-            <p style={{ color:"#94a3b8", fontSize:17, lineHeight:1.75, margin:"0 0 40px" }}>Get a no-obligation site assessment from our senior engineers. We'll evaluate your facility, identify gaps, and deliver a clear, competitive proposal — typically within 72 hours.</p>
-            <div style={{ display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap" }}>
-              <motion.button whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }}
-                style={{ padding:"16px 40px", background:"#dc2626", color:"#fff", border:"none", borderRadius:8, fontWeight:700, fontSize:16, cursor:"pointer" }}>
+            <h2 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(28px,4vw,44px)", color: "#fff", fontWeight: 700, margin: "24px 0 20px", lineHeight: 1.2 }}>Ready to Work with Gujarat's Most Trusted Fire Protection Partner?</h2>
+            <p style={{ color: "#94a3b8", fontSize: 17, lineHeight: 1.75, margin: "0 0 40px" }}>Get a no-obligation site assessment from our senior engineers. We'll evaluate your facility, identify gaps, and deliver a clear, competitive proposal — typically within 72 hours.</p>
+            <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+              <motion.button 
+                whileHover={{ scale: 1.04, backgroundColor: "#b91c1c" }} 
+                whileTap={{ scale: 0.96 }}
+                onClick={() => navigate("/contact")}
+                style={{ padding: "16px 40px", background: "#dc2626", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, fontSize: 16, cursor: "pointer", transition: "background-color 0.2s ease" }}>
                 Request Site Assessment →
               </motion.button>
-              <motion.button whileHover={{ scale:1.04 }} whileTap={{ scale:0.96 }}
-                style={{ padding:"16px 40px", background:"transparent", color:"#fff", border:"1.5px solid #334155", borderRadius:8, fontWeight:600, fontSize:16, cursor:"pointer", display: "inline-flex", alignItems: "center" }}>
-                <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8 }}>
+              <motion.button 
+                whileHover={{ scale: 1.04, backgroundColor: "rgba(255,255,255,0.08)", borderColor: "#dc2626" }} 
+                whileTap={{ scale: 0.96 }}
+                onClick={() => window.location.href = "tel:+919998356941"}
+                style={{ padding: "16px 40px", background: "transparent", color: "#fff", border: "1.5px solid #334155", borderRadius: 8, fontWeight: 600, fontSize: 16, cursor: "pointer", display: "inline-flex", alignItems: "center", transition: "all 0.2s ease" }}>
+                <svg viewBox="0 0 24 24" width="16" height="16" stroke="#dc2626" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: 8 }}>
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                 </svg>
                 +91 99983 56941

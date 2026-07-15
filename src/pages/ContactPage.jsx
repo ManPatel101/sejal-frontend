@@ -1,7 +1,8 @@
 import { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/ui/FadeIn";
-import axios from "axios"; // make sure this is at top
+import axios from "axios";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 
 export default function ContactPage() {
   const heroRef = useRef(null);
@@ -10,6 +11,7 @@ export default function ContactPage() {
 
   const [form, setForm] = useState({
     name: "",
+    company: "",
     email: "",
     phone: "",
     subject: "",
@@ -18,22 +20,47 @@ export default function ContactPage() {
 
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleSubmit = async () => {
+    const nameTrimmed = form.name.trim();
+    const companyTrimmed = form.company.trim();
+    const emailTrimmed = form.email.trim();
+    const phoneTrimmed = form.phone.trim();
+    const subjectTrimmed = form.subject.trim();
+    const messageTrimmed = form.message.trim();
+
+    if (!nameTrimmed || !companyTrimmed || !emailTrimmed || !phoneTrimmed || !subjectTrimmed || !messageTrimmed) {
+      setErrorMsg("All fields (including Company Name) are required.");
+      return;
+    }
+
+    if (nameTrimmed.length < 2) {
+      setErrorMsg("Please enter a valid name (at least 2 characters).");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailTrimmed)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    const phoneRegex = /^[789]\d{9}$/;
+    if (!phoneRegex.test(phoneTrimmed)) {
+      setErrorMsg("Please enter a valid 10-digit");
+      return;
+    }
+
+    if (messageTrimmed.length < 10) {
+      setErrorMsg("Please write a descriptive message (at least 10 characters).");
+      return;
+    }
+
+    setErrorMsg("");
+    setLoading(true);
+
     try {
-      if (
-        !form.name ||
-        !form.email ||
-        !form.phone ||
-        !form.subject ||
-        !form.message
-      ) {
-        alert("Please fill all fields");
-        return;
-      }
-
-      setLoading(true);
-
       const apiBase = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
       const response = await fetch(
         `${apiBase}/api/inquiries`,
@@ -44,6 +71,7 @@ export default function ContactPage() {
           },
           body: JSON.stringify({
             name: form.name,
+            company: form.company,
             email: form.email,
             phone: form.phone,
             product: form.subject,
@@ -57,20 +85,27 @@ export default function ContactPage() {
 
       if (data.success) {
         setSubmitted(true);
+        setErrorMsg("");
         setForm({
           name: "",
+          company: "",
           email: "",
           phone: "",
           subject: "",
           message: "",
         });
+
+        // Show success message for 4 seconds, then show the empty form again
+        setTimeout(() => {
+          setSubmitted(false);
+        }, 4000);
       } else {
-        alert(data.message || "Failed to submit. Try again.");
+        setErrorMsg(data.message || "Failed to submit. Try again.");
       }
     } catch (error) {
       setLoading(false);
       console.log(error);
-      alert("Server error. Try again later.");
+      setErrorMsg("Server error. Try again later.");
     }
   };
 
@@ -93,7 +128,7 @@ export default function ContactPage() {
               Get In Touch
             </h1>
             <p style={{ color: "#cbd5e1", fontSize: 18, lineHeight: 1.7, maxWidth: 650, margin: 0 }}>
-              Our fire safety engineers are ready to assess your project. Reach out for a free consultation.
+              Our fire safety engineers are ready to assess your project. Reach out for a expert consultation.
             </p>
           </motion.div>
         </div>
@@ -174,6 +209,23 @@ export default function ContactPage() {
       gap: 16,
     }}
   >
+    {errorMsg && (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        style={{
+          background: "#fef2f2",
+          border: "1.5px solid #ef4444",
+          borderRadius: 10,
+          padding: "12px 16px",
+          color: "#b91c1c",
+          fontWeight: 600,
+          fontSize: 13,
+        }}
+      >
+        ⚠️ {errorMsg}
+      </motion.div>
+    )}
                 <div
                   style={{
                     display: "grid",
@@ -183,9 +235,10 @@ export default function ContactPage() {
                 >
                   {[
                     ["name", "Your Name"],
+                    ["company", "Company Name"],
                     ["email", "Email Address"],
                     ["phone", "Phone Number"],
-                    ["subject", "Project / Service"],
+                    ["subject", "Project / Service Required"],
                   ].map(([field, placeholder]) => (
                     <input
                       key={field}
@@ -205,6 +258,7 @@ export default function ContactPage() {
                         fontSize: 14,
                         color: "#0f172a",
                         outline: "none",
+                        gridColumn: field === "subject" ? "span 2" : "auto",
                       }}
                     />
                   ))}
@@ -270,36 +324,36 @@ export default function ContactPage() {
 
             {[
               {
-                icon: "📍",
+                icon: <MapPin size={20} strokeWidth={1.8} />,
                 title: "Registered Office",
                 lines: [
-                  "301, Titanium Business Park,",
-                  "Prahlad Nagar, Ahmedabad – 380015",
-                  "Gujarat, India",
+                  {
+                    text: "shop no-3, jay vijay flet, Sardar Chowk, opp. Rugved Hospital, Krishnanagar, Nava Naroda, Ahmedabad, Gujarat 382345",
+                    url: "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("sejal engineering shop no-3, jay vijay flet, Sardar Chowk, opp. Rugved Hospital, Krishnanagar, Nava Naroda, Ahmedabad, Gujarat 382345"),
+                  },
                 ],
               },
               {
-                icon: "📞",
+                icon: <Phone size={20} strokeWidth={1.8} />,
                 title: "Phone",
                 lines: [
-                  "+91 79 4000 1234",
-                  "+91 98765 43210 (Emergency AMC)",
+                  { text: "+91 99983 56941", url: "tel:+919998356941" },
+                  { text: "+91 99090 46826", url: "tel:+919909046826" },
                 ],
               },
               {
-                icon: "📧",
+                icon: <Mail size={20} strokeWidth={1.8} />,
                 title: "Email",
                 lines: [
-                  "info@aegisfiresafety.in",
-                  "projects@aegisfiresafety.in",
+                  { text: "sejalengineering@gmail.com", url: "mailto:sejalengineering@gmail.com" },
                 ],
               },
               {
-                icon: "🕐",
+                icon: <Clock size={20} strokeWidth={1.8} />,
                 title: "Business Hours",
                 lines: [
-                  "Mon–Sat: 9:00 AM – 6:30 PM",
-                  "Emergency support: 24 × 7",
+                  { text: "Mon–Sat: 9:00 AM – 7:00 PM" },
+                  { text: "Emergency support: 24 × 7" },
                 ],
               },
             ].map((item, i) => (
@@ -321,7 +375,7 @@ export default function ContactPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    fontSize: 22,
+                    color: "#dc2626",
                     flexShrink: 0,
                   }}
                 >
@@ -340,15 +394,33 @@ export default function ContactPage() {
                     {item.title}
                   </div>
 
-                  {item.lines.map((l) => (
+                  {item.lines.map((l, index) => (
                     <div
-                      key={l}
+                      key={index}
                       style={{
                         fontSize: 14,
                         color: "#64748b",
                       }}
                     >
-                      {l}
+                      {l.url ? (
+                        <a
+                          href={l.url}
+                          target={l.url.startsWith("http") ? "_blank" : undefined}
+                          rel={l.url.startsWith("http") ? "noopener noreferrer" : undefined}
+                          style={{
+                            color: "#64748b",
+                            textDecoration: "none",
+                            transition: "color 0.2s ease",
+                            cursor: "pointer",
+                          }}
+                          onMouseEnter={(e) => (e.target.style.color = "#dc2626")}
+                          onMouseLeave={(e) => (e.target.style.color = "#64748b")}
+                        >
+                          {l.text}
+                        </a>
+                      ) : (
+                        l.text
+                      )}
                     </div>
                   ))}
                 </div>

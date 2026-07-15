@@ -3,6 +3,33 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import FadeIn from "../components/ui/FadeIn.jsx";
 import { SERVICES } from "../data/index.js";
 import { useNavigate } from "react-router-dom";
+import { 
+  Flame, Droplet, Bell, Eye, Shield, Activity, Wind, Layers, Zap, 
+  Briefcase, FileText, Award, Users, ClipboardCheck, Wrench, PenTool, 
+  Settings, Package, Check 
+} from "lucide-react";
+
+const ICON_MAP = {
+  1: Flame,
+  2: Droplet,
+  3: Bell,
+  4: Eye,
+  5: Shield,
+  6: Activity,
+  7: Wind,
+  8: Layers,
+  9: Zap,
+  10: Briefcase,
+  11: FileText,
+  12: Award,
+  13: Users,
+  14: ClipboardCheck,
+  15: Wrench,
+  16: PenTool,
+  17: Settings,
+  18: Package
+};
+
 
 export default function ServicesPage({ setPage }) {
   const navigate = useNavigate();
@@ -19,7 +46,7 @@ export default function ServicesPage({ setPage }) {
         {/* Dark Overlays */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
         <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
-        
+
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
             <span style={{ display: "inline-block", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", borderRadius: 4, padding: "3px 10px", marginBottom: 16 }}>
@@ -33,7 +60,7 @@ export default function ServicesPage({ setPage }) {
             </p>
           </motion.div>
         </div>
-        
+
         {/* Spinning Rings */}
         <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
@@ -44,45 +71,95 @@ export default function ServicesPage({ setPage }) {
       {/* Services Grid */}
       <section style={{ padding: "80px 24px", background: "#fff" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(340px,1fr))", gap: 28 }}>
-            {SERVICES.map((s, i) => (
-              <FadeIn key={s.id} delay={i * 0.08}>
-                <motion.div
-                  whileHover={{ y: -6 }}
-                  style={{
-                    background: "#fff", border: "1px solid #f1f5f9", borderRadius: 16,
-                    padding: 32, boxShadow: "0 2px 16px rgba(0,0,0,0.04)",
-                    minHeight: 480, height: "100%", boxSizing: "border-box",
-                    display: "flex", flexDirection: "column"
-                  }}
-                >
-                  <div style={{ width: 60, height: 60, background: "#fef2f2", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 22 }}>
-                    <img
-                      src={s.image}
-                      alt={s.title}
-                      style={{ width: "70%", height: "70%", objectFit: "contain" }}
-                    />
-                  </div>
-                  <h2 style={{ fontWeight: 700, fontSize: 20, color: "#0f172a", margin: "0 0 12px" }}>{s.title}</h2>
-                  <p style={{ color: "#475569", fontSize: 15, lineHeight: 1.75, margin: "0 0 24px" }}>{s.desc}</p>
-                  <ul style={{ margin: 0, padding: "0 0 0 18px", color: "#64748b", fontSize: 14, lineHeight: 1.8 }}>
-                    {s.id === 1 && ["Internal hydrant systems", "External ring mains", "Underground piping networks", "Hose box & monitor nozzle supply"].map(item => <li key={item}>{item}</li>)}
-                    {s.id === 2 && ["Wet pipe sprinkler systems", "Deluge & foam-water systems", "ESFR storage rack systems", "Mist suppression systems"].map(item => <li key={item}>{item}</li>)}
-                    {s.id === 3 && ["Addressable loop systems", "Conventional zone panels", "Voice evacuation systems", "Gas suppression tie-in"].map(item => <li key={item}>{item}</li>)}
-                    {s.id === 4 && ["DCP & CO2 extinguishers", "Foam & water extinguishers", "Clean agent (HFC-227ea)", "Annual recharge & tagging"].map(item => <li key={item}>{item}</li>)}
-                    {s.id === 5 && ["Quarterly inspection visits", "Emergency breakdown support", "Spare parts management", "Insurance compliance reports"].map(item => <li key={item}>{item}</li>)}
-                    {s.id === 6 && ["Fire risk assessment", "Escape route analysis", "NOC documentation support", "Staff fire safety training"].map(item => <li key={item}>{item}</li>)}
-                  </ul>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    onClick={() => navigate("/contact")}
-                    style={{ marginTop: "auto", padding: "10px 22px", background: "#dc2626", color: "#fff", border: "none", borderRadius: 8, fontWeight: 600, fontSize: 14, cursor: "pointer", alignSelf: "flex-start" }}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(310px,1fr))", gap: 32 }}>
+            {SERVICES.map((s, i) => {
+              const IconComponent = ICON_MAP[s.id] || Shield;
+              return (
+                <FadeIn key={s.id} delay={i * 0.06}>
+                  <motion.div
+                    className="service-card"
+                    whileHover={{
+                      borderColor: "#dc2626"
+                    }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    style={{
+                      background: "#fff",
+                      border: "1px solid #e2e8f0",
+                      borderRadius: 18,
+                      padding: 20,
+                      boxShadow: "0 4px 20px rgba(0,0,0,0.02)",
+                      minHeight: 490,
+                      height: "100%",
+                      boxSizing: "border-box",
+                      display: "flex",
+                      flexDirection: "column",
+                      position: "relative",
+                      overflow: "hidden",
+                      transition: "border-color 0.3s ease"
+                    }}
                   >
-                    Get Quote →
-                  </motion.button>
-                </motion.div>
-              </FadeIn>
-            ))}
+                    {/* Image Cover */}
+                    <div style={{ height: 165, borderRadius: 12, overflow: "hidden", position: "relative", marginBottom: 16 }}>
+                      <img
+                        src={s.image}
+                        alt={s.title}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.4s ease" }}
+                      />
+                      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(15,23,42,0.45) 0%, transparent 80%)" }} />
+                      
+                      {/* Floating Icon */}
+                      <div style={{ position: "absolute", bottom: 10, left: 10, width: 38, height: 38, background: "rgba(255,255,255,0.92)", backdropFilter: "blur(8px)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#dc2626", boxShadow: "0 4px 12px rgba(0,0,0,0.12)" }}>
+                        <IconComponent size={18} strokeWidth={2.2} />
+                      </div>
+                    </div>
+
+                    <h2 style={{ fontWeight: 800, fontSize: 18, color: "#0f172a", margin: "0 0 6px", lineHeight: 1.35 }}>{s.title}</h2>
+                    <p style={{ color: "#475569", fontSize: 13, lineHeight: 1.55, margin: "0 0 14px" }}>{s.desc}</p>
+                    
+                    {/* Features List */}
+                    <div style={{ display: "flex", flexDirection: "column", gap: 8, marginBottom: 18 }}>
+                      {s.features && s.features.map((item, index) => (
+                        <div key={index} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                          <Check size={14} strokeWidth={3} style={{ color: "#dc2626", marginTop: 2, flexShrink: 0 }} />
+                          <span style={{ fontSize: 13, color: "#64748b", lineHeight: 1.4 }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <motion.button
+                      whileHover={{ scale: 1.01 }}
+                      onClick={() => navigate("/contact")}
+                      style={{
+                        marginTop: "auto",
+                        padding: "9px 18px",
+                        background: "transparent",
+                        border: "1.5px solid #dc2626",
+                        color: "#dc2626",
+                        borderRadius: 8,
+                        fontWeight: 700,
+                        fontSize: 13,
+                        cursor: "pointer",
+                        textAlign: "center",
+                        transition: "all 0.2s ease",
+                        width: "100%"
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = "#dc2626";
+                        e.target.style.color = "#fff";
+                        e.target.style.boxShadow = "0 6px 20px rgba(220,38,38,0.2)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = "transparent";
+                        e.target.style.color = "#dc2626";
+                        e.target.style.boxShadow = "none";
+                      }}
+                    >
+                      Get Quote →
+                    </motion.button>
+                  </motion.div>
+                </FadeIn>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -98,19 +175,25 @@ export default function ServicesPage({ setPage }) {
           </FadeIn>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 24 }}>
             {[
-              { step: "01", title: "Site Survey", desc: "Our engineers conduct a detailed site assessment and risk analysis to understand your exact requirements." },
+              { step: "01", title: "Site Survey", desc: "Our engineers conduct a detailed site assessment and risk analysis to understand your specific fire hazards and project requirements." },
               { step: "02", title: "Engineering Design", desc: "We prepare hydraulic calculations, AutoCAD drawings, and BOQ compliant with NBC 2016 and NFPA standards." },
-              { step: "03", title: "Authority Approval", desc: "We liaise with local fire departments for plan sanction and obtain required NOC clearances on your behalf." },
-              { step: "04", title: "Installation", desc: "Certified technicians execute the installation with quality checks at every stage of the project." },
-              { step: "05", title: "Testing & Commissioning", desc: "Full system testing, hydrostatic pressure tests, and functional checks before handing over." },
-              { step: "06", title: "AMC & Support", desc: "Ongoing annual maintenance, 24×7 emergency response, and compliance reporting throughout asset life." },
+              { step: "03", title: "Authority Approval", desc: "We liaise with local fire departments for plan sanction and obtain required provisional and final Fire NOC clearances on your behalf." },
+              { step: "04", title: "Equipment Supply", desc: "We source and procure certified high-grade fire safety equipment (ISI, UL/FM, and CE marked) matching your project specifications." },
+              { step: "05", title: "System Installation", desc: "Our certified technicians execute professional turnkey installations with quality checks at every stage of the project." },
+              { step: "06", title: "Testing & Commissioning", desc: "Full system testing, hydrostatic pressure tests, and functional checks before handing over to ensure absolute safety." },
+              { step: "07", title: "Safety Training", desc: "We conduct hands-on fire extinguisher usage training, emergency evacuation drills, and safety protocols for your staff." },
+              { step: "08", title: "AMC & Support", desc: "Ongoing annual maintenance, 24×7 emergency response, routine safety audits, and compliance reporting throughout asset life." },
             ].map((p, i) => (
               <FadeIn key={i} delay={i * 0.08}>
-                <div style={{ background: "#fff", borderRadius: 14, border: "1px solid #e2e8f0", padding: 28 }}>
+                <motion.div
+                  whileHover={{ y: -6, boxShadow: "0 12px 30px rgba(220,38,38,0.06)", borderColor: "#fecaca" }}
+                  transition={{ duration: 0.2 }}
+                  style={{ background: "#fff", borderRadius: 14, border: "1px solid #e2e8f0", padding: 28, height: "100%", boxSizing: "border-box" }}
+                >
                   <div style={{ fontFamily: "'Georgia',serif", fontSize: 36, fontWeight: 700, color: "#dc262620", marginBottom: 12 }}>{p.step}</div>
                   <div style={{ fontWeight: 700, fontSize: 16, color: "#0f172a", marginBottom: 8 }}>{p.title}</div>
                   <div style={{ fontSize: 14, color: "#64748b", lineHeight: 1.7 }}>{p.desc}</div>
-                </div>
+                </motion.div>
               </FadeIn>
             ))}
           </div>
@@ -127,7 +210,7 @@ export default function ServicesPage({ setPage }) {
             </p>
             <motion.button
               whileHover={{ scale: 1.04 }}
-              onClick={() => setPage("Contact")}
+              onClick={() => navigate("/contact")}
               style={{ padding: "15px 40px", background: "#dc2626", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, fontSize: 16, cursor: "pointer" }}
             >
               Request Site Assessment
@@ -135,6 +218,12 @@ export default function ServicesPage({ setPage }) {
           </FadeIn>
         </div>
       </section>
+
+      <style>{`
+        .service-card:hover img {
+          transform: scale(1.08);
+        }
+      `}</style>
     </div>
   );
 }

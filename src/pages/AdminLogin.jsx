@@ -26,10 +26,8 @@ export default function AdminLogin({ onLoginSuccess }) {
         }
       );
 
-      localStorage.setItem(
-        "adminToken",
-        res.data.token
-      );
+      localStorage.setItem("adminToken", res.data.token);
+      localStorage.setItem("adminTokenTime", Date.now().toString());
 
       if (onLoginSuccess) {
         onLoginSuccess();

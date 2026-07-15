@@ -14,6 +14,17 @@ const TYPE_COLORS = {
   Retail: "#0891b2",
 };
 
+const PROJECT_IMAGES = {
+  1: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop", 
+  2: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop", 
+  3: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=600&auto=format&fit=crop", 
+  4: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop", 
+  5: "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600&auto=format&fit=crop", 
+  6: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600&auto=format&fit=crop", 
+  7: "https://images.unsplash.com/photo-1542244547-ec409c631fb0?q=80&w=600&auto=format&fit=crop", 
+  8: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=600&auto=format&fit=crop", 
+};
+
 export default function ProjectsPage() {
   const heroRef = useRef(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
@@ -32,7 +43,7 @@ export default function ProjectsPage() {
         {/* Dark Overlays */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
         <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
-        
+
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
             <span style={{ display: "inline-block", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", borderRadius: 4, padding: "3px 10px", marginBottom: 16 }}>
@@ -46,7 +57,7 @@ export default function ProjectsPage() {
             </p>
           </motion.div>
         </div>
-        
+
         {/* Spinning Rings */}
         <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
@@ -55,73 +66,189 @@ export default function ProjectsPage() {
       </section>
 
       {/* Projects Grid */}
-      <section style={{ padding: "60px 24px", background: "#fff" }}>
+      <section style={{ padding: "80px 24px", background: "#f8fafc" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
 
           {/* Filter */}
           <FadeIn>
-            <div style={{ display: "flex", gap: 10, marginBottom: 40, flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: 12, marginBottom: 48, flexWrap: "wrap", justifyContent: "center" }}>
               {types.map(t => (
                 <button key={t} onClick={() => setActiveType(t)}
                   style={{
-                    padding: "8px 20px", borderRadius: 8,
-                    border: `1.5px solid ${activeType === t ? "#dc2626" : "#e2e8f0"}`,
+                    padding: "10px 24px", borderRadius: 100,
+                    border: `1.5px solid ${activeType === t ? "#dc2626" : "#cbd5e1"}`,
                     background: activeType === t ? "#dc2626" : "#fff",
-                    color: activeType === t ? "#fff" : "#374151",
-                    fontWeight: 600, fontSize: 13, cursor: "pointer", transition: "all 0.2s"
-                  }}>
+                    color: activeType === t ? "#fff" : "#475569",
+                    fontWeight: 600, fontSize: 13, cursor: "pointer", transition: "all 0.2s ease",
+                    boxShadow: activeType === t ? "0 4px 12px rgba(220,38,38,0.2)" : "0 2px 4px rgba(0,0,0,0.02)"
+                  }}
+                  onMouseEnter={(e) => {
+                    if (activeType !== t) {
+                      e.currentTarget.style.borderColor = "#dc2626";
+                      e.currentTarget.style.color = "#dc2626";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (activeType !== t) {
+                      e.currentTarget.style.borderColor = "#cbd5e1";
+                      e.currentTarget.style.color = "#475569";
+                    }
+                  }}
+                  >
                   {t}
                 </button>
               ))}
             </div>
           </FadeIn>
-
-          <motion.div layout style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 24 }}>
+          <style dangerouslySetInnerHTML={{ __html: `
+            .projects-grid {
+              display: grid;
+              grid-template-columns: repeat(3, 1fr);
+              gap: 16px;
+            }
+            @media (max-width: 1024px) {
+              .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+            }
+            @media (max-width: 768px) {
+              .projects-grid {
+                grid-template-columns: 1fr;
+              }
+            }
+          `}} />
+          <motion.div layout className="projects-grid">
             <AnimatePresence>
               {filtered.map((p, i) => (
                 <motion.div
                   key={p.id} layout
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ delay: i * 0.05 }}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4, delay: i * 0.03 }}
                 >
-                  <motion.div whileHover={{ y: -5 }}
-                    style={{ background: "#fff", border: "1px solid #f1f5f9", borderRadius: 16, overflow: "hidden", boxShadow: "0 2px 16px rgba(0,0,0,0.04)" }}>
-                    <div style={{
-                      background: `linear-gradient(135deg,${TYPE_COLORS[p.type] || "#dc2626"}18,${TYPE_COLORS[p.type] || "#dc2626"}08)`,
-                      height: 140, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 70, position: "relative"
+                  <motion.div
+                    whileHover="hover"
+                    style={{
+                      position: "relative",
+                      borderRadius: 16,
+                      overflow: "hidden",
+                      height: 300,
+                      cursor: "pointer",
+                      boxShadow: "0 10px 25px -12px rgba(15, 23, 42, 0.3)",
+                      border: "1px solid rgba(255, 255, 255, 0.08)",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "flex-end"
                     }}>
-                      {p.img}
-                      <span style={{
-                        position: "absolute", top: 14, right: 14,
-                        background: TYPE_COLORS[p.type] || "#dc2626",
-                        color: "#fff", fontSize: 11, fontWeight: 700, padding: "3px 10px", borderRadius: 100
+                    
+                    {/* Background Company Photo */}
+                    <motion.div
+                      variants={{
+                        hover: { scale: 1.05 }
+                      }}
+                      transition={{ duration: 0.4, ease: "easeOut" }}
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        backgroundImage: `url("${PROJECT_IMAGES[p.id] || "/page_photo/project.png"}")`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                        zIndex: 0
+                      }}
+                    />
+
+                    {/* Gradient Overlay for Text Readability */}
+                    <div
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background: "linear-gradient(to top, rgba(10, 15, 30, 0.95) 0%, rgba(10, 15, 30, 0.45) 50%, rgba(10, 15, 30, 0.1) 100%)",
+                        zIndex: 1
+                      }}
+                    />
+
+                    {/* Bottom Left Corner Text Content */}
+                    <div
+                      style={{
+                        position: "relative",
+                        zIndex: 2,
+                        padding: "24px 28px",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 6,
+                        pointerEvents: "none"
+                      }}
+                    >
+                      {/* Company Category · Location */}
+                      <div style={{
+                        display: "flex",
+                        alignItems: "center",
+                        flexWrap: "wrap",
+                        textShadow: "0 1px 3px rgba(0, 0, 0, 0.8)"
                       }}>
-                        {p.type}
-                      </span>
-                    </div>
-                    <div style={{ padding: 24 }}>
-                      <h3 style={{ fontWeight: 700, fontSize: 16, color: "#0f172a", margin: "0 0 12px", lineHeight: 1.4 }}>{p.name}</h3>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                          <span style={{ fontSize: 13 }}>📍</span>
-                          <span style={{ fontSize: 13, color: "#64748b" }}>{p.location}</span>
-                        </div>
-                        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                          <span style={{ fontSize: 13 }}>🔧</span>
-                          <span style={{ fontSize: 13, color: "#64748b" }}>{p.scope}</span>
-                        </div>
-                        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-                          <span style={{ fontSize: 13 }}>📐</span>
-                          <span style={{ fontSize: 13, color: "#64748b" }}>{p.size}</span>
-                        </div>
+                        {/* Category Name in Custom Accent Color (All Caps) */}
+                        <span style={{
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "1.5px",
+                          color: TYPE_COLORS[p.type] || "#dc2626"
+                        }}>
+                          {p.type}
+                        </span>
+                        
+                        {/* Dot Separator */}
+                        <span style={{
+                          color: "#94a3b8",
+                          margin: "0 6px",
+                          fontSize: "11px",
+                          fontWeight: 700
+                        }}>
+                          ·
+                        </span>
+
+                        {/* Location Name in Light Grey (All Caps) */}
+                        <span style={{
+                          fontSize: "11px",
+                          fontWeight: 700,
+                          textTransform: "uppercase",
+                          letterSpacing: "1.5px",
+                          color: "#cbd5e1"
+                        }}>
+                          {p.location.split(",")[0].trim()}
+                        </span>
                       </div>
-                      <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px solid #f1f5f9", paddingTop: 14 }}>
-                        <span style={{ fontSize: 12, color: "#94a3b8" }}>Completed</span>
-                        <span style={{ fontSize: 15, fontWeight: 700, color: "#dc2626" }}>{p.year}</span>
-                      </div>
+
+                      {/* Company Name (All Caps) */}
+                      <h3 style={{
+                        fontWeight: 800,
+                        fontSize: "18px",
+                        color: "#ffffff",
+                        margin: "2px 0 4px",
+                        lineHeight: 1.25,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                        fontFamily: "'Inter', sans-serif",
+                        textShadow: "0 2px 8px rgba(10, 15, 30, 0.9)"
+                      }}>
+                        {p.name}
+                      </h3>
+
+                      {/* What we worked on (Scope - Mixed Case) */}
+                      <p style={{
+                        fontSize: "13px",
+                        color: "#86b6de",
+                        fontWeight: 500,
+                        lineHeight: 1.4,
+                        margin: 0,
+                        textShadow: "0 1px 4px rgba(10, 15, 30, 0.8)",
+                        fontFamily: "'Inter', sans-serif"
+                      }}>
+                        {p.scope}
+                      </p>
                     </div>
+
                   </motion.div>
                 </motion.div>
               ))}
@@ -131,7 +258,7 @@ export default function ProjectsPage() {
       </section>
 
       {/* Stats Banner */}
-      <section style={{ background: "#0f172a", padding: "60px 24px" }}>
+      {/* <section style={{ background: "#0f172a", padding: "60px 24px" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <FadeIn>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(200px,1fr))", gap: 32, textAlign: "center" }}>
@@ -149,7 +276,7 @@ export default function ProjectsPage() {
             </div>
           </FadeIn>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }

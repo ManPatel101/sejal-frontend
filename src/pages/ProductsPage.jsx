@@ -11,61 +11,248 @@ export default function ProductsPage() {
   const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
 
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [products, setProducts] = useState([]);
+  const [groupedProducts, setGroupedProducts] = useState({});
+  const [isGrouped, setIsGrouped] = useState(false);
   const [cat, setCat] = useState("All");
   const [modal, setModal] = useState(null);
-  const [inquiryForm, setInquiryForm] = useState({ name: "", email: "", phone: "", message: "" });
+  const [inquiryForm, setInquiryForm] = useState({ name: "", company: "", email: "", phone: "", message: "" });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  // Debounce search input
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [search]);
 
-  const fetchProducts = async () => {
+  // Fetch products from backend
+  const fetchProducts = async (currentPage, currentCat, currentSearch, append = false) => {
+    setLoading(true);
     try {
       const apiBase = import.meta.env.VITE_API_URL || "https://sejal-backend.onrender.com";
-      const res = await axios.get(
-        `${apiBase}/api/products`
-      );
 
-      console.log(res.data);  
-      console.log(res.data.products);
+      const params = {
+        page: currentPage,
+        limit: 8,
+        category: currentCat,
+        search: currentSearch,
+      };
 
-      setProducts(res.data.products || []);
+      // If we are loading more on "All" category without active search, exclude currently loaded products to prevent duplication and appending chronologically at the bottom
+      if (append && currentCat === "All" && !currentSearch) {
+        const excludeIds = products.map((p) => p._id).join(",");
+        params.exclude = excludeIds;
+      }
+
+      const res = await axios.get(`${apiBase}/api/products`, { params });
+
+      if (res.data.isGrouped) {
+        setIsGrouped(true);
+        setGroupedProducts(res.data.grouped || {});
+        
+        // Initial load for "All": display flattened array of grouped items (up to 4 per category)
+        const grouped = res.data.grouped || {};
+        const flattened = Object.values(grouped).flat();
+        setProducts(flattened);
+        setTotal(flattened.length);
+        setHasMore(res.data.hasMore || false);
+      } else {
+        setIsGrouped(false);
+        setGroupedProducts({});
+        if (append) {
+          setProducts((prev) => [...prev, ...(res.data.products || [])]);
+        } else {
+          setProducts(res.data.products || []);
+        }
+        setTotal(res.data.total || 0);
+        setHasMore(res.data.hasMore || false);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const filtered = products.filter(
-    (p) =>
-      (
-        cat === "All" ||
-        (p.category || "").trim().toLowerCase() ===
-        cat.trim().toLowerCase()
-      ) &&
-      (
-        (p.title || p.name || "")
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        (p.desc || p.description || "")
-          .toLowerCase()
-          .includes(search.toLowerCase())
-      )
+  // Re-fetch when category or debounced search changes
+  useEffect(() => {
+    setPage(1);
+    fetchProducts(1, cat, debouncedSearch, false);
+  }, [cat, debouncedSearch]);
+
+  const loadMore = () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    fetchProducts(nextPage, cat, debouncedSearch, true);
+  };
+
+  const handleMainViewMore = () => {
+    if (cat === "All" && !debouncedSearch) {
+      // Fetch next set of products excluding currently loaded products
+      fetchProducts(1, cat, debouncedSearch, true);
+    } else {
+      loadMore();
+    }
+  };
+
+  const renderProductCard = (p, i) => (
+    <FadeIn key={p._id || i} delay={i * 0.05}>
+      <motion.div
+        whileHover={{ y: -6, boxShadow: "0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 10px 10px -5px rgba(15, 23, 42, 0.03)" }}
+        transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          border: "1px solid #f1f5f9",
+          overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+        }}
+      >
+        {/* Image Container */}
+        <div
+          style={{
+            background: "#fff",
+            height: 250,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderBottom: "1px solid #f1f5f9",
+            padding: "0",
+            overflow: "hidden",
+            position: "relative",
+          }}
+        >
+          <motion.img
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+            src={p.image || "https://via.placeholder.com/600"}
+            alt={p.title || p.name}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "100%",
+              objectFit: "contain",
+            }}
+          />
+        </div>
+
+        {/* Body Content */}
+        <div style={{ padding: "20px 20px 22px", display: "flex", flexDirection: "column", flexGrow: 1 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+            <span style={{ fontSize: 11, color: "#dc2626", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.8px" }}>
+              {p.category}
+            </span>
+            <Badge>{p.badge}</Badge>
+          </div>
+
+          <h3
+            style={{
+              fontWeight: 700,
+              fontSize: 16,
+              color: "#0f172a",
+              margin: "0 0 16px",
+              lineHeight: 1.4,
+              display: "-webkit-box",
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              height: 44,
+            }}
+          >
+            {p.title || p.name}
+          </h3>
+
+          <div style={{ display: "flex", gap: 10, marginTop: "auto" }}>
+            <motion.button
+              whileHover={{ scale: 1.03, backgroundColor: "#b91c1c" }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setModal(p)}
+              style={{
+                flex: 1,
+                padding: "10px",
+                background: "#dc2626",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                fontWeight: 600,
+                fontSize: 13,
+                cursor: "pointer",
+                transition: "background-color 0.2s ease",
+                boxShadow: "0 4px 12px rgba(220, 38, 38, 0.15)",
+              }}
+            >
+              Inquire
+            </motion.button>
+            <motion.button
+              whileHover={{ scale: 1.03, backgroundColor: "#f1f5f9" }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setModal(p)}
+              style={{
+                padding: "10px 16px",
+                background: "#f8fafc",
+                color: "#475569",
+                border: "1px solid #e2e8f0",
+                borderRadius: 8,
+                fontWeight: 600,
+                fontSize: 13,
+                cursor: "pointer",
+                transition: "background-color 0.2s ease",
+              }}
+            >
+              Details
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
+    </FadeIn>
   );
 
   const sendInquiry = async () => {
-    if (
-      !inquiryForm.name ||
-      !inquiryForm.email ||
-      !inquiryForm.phone ||
-      !inquiryForm.message
-    ) {
-      alert("⚠️ Please fill all fields before submitting inquiry");
+    const nameTrimmed = inquiryForm.name.trim();
+    const companyTrimmed = inquiryForm.company.trim();
+    const emailTrimmed = inquiryForm.email.trim();
+    const phoneTrimmed = inquiryForm.phone.trim();
+    const messageTrimmed = inquiryForm.message.trim();
+
+    if (!nameTrimmed || !companyTrimmed || !emailTrimmed || !phoneTrimmed || !messageTrimmed) {
+      setErrorMsg("All fields (including Company Name) are required.");
       return;
     }
 
+    if (nameTrimmed.length < 2) {
+      setErrorMsg("Please enter a valid name (at least 2 characters).");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailTrimmed)) {
+      setErrorMsg("Please enter a valid email address.");
+      return;
+    }
+
+    const phoneRegex = /^[789]\d{9}$/;
+    if (!phoneRegex.test(phoneTrimmed)) {
+      setErrorMsg("Please enter a valid 10-digit Indian phone number starting with 7, 8, or 9.");
+      return;
+    }
+
+    if (messageTrimmed.length < 10) {
+      setErrorMsg("Please write a descriptive message (at least 10 characters).");
+      return;
+    }
+
+    setErrorMsg("");
     setSending(true);
 
     try {
@@ -88,6 +275,7 @@ export default function ProductsPage() {
 
       if (data.success) {
         setSent(true);
+        setErrorMsg("");
 
         setTimeout(() => {
           setSent(false);
@@ -95,21 +283,26 @@ export default function ProductsPage() {
 
           setInquiryForm({
             name: "",
+            company: "",
             email: "",
             phone: "",
             message: "",
           });
         }, 2000);
       } else {
-        alert(data.message || "Something went wrong");
+        setErrorMsg(data.message || "Something went wrong");
       }
     } catch (error) {
       console.log(error);
-      alert("Server error");
+      setErrorMsg("Server error. Try again later.");
     } finally {
       setSending(false);
     }
   };
+
+  const displayProducts = isGrouped
+    ? Object.values(groupedProducts).flat()
+    : products;
 
   return (
     <div style={{ paddingTop: 68, overflowX: "hidden" }}>
@@ -120,7 +313,7 @@ export default function ProductsPage() {
         {/* Dark Overlays */}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(15,23,42,0.7) 0%,rgba(15,23,42,0.35) 60%,transparent 100%)" }} />
         <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0)", backgroundSize: "28px 28px" }} />
-        
+
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9 }}>
             <span style={{ display: "inline-block", background: "rgba(220,38,38,0.15)", border: "1px solid rgba(220,38,38,0.3)", color: "#ef4444", fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", borderRadius: 4, padding: "3px 10px", marginBottom: 16 }}>
@@ -134,7 +327,7 @@ export default function ProductsPage() {
             </p>
           </motion.div>
         </div>
-        
+
         {/* Spinning Rings */}
         <motion.div animate={{ rotate: [0, 360] }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           style={{ position: "absolute", right: "8%", top: "15%", width: 220, height: 220, borderRadius: "50%", border: "1px solid rgba(220,38,38,0.20)", pointerEvents: "none" }} />
@@ -150,7 +343,22 @@ export default function ProductsPage() {
           <FadeIn>
             <div style={{ display: "flex", gap: 16, marginBottom: 40, flexWrap: "wrap", alignItems: "center" }}>
               <div style={{ flex: 1, minWidth: 240, position: "relative" }}>
-                <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#94a3b8" }}>🔍</span>
+                <span style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "#94a3b8", display: "flex", alignItems: "center", pointerEvents: "none" }}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                  </svg>
+                </span>
                 <input
                   value={search}
                   onChange={e => setSearch(e.target.value)}
@@ -163,52 +371,48 @@ export default function ProductsPage() {
                   <motion.button key={c} whileHover={{ scale: 1.03 }} onClick={() => setCat(c)}
                     style={{ padding: "8px 18px", borderRadius: 8, border: `1.5px solid ${cat === c ? "#dc2626" : "#e2e8f0"}`, background: cat === c ? "#dc2626" : "#fff", color: cat === c ? "#fff" : "#374151", fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
                     {c}
-                
+
                   </motion.button>
                 ))}
               </div>
             </div>
           </FadeIn>
 
-          <p style={{ color: "#64748b", fontSize: 14, marginBottom: 24 }}>
-            {filtered.length} product{filtered.length !== 1 ? "s" : ""} found
-          </p>
+          {!isGrouped && (
+            <p style={{ color: "#64748b", fontSize: 14, marginBottom: 24 }}>
+              {total} product{total !== 1 ? "s" : ""} found
+            </p>
+          )}
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 22 }}>
-            {filtered.map((p, i) => (
-              <FadeIn key={p._id || i}delay={i * 0.05}>
-                <motion.div whileHover={{ y: -5 }} style={{ background: "#fff", borderRadius: 14, border: "1px solid #f1f5f9", overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,0.04)" }}>
-                  <div style={{ background: "#fef2f2", height: 130, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 62 }}><img
-  src={p.image || "https://via.placeholder.com/600"}
-  alt={p.title || p.name}
-  style={{
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-  }}
-/></div>
-                  <div style={{ padding: "18px 20px 20px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                      <Badge>{p.badge}</Badge>
-                      <span style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600 }}>{p.category}</span>
-                    </div>
-                    <h3 style={{ fontWeight: 700, fontSize: 15, color: "#0f172a", margin: "0 0 8px", lineHeight: 1.4 }}>{p.title || p.name}</h3>
-                    <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6, margin: "0 0 16px" }}>{(p.shortDesc || "").slice(0, 90)}…</p>
-                    <div style={{ display: "flex", gap: 8 }}>
-                      <button onClick={() => setModal(p)}
-                        style={{ flex: 1, padding: "9px", background: "#dc2626", color: "#fff", border: "none", borderRadius: 7, fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
-                        Inquire
-                      </button>
-                      <button onClick={() => setModal(p)}
-                        style={{ padding: "9px 14px", background: "#f8fafc", color: "#374151", border: "1px solid #e2e8f0", borderRadius: 7, fontWeight: 600, fontSize: 13, cursor: "pointer" }}>
-                        Details
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              </FadeIn>
-            ))}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 24 }}>
+            {displayProducts.map((p, i) => renderProductCard(p, i))}
           </div>
+
+          {hasMore && (
+            <div style={{ textAlign: "center", marginTop: 48 }}>
+              <motion.button
+                whileHover={{ scale: 1.03, backgroundColor: "#b91c1c" }}
+                whileTap={{ scale: 0.98 }}
+                onClick={handleMainViewMore}
+                disabled={loading}
+                style={{
+                  padding: "12px 32px",
+                  background: "#dc2626",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: 8,
+                  fontWeight: 700,
+                  fontSize: 14,
+                  cursor: loading ? "not-allowed" : "pointer",
+                  transition: "all 0.2s ease",
+                  boxShadow: "0 4px 12px rgba(220, 38, 38, 0.15)",
+                }}
+              >
+                {loading ? "Loading..." : "View More"}
+              </motion.button>
+            </div>
+          )}
+
         </div>
       </section>
 
@@ -218,55 +422,56 @@ export default function ProductsPage() {
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
             style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}
-            onClick={e => { if (e.target === e.currentTarget) setModal(null); }}
+            onClick={e => { if (e.target === e.currentTarget) { setModal(null); setErrorMsg(""); } }}
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
               style={{ background: "#fff", borderRadius: 18, maxWidth: 580, width: "100%", maxHeight: "90vh", overflow: "auto" }}
             >
-              <div style={{ background: "#fef2f2", padding: 40, textAlign: "center", borderRadius: "18px 18px 0 0", fontSize: 80 }}><img
-  src={modal.image || "https://via.placeholder.com/400"}
-  alt={modal.title || modal.name}
-  style={{
-    width: "100%",
-    maxHeight: 260,
-    objectFit: "cover",
-    borderRadius: "18px 18px 0 0",
-  }}
-/></div>
+              <div style={{ background: "#fff", borderBottom: "1px solid #f1f5f9", padding: "16px", textAlign: "center", borderRadius: "18px 18px 0 0", display: "flex", justifyContent: "center", alignItems: "center", height: 280, position: "relative" }}><img
+                src={modal.image || "https://via.placeholder.com/400"}
+                alt={modal.title || modal.name}
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  objectFit: "contain",
+                }}
+              /></div>
               <div style={{ padding: 32 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
                   <div>
                     <Badge>{modal.badge}</Badge>
                     <h2 style={{ fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 22, color: "#0f172a", margin: "10px 0 0" }}>{modal.title || modal.name}</h2>
                   </div>
-                  <button onClick={() => setModal(null)}
+                  <button onClick={() => { setModal(null); setErrorMsg(""); }}
                     style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 18 }}>✕</button>
                 </div>
                 <div style={{ margin: "0 0 24px" }}>
-  <p
-    style={{
-      color: "#0f172a",
-      fontSize: 15,
-      fontWeight: 600,
-      lineHeight: 1.7,
-      margin: "0 0 10px",
-    }}
-  >
-    {modal.shortDesc || modal.description}
-  </p>
+                  <p
+                    style={{
+                      color: "#0f172a",
+                      fontSize: 15,
+                      fontWeight: 600,
+                      lineHeight: 1.7,
+                      margin: "0 0 10px",
+                      whiteSpace: "pre-line",
+                    }}
+                  >
+                    {modal.shortDesc || modal.description}
+                  </p>
 
-  <p
-    style={{
-      color: "#475569",
-      fontSize: 15,
-      lineHeight: 1.75,
-      margin: 0,
-    }}
-  >
-    {modal.fullDesc || modal.description}
-  </p>
-</div>
+                  <p
+                    style={{
+                      color: "#475569",
+                      fontSize: 15,
+                      lineHeight: 1.75,
+                      margin: 0,
+                      whiteSpace: "pre-line",
+                    }}
+                  >
+                    {modal.fullDesc || modal.description}
+                  </p>
+                </div>
                 <div style={{ background: "#f8fafc", borderRadius: 10, padding: 20, marginBottom: 24 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a", marginBottom: 12 }}>Send Inquiry</div>
                   {sent ? (
@@ -275,7 +480,12 @@ export default function ProductsPage() {
                     </div>
                   ) : (
                     <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                      {[["name", "text", "Your Name"], ["email", "email", "Email"], ["phone", "text", "Phone"]].map(([field, type, ph]) => (
+                      {errorMsg && (
+                        <div style={{ color: "#ef4444", fontSize: 13, fontWeight: 600, gridColumn: "1/-1", marginBottom: 4 }}>
+                          ⚠️ {errorMsg}
+                        </div>
+                      )}
+                      {[["name", "text", "Your Name"], ["company", "text", "Company Name"], ["email", "email", "Email"], ["phone", "text", "Phone"]].map(([field, type, ph]) => (
                         <input key={field} type={type} placeholder={ph}
                           value={inquiryForm[field]}
                           onChange={e => setInquiryForm(f => ({ ...f, [field]: e.target.value }))}
@@ -303,7 +513,7 @@ export default function ProductsPage() {
                           cursor: sending ? "not-allowed" : "pointer",
                           opacity: sending ? 0.8 : 1,
                         }}
-                    >
+                      >
                         {sending ? "Sending Inquiry..." : "Submit Inquiry"}
                       </motion.button>
                     </div>
