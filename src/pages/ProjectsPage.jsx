@@ -16,13 +16,18 @@ const TYPE_COLORS = {
 
 const PROJECT_IMAGES = {
   1: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600&auto=format&fit=crop", 
-  2: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop", 
-  3: "https://images.unsplash.com/photo-1587351021759-3e566b6af7cc?q=80&w=600&auto=format&fit=crop", 
-  4: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop", 
-  5: "https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=600&auto=format&fit=crop", 
-  6: "https://images.unsplash.com/photo-1566073771259-6a8506099945?q=80&w=600&auto=format&fit=crop", 
-  7: "https://images.unsplash.com/photo-1542244547-ec409c631fb0?q=80&w=600&auto=format&fit=crop", 
-  8: "https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=600&auto=format&fit=crop", 
+  2: "/project/yazaki-india-pvt-ltd.avif", 
+  3: "/project/acume chemi.jpg", 
+  4: "/project/hudco bhavan.webp", 
+  5: "/project/shri jag.png", 
+  6: "/project/shri jag.png", 
+  7: "/project/techtex.png", 
+  8: "/project/DAIICT.webp", 
+  9: "/project/prayosha.jpg",
+  10: "/project/devshree.jfif",
+  11: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=600&auto=format&fit=crop",
+  12: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=600&auto=format&fit=crop",
+  13: "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=600&auto=format&fit=crop",
 };
 
 export default function ProjectsPage() {

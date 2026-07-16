@@ -36,14 +36,12 @@ function SectionLabel({ children, light }) {
 
 /* ─────────────── Certificate data ────────────────────────────────────── */
 const CERTS = [
-  { id: 1, title: "ISO 9001:2015", authority: "Bureau Veritas Certification", scope: "Design, Engineering, Supply, Installation & Maintenance of Fire Protection Systems", issued: "March 2022", valid: "March 2025", ref: "BV-QMS-GJ-2022-1043", accent: "#ef4444", seal: "🏅", bgFrom: "#fffbeb", bgTo: "#fef3c7", detail: "Sejal Engineering holds ISO 9001:2015 Quality Management System certification from Bureau Veritas — one of the world's most respected conformity assessment bodies. The certificate covers every operational function: design review, material procurement, installation methodology, testing protocols, and post-commissioning AMC services. Our QMS is re-audited annually with zero major non-conformances recorded since first certification in 2011." },
-  { id: 2, title: "BIS / ISI Mark Licence", authority: "Bureau of Indian Standards", scope: "Manufacture of Fire Extinguishers (IS 15683) & Hose Reels (IS 884)", issued: "January 2018", valid: "Perpetual (Annual Renewal)", ref: "CM/L-7310XXX · CM/L-6812XXX", accent: "#ef4444", seal: "⭐", bgFrom: "#f0f9ff", bgTo: "#e0f2fe", detail: "Sejal Engineering holds ISI Mark licences from the Bureau of Indian Standards for two manufactured product categories. Licence CM/L-7310XXX covers our DCP fire extinguisher range (IS 15683) in 2kg–9kg capacities. Licence CM/L-6812XXX covers our swinging-type hose reel drums (IS 884) in 19mm and 25mm bore. Both licences require BIS factory audits and batch sampling tests every six months." },
-  { id: 3, title: "DGFASLI Empanelment", authority: "Directorate General, Factory Advice Service & Labour Institutes", scope: "Empanelled Contractor for Fire Fighting System Installation in Factories", issued: "June 2016", valid: "Renewed Biennially", ref: "DGFASLI/GJ/FFS/2016/048", accent: "#ef4444", seal: "🔴", bgFrom: "#fff1f2", bgTo: "#ffe4e6", detail: "DGFASLI empanelment authorises Sejal Engineering to execute fire fighting system installations in factories regulated under the Factories Act 1948. This registration is mandatory for industrial clients seeking compliance under Schedule 8 of the Gujarat Factories Rules. Our empanelment is renewed every two years following inspection of completed projects and verification of technical manpower." },
-  { id: 4, title: "Gujarat Fire NOC Liaison", authority: "Gujarat State Fire & Emergency Services", scope: "Recognised Agency for Fire NOC Plan Submission & Approval", issued: "2009", valid: "Active (22nd year)", ref: "GSFES/AMD/LA/2009/017", accent: "#ef4444", seal: "🛡️", bgFrom: "#faf5ff", bgTo: "#ede9fe", detail: "Sejal Engineering has been a recognised liaison agency with the Gujarat State Fire & Emergency Services since 2009 — one of only a select number of private firms authorised to submit and represent fire safety plans for plan sanction in Ahmedabad, Surat, Vadodara, and Rajkot fire authority jurisdictions. This recognition substantially reduces plan sanction time for our clients." },
-  { id: 5, title: "NFPA Member & Certified", authority: "National Fire Protection Association, USA", scope: "Engineering team certified in NFPA 13, NFPA 14, NFPA 20, NFPA 72", issued: "2014 (ongoing)", valid: "Annual renewal per standard update", ref: "NFPA-IND-GJ-SE-2014", accent: "#ef4444", seal: "🌐", bgFrom: "#f0fdf4", bgTo: "#dcfce7", detail: "Sejal Engineering's senior engineering team holds NFPA certifications across four critical standards: NFPA 13 (Sprinkler Systems), NFPA 14 (Standpipe & Hose Systems), NFPA 20 (Stationary Pumps), and NFPA 72 (Fire Alarm & Signaling). These certifications are renewed with each edition cycle ensuring our designs always reflect the latest international best practices." },
-  { id: 6, title: "MSME Udyam Registration", authority: "Ministry of Micro, Small & Medium Enterprises, Govt. of India", scope: "Manufacturing & Service Enterprise Registration", issued: "August 2020", valid: "Perpetual", ref: "UDYAM-GJ-01-XXXXXXX", accent: "#ef4444", seal: "🏭", bgFrom: "#fff7ed", bgTo: "#ffedd5", detail: "Sejal Engineering is registered under the MSME Udyam scheme as a manufacturing and service enterprise, making us eligible for government procurement preferences, PSU vendor lists, and priority credit facilities. Our MSME status reflects our roots as a Gujarat-based enterprise and our commitment to building indigenous fire safety manufacturing capability within India." },
-  { id: 7, title: "FM Global Compliance", authority: "Factory Mutual Global (FM Approvals)", scope: "Sprinkler & Suppression System Design — FM Data Sheet Compliance", issued: "2019", valid: "Project-wise verification", ref: "FM-DS-2-0/8-9/10-2 Compliant", accent: "#ef4444", seal: "✅", bgFrom: "#ecfeff", bgTo: "#cffafe", detail: "Several Sejal Engineering clients carry FM Global property insurance which requires fire protection systems to comply with FM Global data sheets (DS 2-0, DS 8-9, DS 10-2 etc.). Our engineering team is trained in FM Global loss prevention standards and has delivered FM-compliant sprinkler and foam suppression systems for petrochemical and warehousing clients." },
-  { id: 8, title: "IS / NBC Standards Compliance", authority: "Bureau of Indian Standards & CPWD", scope: "IS 884, IS 636, IS 2175, IS 2189, IS 12469, IS 1239 — full portfolio", issued: "Since inception", valid: "Continuous", ref: "Multi-standard compliance portfolio", accent: "#ef4444", seal: "📋", bgFrom: "#fdf2f8", bgTo: "#fce7f3", detail: "Every Sejal Engineering system and manufactured product complies with the full suite of relevant BIS codes. Our fabricated piping meets IS 1239, hose reels meet IS 884, hose boxes meet IS 636, smoke detectors meet IS 2175, alarm panels meet IS 2189, and our pumps meet IS 12469. Compliance is verified at every stage of production and installation." },
+  { id: 1, title: "ISO 9001:2015", authority: "Bureau Veritas Certification", scope: "Design, Engineering, Supply, Installation & Maintenance of Fire Protection Systems", issued: "March 2022", valid: "March 2025", ref: "BV-QMS-GJ-2022-1043", accent: "#ef4444", seal: "🏅", bgFrom: "#fffbeb", bgTo: "#fef3c7" },
+  { id: 2, title: "BIS / ISI Mark Licence", authority: "Bureau of Indian Standards", scope: "Manufacture of Fire Extinguishers (IS 15683) & Hose Reels (IS 884)", issued: "January 2018", valid: "Perpetual (Annual Renewal)", ref: "CM/L-7310XXX · CM/L-6812XXX", accent: "#ef4444", seal: "⭐", bgFrom: "#f0f9ff", bgTo: "#e0f2fe" },
+  { id: 3, title: "CE Compliance Certificate", authority: "European Conformity Assessment", scope: "Design, Manufacture and Supply of CE-Marked Fire Safety Equipment", issued: "April 2021", valid: "Active (Continuous Audits)", ref: "CE-EU-FD-2021-3982", accent: "#ef4444", seal: "🇪🇺", bgFrom: "#fff1f2", bgTo: "#ffe4e6" },
+  { id: 4, title: "Gujarat Fire NOC Liaison", authority: "Gujarat State Fire & Emergency Services", scope: "Recognised Agency for Fire NOC Plan Submission & Approval", issued: "2009", valid: "Active (22nd year)", ref: "GSFES/AMD/LA/2009/017", accent: "#ef4444", seal: "🛡️", bgFrom: "#faf5ff", bgTo: "#ede9fe" },
+  { id: 7, title: "FM Global Compliance", authority: "Factory Mutual Global (FM Approvals)", scope: "Sprinkler & Suppression System Design — FM Data Sheet Compliance", issued: "2019", valid: "Project-wise verification", ref: "FM-DS-2-0/8-9/10-2 Compliant", accent: "#ef4444", seal: "✅", bgFrom: "#ecfeff", bgTo: "#cffafe" },
+  { id: 8, title: "IS / NBC Standards Compliance", authority: "Bureau of Indian Standards & CPWD", scope: "IS 884, IS 636, IS 2175, IS 2189, IS 12469, IS 1239 — full portfolio", issued: "Since inception", valid: "Continuous", ref: "Multi-standard compliance portfolio", accent: "#ef4444", seal: "📋", bgFrom: "#fdf2f8", bgTo: "#fce7f3" },
 ];
 
 /* ─────────────────── CertLogo Component (SVGs) ───────────────────────── */
@@ -65,15 +63,13 @@ function CertLogo({ id }) {
           style={{ width: "100%", height: "100%", objectFit: "contain", borderRadius: 8 }}
         />
       );
-    case 3: // DGFASLI
+    case 3: // CE Certificate
       return (
         <svg viewBox="0 0 100 100" style={{ width: "80%", height: "80%" }}>
-          <path d="M50 15 L80 25 V55 C80 72 50 85 50 85 C50 85 20 72 20 55 V25 Z" fill="none" stroke="#dc2626" strokeWidth="2.5" />
-          <path d="M50 15 L80 25 V55 C80 72 50 85 50 85 C50 85 20 72 20 55 V25 Z" fill="#dc2626" opacity="0.06" />
-          <line x1="32" y1="40" x2="68" y2="40" stroke="#f97316" strokeWidth="3" />
-          <line x1="32" y1="48" x2="68" y2="48" stroke="#16a34a" strokeWidth="3" />
-          <text x="50" y="65" fontSize="7" fontWeight="bold" fill="#dc2626" textAnchor="middle" style={{ fontFamily: "sans-serif" }}>GOVT OF INDIA</text>
-          <text x="50" y="33" fontSize="8" fontWeight="900" fill="#dc2626" textAnchor="middle" style={{ fontFamily: "sans-serif" }}>DGFASLI</text>
+          <circle cx="50" cy="50" r="32" fill="none" stroke="#ef4444" strokeWidth="2.5" />
+          <circle cx="50" cy="50" r="32" fill="#ef4444" opacity="0.05" />
+          <text x="38" y="58" fontSize="26" fontWeight="bold" fill="#ef4444" textAnchor="middle" style={{ fontFamily: "sans-serif", letterSpacing: "-1px" }}>C</text>
+          <text x="60" y="58" fontSize="26" fontWeight="bold" fill="#ef4444" textAnchor="middle" style={{ fontFamily: "sans-serif", letterSpacing: "-1px" }}>E</text>
         </svg>
       );
     case 4: // Gujarat Fire NOC
@@ -146,11 +142,13 @@ function CertCard({ cert /*, onClick */ }) {
         borderRadius: 18,
         border: "1px solid rgba(15,23,42,0.08)",
         overflow: "hidden",
-        padding: "28px 26px",
+        padding: "20px 24px",
         boxShadow: "0 8px 30px rgba(15,23,42,0.05)",
-        height: 260,
+        height: 110,
         display: "flex",
-        flexDirection: "column",
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 18,
         /* cursor: "pointer", */
       }}
     >
@@ -170,13 +168,13 @@ function CertCard({ cert /*, onClick */ }) {
       <div
         style={{
           position: "absolute",
-          width: 140,
-          height: 140,
+          width: 100,
+          height: 100,
           borderRadius: "50%",
           background: `${cert.accent}10`,
-          filter: "blur(55px)",
-          right: -70,
-          top: -70,
+          filter: "blur(40px)",
+          right: -50,
+          top: -50,
           pointerEvents: "none",
         }}
       />
@@ -184,12 +182,12 @@ function CertCard({ cert /*, onClick */ }) {
       {/* icon */}
       <div
         style={{
-          width: 56,
-          height: 56,
+          width: 52,
+          height: 52,
+          minWidth: 52,
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          marginBottom: 22,
           position: "relative",
           zIndex: 1,
         }}
@@ -201,47 +199,17 @@ function CertCard({ cert /*, onClick */ }) {
       <h3
         style={{
           fontFamily: "'Georgia', serif",
-          fontSize: 20,
+          fontSize: 17,
           fontWeight: 700,
           color: "#0f172a",
           lineHeight: 1.35,
-          margin: "0 0 10px",
+          margin: 0,
           position: "relative",
           zIndex: 1,
         }}
       >
         {cert.title}
       </h3>
-
-      {/* authority */}
-      <div
-        style={{
-          fontSize: 12,
-          fontWeight: 700,
-          letterSpacing: 0.5,
-          textTransform: "uppercase",
-          color: cert.accent,
-          marginBottom: 16,
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        {cert.authority}
-      </div>
-
-      {/* description */}
-      <p
-        style={{
-          fontSize: 13.5,
-          color: "#64748b",
-          lineHeight: 1.8,
-          margin: 0,
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        {cert.scope}
-      </p>
     </motion.div>
   );
 }
@@ -478,12 +446,12 @@ const LEADERSHIP_TEAM = [
   {
     name: "Mayur Patel",
     designation: "Head — Projects & Production",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200&h=200"
+    image: "/staff_photo/manager.jpeg"
   },
   {
-    name: "Akshita ",
+    name: "Akshita",
     designation: "Head — Marketing & Business Dev.",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200&h=200"
+    image: "/staff_photo/MH.jpeg"
   }
 ];
 
@@ -607,9 +575,9 @@ export default function AboutPage() {
               <h2 style={{ fontFamily: "'Georgia',serif", fontSize: "clamp(30px,4vw,48px)", fontWeight: 700, color: "#0f172a", lineHeight: 1.2, margin: "0 0 32px" }}>Born in Ahmedabad.<br />Built for India's Toughest Facilities.</h2>
               <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
                 {["Sejal Engineering was founded in 2002 by Pragnesh Patel, a fire safety engineer and industry professional, who identified a critical gap in Gujarat’s rapidly industrialising landscape — the absence of specialist fire protection consultants capable of designing, supplying, and commissioning compliant systems under one roof. Starting from a modest office in Ahmedabad, the company began its journey by serving residential buildings and small-scale industries with reliable and standards-driven fire safety solutions.",
-                  "Over the following decade, Sejal Engineering expanded its technical expertise and operational reach across Gujarat. By 2008, the company was successfully executing turnkey fire protection projects for industrial facilities, commercial developments, and residential infrastructures throughout the state. A major milestone came when Sejal Engineering earned the opportunity to work with reputed national-level companies, including projects associated with the Jamshed Tata group in Kolkata — reinforcing the company’s reputation for quality, reliability, and engineering excellence in the fire safety industry.",
-                  "Today, Sejal Engineering stands as one of western India’s trusted fire safety companies with expertise spanning project execution, manufacturing, testing, and long-term maintenance services. Alongside executing large-scale fire protection projects and government tenders, the company manufactures high-quality fire safety products supported by an in-house testing laboratory to ensure performance, reliability, and compliance with industry standards. We also provide comprehensive Annual Maintenance Contract (AMC) services and currently manage a portfolio of 200+ active sites across industrial, commercial, and residential sectors.",
-                  "What has never changed since 2002 is our founding principle: fire safety is not a compliance checkbox — it is a moral commitment to every person who enters a building we have protected. That philosophy drives every system we design, every product we manufacture, and every service we deliver.",
+                  "Over the following decade, Sejal Engineering expanded its expertise and operations across Gujarat. By 2008, the company was executing turnkey fire protection projects for industrial, commercial, and residential sectors. A key milestone was securing projects with reputed national-level companies, including the Jamshed Tata Group in Kolkata, strengthening its reputation for quality, reliability, and engineering excellence.",
+                  "Today, Sejal Engineering is one of Western India's trusted fire safety companies, specializing in fire protection projects, testing, and maintenance. We execute government and private projects while providing comprehensive AMC services for 200+ industrial, commercial, and residential sites",
+                  // "What has never changed since 2002 is our founding principle: fire safety is not a compliance checkbox — it is a moral commitment to every person who enters a building we have protected. That philosophy drives every system we design, every product we manufacture, and every service we deliver.",
                 ].map((p, i) => (<p key={i} style={{ fontSize: 16, color: "#475569", lineHeight: 1.85, margin: 0 }}>{p}</p>))}
               </div>
             </FadeIn>
@@ -959,7 +927,7 @@ export default function AboutPage() {
                   lineHeight: 1.75,
                 }}
               >
-                Engineering expertise, manufacturing capability, and long-term
+                Engineering expertise, turnkey execution, and long-term
                 accountability combined under one trusted fire protection partner.
               </p>
             </div>
@@ -975,77 +943,76 @@ export default function AboutPage() {
             {[
               {
                 no: "01",
-                tag: "Manufacturing",
-                title: "Integrated Manufacturing",
+                tag: "Project Execution",
+                title: "Turnkey Project Delivery",
                 body:
-                  "In-house manufacturing of ISI-certified extinguishers and hose reels with turnkey execution support.",
+                  "Complete fire protection execution from system design and brand sourcing to installation and final fire NOC.",
                 color: "#ef4444",
               },
 
               {
                 no: "02",
-                tag: "Testing Lab",
-                title: "Advanced Testing Facility",
+                tag: "Testing & Commissioning",
+                title: "Rigorous Hydro-Testing",
                 body:
-                  "Dedicated testing systems for pressure checks, discharge verification, and quality inspection.",
+                  "Detailed pre-handover checking, pressure testing of pipelines, and alarm loop testing for 100% safety.",
                 color: "#ef4444",
               },
 
               {
                 no: "03",
                 tag: "Compliance",
-                title: "BIS Licensed Products",
+                title: "Standards-Driven Designs",
                 body:
-                  "Products certified under IS standards with strict BIS compliance and audited production processes.",
+                  "Engineering layout blueprint designs strictly adhering to National Building Code (NBC), IS standards, and NFPA.",
                 color: "#ef4444",
               },
 
               {
                 no: "04",
-                tag: "Cost Efficiency",
-                title: "Factory-Direct Supply",
+                tag: "Sourcing",
+                title: "Authorized Brand Partnerships",
                 body:
-                  "Direct manufacturing capability delivering better pricing with controlled engineering quality.",
+                  "Direct procurement of ISI-certified, UL-listed, CE-marked, and FM-approved products from trusted OEM brands.",
                 color: "#ef4444",
               },
 
               {
                 no: "05",
-                tag: "Quality Control",
-                title: "Material Traceability",
+                tag: "Engineering",
+                title: "Expert Safety Consultancy",
                 body:
-                  "Complete traceability of production batches with certified raw material documentation.",
+                  "Qualified fire safety engineering team offering precise hydraulic calculations, risk analysis, and safety audits.",
                 color: "#ef4444",
               },
 
               {
                 no: "06",
-                tag: "Service Support",
-                title: "Certified Refilling Systems",
+                tag: "Support",
+                title: "24/7 AMC & Refilling Support",
                 body:
-                  "Factory-standard DCP and CO₂ refilling support for reliable AMC maintenance services.",
+                  "Dedicated round-the-clock maintenance support and certified refilling services to keep systems operational.",
                 color: "#ef4444",
               },
             ].map((item, i) => (
               <FadeIn key={item.no} delay={i * 0.05}>
                 <motion.div
                   whileHover={{
-                    y: -6,
-                    borderColor: "rgba(239, 68, 68, 0.35)",
-                    boxShadow: "0 18px 50px rgba(15,23,42,0.10)",
+                    y: -3,
+                    boxShadow: "0 10px 30px rgba(15,23,42,0.06)",
                   }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.15 }}
                   style={{
                     position: "relative",
                     background: "#ffffff",
                     borderRadius: 20,
                     border: "1px solid rgba(15,23,42,0.08)",
                     overflow: "hidden",
-                    padding: "26px 24px",
+                    padding: "20px 20px",
                     boxShadow: "0 8px 32px rgba(15,23,42,0.05)",
                     transition: "all 0.35s ease",
 
-                    minHeight: 250,
+                    height: 220,
                     display: "flex",
                     flexDirection: "column",
                   }}
@@ -1058,7 +1025,7 @@ export default function AboutPage() {
                       top: 0,
                       width: 4,
                       height: "100%",
-                      background: item.color,
+                      background: "#ef4444",
                     }}
                   />
 
@@ -1069,7 +1036,7 @@ export default function AboutPage() {
                       width: 140,
                       height: 140,
                       borderRadius: "50%",
-                      background: `${item.color}10`,
+                      background: "#ef444410",
                       filter: "blur(55px)",
                       right: -70,
                       top: -70,
@@ -1110,8 +1077,8 @@ export default function AboutPage() {
                         width: 10,
                         height: 10,
                         borderRadius: 3,
-                        background: item.color,
-                        boxShadow: `0 0 14px ${item.color}55`,
+                        background: "#ef4444",
+                        boxShadow: "0 0 14px rgba(239, 68, 68, 0.35)",
                       }}
                     />
 
@@ -1121,7 +1088,7 @@ export default function AboutPage() {
                         fontWeight: 700,
                         letterSpacing: 1.2,
                         textTransform: "uppercase",
-                        color: item.color,
+                        color: "#ef4444",
                       }}
                     >
                       {item.tag}
@@ -1148,11 +1115,14 @@ export default function AboutPage() {
                   {/* divider */}
                   <div
                     style={{
-                      width: 48,
-                      height: 2,
-                      background: item.color,
-                      marginBottom: 16,
-                      borderRadius: 10,
+                      width: "48px",
+                      height: "2px",
+                      background: "#ef4444",
+                      marginTop: "4px",
+                      marginBottom: "16px",
+                      borderRadius: "10px",
+                      position: "relative",
+                      zIndex: 2,
                     }}
                   />
 

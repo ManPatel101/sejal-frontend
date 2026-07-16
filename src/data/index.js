@@ -270,13 +270,18 @@ export const PRODUCTS_DATA = [
 
 export const PROJECTS = [
   { id: 1, name: "Tata Steel Plant – Fire Protection Upgrade", location: "Jamshedpur, Jharkhand", type: "Industrial", year: 2023, scope: "Complete fire hydrant, sprinkler & alarm system", img: "🏭", size: "18,000 m²" },
-  { id: 2, name: "Prestige Towers – High-Rise Fire System", location: "Bengaluru, Karnataka", type: "Commercial", year: 2024, scope: "Addressable alarm, sprinkler & pressurization", img: "🏢", size: "32 floors" },
-  { id: 3, name: "Apollo Hospital – Fire Safety Overhaul", location: "Hyderabad, Telangana", type: "Healthcare", year: 2023, scope: "NFPA compliant detection, suppression & training", img: "🏥", size: "12,000 m²" },
-  { id: 4, name: "Reliance Warehouse – Sprinkler System", location: "Navi Mumbai, Maharashtra", type: "Warehousing", year: 2022, scope: "ESFR high-rack sprinkler system", img: "🏪", size: "24,000 m²" },
-  { id: 5, name: "IIT Research Campus – Fire Audit", location: "Chennai, Tamil Nadu", type: "Educational", year: 2024, scope: "Complete fire safety audit & NOC assistance", img: "🎓", size: "45 acres" },
-  { id: 6, name: "Oberoi Grand Hotel – AMC Contract", location: "Kolkata, West Bengal", type: "Hospitality", year: 2022, scope: "5-year AMC for all fire protection assets", img: "🏨", size: "280 rooms" },
-  { id: 7, name: "ONGC Refinery – Foam Suppression", location: "Hazira, Gujarat", type: "Petrochemical", year: 2023, scope: "High-expansion foam system for tank farm", img: "🛢️", size: "Tier-1 facility" },
-  { id: 8, name: "DLF Mall of India – Fire Retrofit", location: "Noida, Uttar Pradesh", type: "Retail", year: 2024, scope: "Retrofit of sprinkler and detection systems", img: "🛍️", size: "185,000 m²" },
+  { id: 2, name: "YAZAKI INDIA PVT LTD", location: "Sanand-Bhayla-Jalisana", type: "Industrial", year: 2024, scope: "Complete fire hydrant & Sprinkler System", img: "🏢" },
+  { id: 3, name: "ACUME CHEMICALS PVT LTD", location: "Jhagadia", type: "Industrial", year: 2023, scope: "Complete Fire Hydrant & sprinkler System, MVW system, CO2 flooding system", img: "🏥", size: "12,000 m²" },
+  { id: 4, name: "HUDKO BHAVAN", location: "Ahmedabad", type: "Goverment office", year: 2022, scope: "AMC for all fire protection assets", img: "🏪", size: "24,000 m²" },
+  { id: 5, name: "SHRI JAGDAMBA POLYMERS LTD", location: "SIMEJ", type: "Industrial", year: 2024, scope: "Complete fire hydrant system", img: "🎓", size: "45 acres" },
+  { id: 6, name: "SHAKTI POLYWEAVE PVT LTD", location: "SIMEJ", type: "Industrial", year: 2022, scope: "Complete fire hydrant system", img: "🏨", size: "280 rooms" },
+  { id: 7, name: "shritechtex", location: "SIMEJ, Gujarat", type: "Industrial", year: 2023, scope: "Complete fire hydrant system", img: "🏨"},
+  { id: 8, name: "DHIRUBHAI AMBANI UNIVERCITY", location: "Gandhinagar", type: "Institute", year: 2024, scope: "AMC for all fire protection asset, Fire hydrant system", img: "🛍️", size: "185,000 m²" },
+   { id: 9, name: "PRAYOSHA GROUP", location: "surat", type: "Residential", year: 2024, scope: "end-to-end fire safety solutions from hydrant systems to AMC services", img: "🛍️" },
+   { id: 10, name: "DEVSHREE GROUP", location: "surat", type: "Residential", year: 2024, scope: "end-to-end fire safety solutions from hydrant systems to AMC services", img: "🛍️" },
+   { id: 11, name: "SHRI AMBICA POLYMERS LTD", location: "Kheda", type: "Industrial", year: 2024, scope: "AMC for all fire protection asset, Fire hydrant system", img: "🏭" },
+   { id: 12, name: "BOSTIK INDIA PVT LTD", location: "Jhagadia", type: "Industrial", year: 2023, scope: "clean agent suppression system", img: "🏭" },
+   { id: 13, name: "ADIENT INDIA PVT LTD", location: "Sanand", type: "Industrial", year: 2024, scope: "end-to-end fire safety solutions from hydrant systems to AMC services", img: "🏭" }
 ];
 
 export const TESTIMONIALS = [
@@ -306,19 +311,3 @@ export const STATS = [
 ];
 
 export const CATEGORIES = ["All", "Extinguishers", "Hydrant Valve & Fittings", "Alarm System", "Suppression System", "Sprinklers", "Pumps"];
-
-export const NAV_LINKS = ["Home", "About", "Services", "Products", "Projects", "Contact"];
-
-export const initProducts = () => {
-  try { const s = localStorage.getItem("aegis_products"); if (s) return JSON.parse(s); } catch {}
-  return PRODUCTS_DATA;
-};
-
-export const initInquiries = () => {
-  try { const s = localStorage.getItem("aegis_inquiries"); if (s) return JSON.parse(s); } catch {}
-  return [
-    { id: 1, name: "Suresh Kumar", email: "suresh@abc.com", phone: "9876543210", product: "Diesel Engine Fire Pump", message: "Need 3 units for refinery project", date: "2024-06-10", status: "Pending" },
-    { id: 2, name: "Meena Joshi", email: "meena@xyz.in", phone: "9123456780", product: "Addressable Fire Alarm Panel", message: "Require panel for 8 floor building", date: "2024-06-12", status: "Contacted" },
-    { id: 3, name: "Arun Pillai", email: "arun@corp.com", phone: "9988776655", product: "AMC Services", message: "Interested in 3-year AMC for hospital", date: "2024-06-14", status: "Converted" },
-  ];
-};
