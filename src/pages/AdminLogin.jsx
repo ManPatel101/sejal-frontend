@@ -89,7 +89,7 @@ export default function AdminLogin({ onLoginSuccess }) {
         {/* LOGO */}
         <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
           <img
-            src="/se_logo/croped.png"
+            src="/se_logo/sejal_logo_cropped.png"
             alt="Sejal Engineering Logo"
             style={{
               width: "64px",

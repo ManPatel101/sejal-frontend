@@ -63,11 +63,11 @@ export default function Navbar() {
             }}
           >
             <img
-              src="/se_logo/croped.png"
+              src="/se_logo/sejal_logo_cropped.png"
               alt="Sejal Engineering Logo"
               style={{
-                width: isMobile ? "34px" : "38px",
-                height: isMobile ? "34px" : "38px",
+                width: isMobile ? "28px" : "34px",
+                height: isMobile ? "28px" : "34px",
                 objectFit: "contain",
               }}
             />

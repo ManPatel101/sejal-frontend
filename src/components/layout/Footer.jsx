@@ -21,7 +21,7 @@ export default function Footer() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "2fr 1fr 1fr 1fr",
+            gridTemplateColumns: "2fr 1.2fr 1.2fr",
             gap: 48,
             marginBottom: 48,
           }}
@@ -36,21 +36,15 @@ export default function Footer() {
                 marginBottom: 16,
               }}
             >
-              <div
+              <img
+                src="/se_logo/sejal_logo_cropped.png"
+                alt="Sejal Engineering Logo"
                 style={{
-                  width: 36,
-                  height: 36,
-                  background:
-                    "linear-gradient(135deg,#dc2626,#991b1b)",
-                  borderRadius: 8,
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 18,
+                  width: "48px",
+                  height: "48px",
+                  objectFit: "contain",
                 }}
-              >
-                🔥
-              </div>
+              />
 
               <div>
                 <div
@@ -99,29 +93,35 @@ export default function Footer() {
     marginTop: 18,
   }}
 >
-  <div
+  <a
+    href="tel:+919998356941"
     style={{
       display: "flex",
       alignItems: "center",
       gap: 10,
       color: "#cbd5e1",
+      textDecoration: "none",
+      cursor: "pointer",
     }}
   >
     <Phone size={15} color="#dc2626" />
     <span>+91 99 9835 6941</span>
-  </div>
+  </a>
 
-  <div
+  <a
+    href="mailto:sejalengineering@gmail.com"
     style={{
       display: "flex",
       alignItems: "center",
       gap: 10,
       color: "#cbd5e1",
+      textDecoration: "none",
+      cursor: "pointer",
     }}
   >
     <Mail size={15} color="#dc2626" />
     <span>sejalengineering@gmail.com</span>
-  </div>
+  </a>
 </div>
           </div>
 
@@ -144,16 +144,6 @@ export default function Footer() {
       { name: "Products", path: "/products" },
       { name: "Certifications", path: "/about" },
       { name: "Contact", path: "/contact" },
-    ],
-  },
-  {
-    title: "Compliance",
-    links: [
-      { name: "NBC 2016", path: "/about" },
-      { name: "NFPA 13", path: "/about" },
-      { name: "NFPA 72", path: "/about" },
-      { name: "IS 15105", path: "/about" },
-      { name: "FM Global", path: "/about" },
     ],
   },
 ].map((col) => (
@@ -222,9 +212,10 @@ export default function Footer() {
       </div>
 
       <style>{`
-        @media(max-width:768px){
+        @media(max-width:992px){
           .footer-grid{
             grid-template-columns:1fr!important;
+            gap: 32px!important;
           }
         }
       `}</style>

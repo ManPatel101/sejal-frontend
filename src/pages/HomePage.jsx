@@ -444,9 +444,8 @@ export default function HomePage({ setPage }) {
               <div className="flex flex-wrap gap-3">
                 {[
                   "NBC 2016 Compliant",
-                  "NFPA 13/72 Certified",
                   "ISO 9001:2015",
-                  "DGFASLI Empanelled",
+      
                 ].map((t) => (
                   <span
                     key={t}

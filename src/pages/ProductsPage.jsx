@@ -21,6 +21,13 @@ export default function ProductsPage() {
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -421,14 +428,14 @@ export default function ProductsPage() {
         {modal && (
           <motion.div
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center", padding: 24 }}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 2000, display: "flex", alignItems: "center", justifyContent: "center", padding: isMobile ? 12 : 24 }}
             onClick={e => { if (e.target === e.currentTarget) { setModal(null); setErrorMsg(""); } }}
           >
             <motion.div
               initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
-              style={{ background: "#fff", borderRadius: 18, maxWidth: 580, width: "100%", maxHeight: "90vh", overflow: "auto" }}
+              style={{ background: "#fff", borderRadius: 18, maxWidth: 580, width: "100%", maxHeight: isMobile ? "95vh" : "90vh", overflow: "auto" }}
             >
-              <div style={{ background: "#fff", borderBottom: "1px solid #f1f5f9", padding: "16px", textAlign: "center", borderRadius: "18px 18px 0 0", display: "flex", justifyContent: "center", alignItems: "center", height: 280, position: "relative" }}><img
+              <div style={{ background: "#fff", borderBottom: "1px solid #f1f5f9", padding: "16px", textAlign: "center", borderRadius: "18px 18px 0 0", display: "flex", justifyContent: "center", alignItems: "center", height: isMobile ? 180 : 280, position: "relative" }}><img
                 src={modal.image || "https://via.placeholder.com/400"}
                 alt={modal.title || modal.name}
                 style={{
@@ -437,11 +444,11 @@ export default function ProductsPage() {
                   objectFit: "contain",
                 }}
               /></div>
-              <div style={{ padding: 32 }}>
+              <div style={{ padding: isMobile ? 20 : 32 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 16 }}>
                   <div>
                     <Badge>{modal.badge}</Badge>
-                    <h2 style={{ fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: 22, color: "#0f172a", margin: "10px 0 0" }}>{modal.title || modal.name}</h2>
+                    <h2 style={{ fontFamily: "'Georgia',serif", fontWeight: 700, fontSize: isMobile ? 19 : 22, color: "#0f172a", margin: "10px 0 0" }}>{modal.title || modal.name}</h2>
                   </div>
                   <button onClick={() => { setModal(null); setErrorMsg(""); }}
                     style={{ background: "#f1f5f9", border: "none", borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 18 }}>✕</button>
@@ -450,7 +457,7 @@ export default function ProductsPage() {
                   <p
                     style={{
                       color: "#0f172a",
-                      fontSize: 15,
+                      fontSize: 14.5,
                       fontWeight: 600,
                       lineHeight: 1.7,
                       margin: "0 0 10px",
@@ -463,7 +470,7 @@ export default function ProductsPage() {
                   <p
                     style={{
                       color: "#475569",
-                      fontSize: 15,
+                      fontSize: 14,
                       lineHeight: 1.75,
                       margin: 0,
                       whiteSpace: "pre-line",
@@ -472,14 +479,14 @@ export default function ProductsPage() {
                     {modal.fullDesc || modal.description}
                   </p>
                 </div>
-                <div style={{ background: "#f8fafc", borderRadius: 10, padding: 20, marginBottom: 24 }}>
+                <div style={{ background: "#f8fafc", borderRadius: 10, padding: isMobile ? 14 : 20, marginBottom: 24 }}>
                   <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a", marginBottom: 12 }}>Send Inquiry</div>
                   {sent ? (
                     <div style={{ textAlign: "center", padding: 20, color: "#16a34a", fontWeight: 700 }}>
                       ✅ Inquiry sent! We'll contact you within 24 hours.
                     </div>
                   ) : (
-                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                    <div style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", gap: 10 }}>
                       {errorMsg && (
                         <div style={{ color: "#ef4444", fontSize: 13, fontWeight: 600, gridColumn: "1/-1", marginBottom: 4 }}>
                           ⚠️ {errorMsg}
